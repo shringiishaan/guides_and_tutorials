@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <description>Computer Guide</description>
+    <!-- filter>
+        <filter-name>Chief</filter-name>
+        <filter-class>filter.Chief</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Chief</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping -->
+    <servlet>
+        <servlet-name>NewTutorial</servlet-name>
+        <servlet-class>controller.NewTutorial</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NewArticle</servlet-name>
+        <servlet-class>controller.NewArticle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoginController</servlet-name>
+        <servlet-class>controller.Login</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditArticle</servlet-name>
+        <servlet-class>controller.EditArticle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Article</servlet-name>
+        <jsp-file>/article.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>HomePage</servlet-name>
+        <jsp-file>/homePage.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewTutorial</servlet-name>
+        <url-pattern>/NewTutorial</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NewArticle</servlet-name>
+        <url-pattern>/NewArticle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditArticle</servlet-name>
+        <url-pattern>/EditArticle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Article</servlet-name>
+        <url-pattern>/article/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HomePage</servlet-name>
+        <url-pattern/>
+    </servlet-mapping>
+    <resource-ref>
+        <description>Application Connection pool</description>
+        <res-ref-name>appConnPool</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+</web-app>
