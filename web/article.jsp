@@ -113,6 +113,9 @@
             <div class="is-content">
                 <h2><%=article.getTitle()%></h2>
                 <hr />
+                <a href="/EditArticle/<%=tutorial.getIdentifier()%>/<%=article.getIdentifier()%>" class="is-btn">edit</a>
+                <a href="/NewArticle" class="is-btn">new</a>
+                <hr />
                 <%=article.getData()%>
             </div>
 

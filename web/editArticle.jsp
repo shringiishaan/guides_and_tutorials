@@ -1,17 +1,29 @@
+<%@page import="dao.ArticleDAO"%>
+<%@page import="model.Article"%>
 <%@page import="model.Tutorial"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.TutorialDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-
     TutorialDAO tutorialdao = new TutorialDAO();
-    List<Tutorial> tutorials = tutorialdao.getAllTutorials();
-
+    Tutorial tutorial = tutorialdao.getTutorialByIdentifier(request.getAttribute("tutorialIdentifier").toString());
+    if(tutorial==null) {
+        request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        return;
+    }
+    
+    ArticleDAO articledao = new ArticleDAO();
+    Article article = articledao.getArticleByTutorialAndIdentifier(tutorial.getId(),request.getAttribute("articleIdentifier").toString());
+    if(article==null) {
+        request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        return;
+    }
+    article.fetchData();
 %>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>The Computer Guide | New Article</title>
+        <title>The Computer Guide | Edit Article</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/main/main.css" type="text/css" />
@@ -75,7 +87,7 @@
             <!-- main content -->
             <div class="is-content">
                 <center>
-                    <h2>Create New Article</h2>
+                    <h2>Edit Article</h2>
                     <hr />
                     <%
                         if(session.getAttribute("error")!=null) {
@@ -91,35 +103,13 @@
                             session.removeAttribute("message");
                         }
                     %>
-                    <form action="/NewArticle" method="post">
-                        <select name="tutorialId">
-                            <option value="0" selected="true">None</option>
-                            <%
-                                for(int i=0; i<tutorials.size(); i++) {
-                                    %><option value="<%=tutorials.get(i).getId()%>"><%=tutorials.get(i).getTitle()%></option><%
-                                }
-                            %>
-                        </select>
-                        <input type="text" name="title" 
-                               <%
-                                    if(session.getAttribute("articleFormTitle")!=null) {
-                                        %> value="<%=session.getAttribute("articleFormTitle")%>"<%
-                                        session.removeAttribute("articleFormTitle");
-                                    }
-                                    else {
-                                        %> placeholder="New Title"<%
-                                    }
-                               %> />
-                        <textarea name="data"><%
-                                    if(session.getAttribute("articleFormData")!=null) {
-                                        out.println(session.getAttribute("articleFormData"));
-                                        session.removeAttribute("articleFormData");
-                                    }
-                                    else {
-                                        out.println("New Article Data");
-                                    }
-                               %></textarea>
-                        <input type="submit" name="submit" value="Create" class="is-btn" />
+                    <form action="/EditArticle" method="post">
+                        Tutorial : <%=tutorial.getTitle()%>
+                        Title : <%=article.getTitle()%>
+                        <input name="id" value="<%=article.getId()%>" type="text" hidden="true" />
+                        <textarea name="data"><%=article.getData()%></textarea>
+                        <input type="submit" name="submit" value="Update" class="is-btn" />
+                        <button class="is-btn">Reset</button>
                     </form>
                 </center>
             </div>

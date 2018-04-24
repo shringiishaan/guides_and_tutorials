@@ -1,3 +1,5 @@
+<%@page import="model.Article"%>
+<%@page import="dao.ArticleDAO"%>
 <%@page import="model.Tutorial"%>
 <%@page import="java.util.List"%>
 <%@page import="dao.TutorialDAO"%>
@@ -5,13 +7,15 @@
 <%
 
     TutorialDAO tutorialdao = new TutorialDAO();
-    List<Tutorial> tutorials = tutorialdao.getAllTutorials();
+    Tutorial tutorial = tutorialdao.getTutorialByIdentifier(request.getAttribute("tutorialIdentifier").toString());
+    ArticleDAO articledao = new ArticleDAO();
+    List<Article> articles = articledao.getArticlesByTutorialId(tutorial.getId());
 
 %>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>The Computer Guide | New Article</title>
+        <title>The Computer Guide | Move Article Position</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/main/main.css" type="text/css" />
@@ -75,7 +79,7 @@
             <!-- main content -->
             <div class="is-content">
                 <center>
-                    <h2>Create New Article</h2>
+                    <h2>Move Article Position</h2>
                     <hr />
                     <%
                         if(session.getAttribute("error")!=null) {
@@ -91,35 +95,23 @@
                             session.removeAttribute("message");
                         }
                     %>
-                    <form action="/NewArticle" method="post">
-                        <select name="tutorialId">
-                            <option value="0" selected="true">None</option>
+                    <form action="/MoveArticle" method="post">
+                        Select article to move : <select name="targetArticleId">
                             <%
-                                for(int i=0; i<tutorials.size(); i++) {
-                                    %><option value="<%=tutorials.get(i).getId()%>"><%=tutorials.get(i).getTitle()%></option><%
+                                for(int i=0; i<articles.size(); i++) {
+                                    %><option value="<%=articles.get(i).getId()%>"><%=articles.get(i).getTitle()%></option><%
+                                }
+                            %>
+                        </select><br />
+                        Move after : <select name="preArticleId">
+                            <%
+                                for(int i=0; i<articles.size(); i++) {
+                                    %><option value="<%=articles.get(i).getId()%>"><%=articles.get(i).getTitle()%></option><%
                                 }
                             %>
                         </select>
-                        <input type="text" name="title" 
-                               <%
-                                    if(session.getAttribute("articleFormTitle")!=null) {
-                                        %> value="<%=session.getAttribute("articleFormTitle")%>"<%
-                                        session.removeAttribute("articleFormTitle");
-                                    }
-                                    else {
-                                        %> placeholder="New Title"<%
-                                    }
-                               %> />
-                        <textarea name="data"><%
-                                    if(session.getAttribute("articleFormData")!=null) {
-                                        out.println(session.getAttribute("articleFormData"));
-                                        session.removeAttribute("articleFormData");
-                                    }
-                                    else {
-                                        out.println("New Article Data");
-                                    }
-                               %></textarea>
-                        <input type="submit" name="submit" value="Create" class="is-btn" />
+                        <input name="tutorialId" hidden="true" type="text" value="<%=tutorial.getId()%>" />
+                        <input type="submit" name="submit" value="Move" class="is-btn" />
                     </form>
                 </center>
             </div>

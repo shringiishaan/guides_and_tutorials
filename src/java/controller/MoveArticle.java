@@ -4,14 +4,17 @@ import dao.ArticleDAO;
 import dao.TutorialDAO;
 import dao.UserDAO;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.Article;
+import model.Tutorial;
 import model.User;
 
-public class NewArticle extends HttpServlet {
+public class MoveArticle extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -28,15 +31,26 @@ public class NewArticle extends HttpServlet {
             request.getRequestDispatcher("/error404.jsp").forward(request, response);
             return;
         }
-        request.getRequestDispatcher("/newArticle.jsp").forward(request, response);
+        String requestedPath = request.getRequestURI().substring(request.getContextPath().length());
+        String[] parts = requestedPath.split("/");
+
+        if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("EditArticle")) {
+            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            return;
+        }
+
+        String tutorialIdentifier;
+        tutorialIdentifier = parts[2];
+        request.setAttribute("tutorialIdentifier", tutorialIdentifier);
+        request.getRequestDispatcher("/moveArticle.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String title = request.getParameter("title").trim();
         Integer tutorialId = Integer.parseInt(request.getParameter("tutorialId").trim());
-        String data = request.getParameter("data").trim();
+        Integer targetArticleId = Integer.parseInt(request.getParameter("targetArticleId").trim());
+        Integer preArticleId = Integer.parseInt(request.getParameter("preArticleId").trim());
         UserDAO userdao = new UserDAO();
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId");
@@ -49,38 +63,13 @@ public class NewArticle extends HttpServlet {
             request.getRequestDispatcher("/error404.jsp").forward(request, response);
             return;
         }
-        
-        TutorialDAO tutorialdao = new TutorialDAO();
         ArticleDAO articledao = new ArticleDAO();
-        
-        if(tutorialId!=0 && !tutorialdao.verifyTutorialId(tutorialId)) {
-            session.setAttribute("error","Tutorial not found");
-            session.setAttribute("articleFormTitle",title);
-            session.setAttribute("articleFormData",data);
-            request.getRequestDispatcher("/newArticle.jsp").forward(request, response);
-        }
-        else if(articledao.verifyArticleTitleAndTutorialId(tutorialId, title)) {
-            session.setAttribute("error","Title already exists in the selected tutorial!");
-            session.setAttribute("articleFormTitle",title);
-            session.setAttribute("articleFormData",data);
-            request.getRequestDispatcher("/newArticle.jsp").forward(request, response);
-        }
-        else {
-            if(tutorialId!=0) {
-                Integer displayIndex = articledao.getLastDisplayIndexByTutorialId(tutorialId);
-                if(displayIndex==null)
-                    displayIndex = 0;
-                displayIndex++;
-                articledao.createNewArticleInTutorialWithData(title, tutorialId, user.getId(), displayIndex, data);
-            }
-            else {
-                articledao.createNewArticleWithData(title, user.getId(), data);
-            }
-            session.removeAttribute("articleFormTitle");
-            session.removeAttribute("articleFormData");
-            session.setAttribute("message","Article created successfully");
-            response.sendRedirect("/");
-        }
+        Integer displayIndex = articledao.getArticleById(preArticleId).getDisplayIndex();
+        displayIndex++;
+        articledao.incrementDisplayIndexForArticlesByTutorialId(tutorialId, displayIndex);
+        articledao.updateDisplayIndexByArticleId(targetArticleId, displayIndex);
+        session.setAttribute("message","Article moved successfully!");
+        response.sendRedirect("/article/"+new TutorialDAO().getTutorialById(tutorialId).getIdentifier());
     }
 
     @Override

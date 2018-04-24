@@ -1,17 +1,8 @@
-<%@page import="model.Tutorial"%>
-<%@page import="java.util.List"%>
-<%@page import="dao.TutorialDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-
-    TutorialDAO tutorialdao = new TutorialDAO();
-    List<Tutorial> tutorials = tutorialdao.getAllTutorials();
-
-%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>The Computer Guide | New Article</title>
+        <title>The Computer Guide | New Category</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
         <link rel="stylesheet" href="/main/main.css" type="text/css" />
@@ -75,7 +66,7 @@
             <!-- main content -->
             <div class="is-content">
                 <center>
-                    <h2>Create New Article</h2>
+                    <h2>Create New Category</h2>
                     <hr />
                     <%
                         if(session.getAttribute("error")!=null) {
@@ -91,34 +82,17 @@
                             session.removeAttribute("message");
                         }
                     %>
-                    <form action="/NewArticle" method="post">
-                        <select name="tutorialId">
-                            <option value="0" selected="true">None</option>
-                            <%
-                                for(int i=0; i<tutorials.size(); i++) {
-                                    %><option value="<%=tutorials.get(i).getId()%>"><%=tutorials.get(i).getTitle()%></option><%
-                                }
-                            %>
-                        </select>
-                        <input type="text" name="title" 
+                    <form action="/NewCategory" method="post">
+                        <input type="text" name="name" 
                                <%
-                                    if(session.getAttribute("articleFormTitle")!=null) {
-                                        %> value="<%=session.getAttribute("articleFormTitle")%>"<%
-                                        session.removeAttribute("articleFormTitle");
+                                    if(session.getAttribute("categoryFormName")!=null) {
+                                        %> value="<%=session.getAttribute("categoryFormName")%>"<%
+                                        session.removeAttribute("categoryFormName");
                                     }
                                     else {
-                                        %> placeholder="New Title"<%
+                                        %> placeholder="New Name"<%
                                     }
                                %> />
-                        <textarea name="data"><%
-                                    if(session.getAttribute("articleFormData")!=null) {
-                                        out.println(session.getAttribute("articleFormData"));
-                                        session.removeAttribute("articleFormData");
-                                    }
-                                    else {
-                                        out.println("New Article Data");
-                                    }
-                               %></textarea>
                         <input type="submit" name="submit" value="Create" class="is-btn" />
                     </form>
                 </center>
@@ -144,7 +118,7 @@
         <div class="is-modal" id="explore-modal">
             <div class="body">
                 <div class="header">
-                    <h3>Categories</h3>
+                    <h3>Tutorials</h3>
                 </div>
                 <div class="content">
                     <center>

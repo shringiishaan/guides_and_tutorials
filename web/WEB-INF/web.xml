@@ -18,12 +18,20 @@
         <servlet-class>controller.NewArticle</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>NewCategory</servlet-name>
+        <servlet-class>controller.NewCategory</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>LoginController</servlet-name>
         <servlet-class>controller.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>EditArticle</servlet-name>
         <servlet-class>controller.EditArticle</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MoveArticle</servlet-name>
+        <servlet-class>controller.MoveArticle</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Article</servlet-name>
@@ -42,12 +50,20 @@
         <url-pattern>/NewArticle</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>NewCategory</servlet-name>
+        <url-pattern>/NewCategory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>EditArticle</servlet-name>
-        <url-pattern>/EditArticle</url-pattern>
+        <url-pattern>/EditArticle/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MoveArticle</servlet-name>
+        <url-pattern>/MoveArticle/*</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Article</servlet-name>

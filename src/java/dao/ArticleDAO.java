@@ -290,7 +290,7 @@ public class ArticleDAO {
             statement.setInt(1, tutorialId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
-                return resultSet.getInt("displayIndex");
+                return resultSet.getInt("max(displayIndex)");
             }
             
         } catch (SQLException ex) {
@@ -338,7 +338,36 @@ public class ArticleDAO {
         return null;
     }
     
-    public void createNewArticle(String title, Integer tutorialId, Integer ownerId, Integer displayIndex, String data) {
+    public Integer getTutorialIdByArticleId(Integer articleId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT tutorial_id FROM articles where id=?");
+            statement.setInt(1, articleId);
+            resultSet = statement.executeQuery();
+            if(resultSet.first()) {
+                return resultSet.getInt("tutorial_id");
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return null;
+    }
+    
+    public void createNewArticleInTutorialWithData(String title, Integer tutorialId, Integer ownerId, Integer displayIndex, String data) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -366,7 +395,7 @@ public class ArticleDAO {
         }
     }
     
-    public void createNewArticle(String title, Integer tutorialId, Integer ownerId, Integer displayIndex) {
+    public void createNewArticleInTutorial(String title, Integer tutorialId, Integer ownerId, Integer displayIndex) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -378,6 +407,57 @@ public class ArticleDAO {
             statement.setInt(3,tutorialId);
             statement.setInt(4, ownerId);
             statement.setInt(5, displayIndex);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void createNewArticle(String title, Integer ownerId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            String ident = title.toLowerCase().replace(" ", "-");
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("INSERT INTO articles (title,identifier,owner_id) VALUES (?,?,?)");
+            statement.setString(1, title);
+            statement.setString(2, ident);
+            statement.setInt(3, ownerId);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void createNewArticleWithData(String title, Integer ownerId, String data) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            String ident = title.toLowerCase().replace(" ", "-");
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("INSERT INTO articles (title,identifier,owner_id,data) VALUES (?,?,?,?)");
+            statement.setString(1, title);
+            statement.setString(2, ident);
+            statement.setInt(3, ownerId);
+            statement.setString(4, data);
             statement.executeUpdate();
             
         } catch (SQLException ex) {
@@ -415,6 +495,49 @@ public class ArticleDAO {
         }
     }
     
+    public void incrementDisplayIndexForArticlesByTutorialId(Integer tutorialId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE articles SET displayIndex=displayIndex+1 WHERE tutorial_id=?");
+            statement.setInt(1, tutorialId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void incrementDisplayIndexForArticlesByTutorialId(Integer tutorialId, Integer minDisplayIndex) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE articles SET displayIndex=displayIndex+1 WHERE tutorial_id=? and displayIndex>=?");
+            statement.setInt(1, tutorialId);
+            statement.setInt(2, minDisplayIndex);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
     public void updateDataByArticleId(Integer articleId, String data) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -423,6 +546,28 @@ public class ArticleDAO {
             statement = connection.prepareStatement("UPDATE articles SET data=? WHERE id=?");
             statement.setString(1, data);
             statement.setInt(2, articleId);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void updateDisplayIndexByArticleId(Integer articleId, Integer displayIndex) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE articles SET displayIndex=? WHERE id=?");
+            statement.setInt(1, displayIndex);
             statement.executeUpdate();
             
         } catch (SQLException ex) {
@@ -463,5 +608,26 @@ public class ArticleDAO {
             }
         }
         return false;
+    }
+    
+    public void deleteByArticleId(Integer articleId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("DELETE FROM articles WHERE id=?");
+            statement.setInt(1,articleId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
     }
 }
