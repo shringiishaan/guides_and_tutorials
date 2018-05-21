@@ -1,34 +1,9 @@
 
 
-    .is-content {
-    }
-/*
-    @media only screen and (max-width: 799px) {
-
-            .is-container {
-                    padding:20px;
-            }
-    }
-
-    @media only screen and (min-width: 800px) and (max-width: 999px) {
-
-            .is-container {
-                    margin-left:250px; 
-                    padding:25px;
-            }
-    }
-
-    @media only screen and (min-width: 1000px) {
-
-            .is-container {
-                    margin-left:300px;  
-            }
-
-            .is-content {
-                    float:left;
-                    padding:10px;
-                    margin-right:300px; 
-            }
+    .is-article-data p, .is-article-data ul {
+        font-size:15px;
     }
     
-    */
+    .is-article-data h5 {
+        padding-top:18px;
+    }

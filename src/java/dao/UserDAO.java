@@ -103,9 +103,35 @@ public class UserDAO {
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id FROM users where email=? and password=?;");
+            statement = connection.prepareStatement("SELECT 1 FROM users where email=? and password=?;");
             statement.setString(1, email);
             statement.setString(2, password);
+            resultSet = statement.executeQuery();
+            return (resultSet.first());
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return false;
+    }
+    
+    public Boolean validateAdminByUserId(Integer id) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT 1 FROM users where type='admin' and id=?;");
+            statement.setInt(1, id);
             resultSet = statement.executeQuery();
             return (resultSet.first());
         } catch (SQLException ex) {

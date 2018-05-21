@@ -1,120 +1,135 @@
+<%@page import="dao.TutorialDAO"%>
+<%@page import="java.util.List"%>
+<%@page import="model.Tutorial"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    TutorialDAO tutorialdao = new TutorialDAO();
+    List<Tutorial> allTutorials = tutorialdao.getAllTutorials();
+%>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>The Computer Guide | 404</title>
+        <title>The Computer Guide | Home</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
         <link rel="stylesheet" href="/main/main.css" type="text/css" />
-        <link rel="stylesheet" href="/content/content.css" type="text/css" />
         <link rel="stylesheet" href="/navbar/navbar.css" type="text/css" />
         <link rel="stylesheet" href="/sidebar/sidebar.css" type="text/css" />
         <link rel="stylesheet" href="/infobar/infobar.css" type="text/css" />
-        <link rel="stylesheet" href="/utils/modal.css" type="text/css" />
-        <link rel="stylesheet" href="/utils/dropdown.css" type="text/css" />
-        <link rel="stylesheet" href="/utils/button.css" type="text/css" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous" type="text/css" />
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+        <link rel="stylesheet" href="/content/content.css" type="text/css" />
     </head>
     <body>
         <!-- navigation bar -->
-        <div class="is-nb">
-            <div class="section left">
-                <a class="element is-sb-toggle"><i class="fas fa-bars"></i></a>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark is-navbar">
+            <a class="navbar-brand" href="/">Computer Guide</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tutorials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Articles</a>
+                    </li>
+                </ul>
             </div>
-            <div class="section left">
-                <a class="element">The Computer Guide</a>
-            </div>
-            <div class="is-med-and-up section right">
-                <a class="element">Categories</a>
-            </div>
-            <div class="is-med-and-up section right">
-                <div class="is-dropdown">
-                    <a href="#" class="element dd-trigger">More&nbsp;&nbsp;<i class="fas fa-caret-down"></i></a>
-                    <div class="dd-content">
-                        <a href="#" class="dd-element">option 1</a>
-                        <a href="#" class="dd-element">option 2</a>
-                        <a href="#" class="dd-element">option 3</a>
-                        <a href="#" class="dd-element">option 4</a>
+        </nav>
+
+        <!-- container -->
+        <div class="container-fluid">
+            <div class="row">
+                <!-- side bar -->
+                <div class="is-sidebar col-lg-3 d-none d-lg-block p-4">
+                    <a class="is-title">Tutorials</a>
+                    <%
+                        for (int i = 0; i < allTutorials.size(); i++) {
+                    %>
+                        <a class="is-label" href="/article/<%=allTutorials.get(i).getId()%>"><%=allTutorials.get(i).getTitle()%></a>
+                    <%
+                        }
+                    %>
+                </div>
+
+                <!-- main content -->
+                <div class="col-lg-6 offset-lg-3 pt-5 is-content">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <%
+                                if (session.getAttribute("error") != null) {
+                                %>
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        <%=session.getAttribute("error")%>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                <%
+                                    session.removeAttribute("error");
+                                }
+                                if (session.getAttribute("message") != null) {
+                                %>
+                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                        <%=session.getAttribute("message")%>
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                <%
+                                    session.removeAttribute("message");
+                                }
+                            %>
+                            <h4>ERROR : 404</h4>
+                            <hr/>
+                            <h5>Page not found :(</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- information bar -->
+                <div class="col-lg-3 offset-lg-9 p-4 is-infobar">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    Top Tutorials
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="#!">Java Advanced Guide</a>
+                            <a href="#!">Web Development with Java</a>
+                        </div>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col">
+                                    Top Articles
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <a href="#!">Java Advanced Guide</a>
+                            <a href="#!">Web Development with Java</a>
+                            <a href="#!">Java Advanced Guide</a>
+                            <a href="#!">Web Development with Java</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- side bar -->
-        <div class="is-sb">
-            <div class="section">
-                <i class="fas is-icon fa-home"></i>
-                <div class="label">Home</div>
-            </div>
-            <div class="section" id="is-sb-sec-explore">
-                <i class="fas is-icon fa-search"></i>
-                <div class="label is-modal-open" target-modal="explore-modal">Explore</div>
-            </div>
-            <div class="section" id="is-sb-sec-bgtj" collapse="false">
-                <i class="fas is-icon fa-book"></i>
-                <div class="label">Beginners Guide to Java&nbsp;&nbsp;<i class="is-caret fas"></i></div>
-                <a class="element" href="#">Overview</a>
-                <a class="element" href="#">Hello World Java Program</a>
-                <a class="element" href="#">Java Basics</a>
-            </div>
-        </div>
-
-        <!-- container -->
-        <div class="is-container">
-
-            <!-- main content -->
-            <div class="is-content">
-                <center>
-                    <h2>404 : Page not found :(</h2>
-                </center>
-            </div>
-
-            <!-- information bar -->
-            <div class="is-ib">
-                <div class="section" id="is-ib-sec-recommended" collapse="false">
-                    <div class="label">Recommended Tutorials&nbsp;&nbsp;<i class="is-caret fas"></i></div>
-                    <a class="element" href="#">Java Advanced Guide</a>
-                    <a class="element" href="#">Web Development with Java</a>
-                </div>
-                <div class="section" id="is-ib-sec-related" collapse="false">
-                    <div class="label">Related Tutorials&nbsp;&nbsp;<i class="is-caret fas"></i></div>
-                    <a class="element" href="#">Java Advanced Guide</a>
-                    <a class="element" href="#">Web Development with Java</a>
-                    <a class="element" href="#">Java Advanced Guide</a>
-                    <a class="element" href="#">Web Development with Java</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="is-modal" id="explore-modal">
-            <div class="body">
-                <div class="header">
-                    <h3>Categories</h3>
-                </div>
-                <div class="content">
-                    <center>
-                        <a class="is-btn" href="#">C</a>
-                        <a class="is-btn" href="#">Java</a>
-                        <a class="is-btn" href="#">Web Development</a>
-                        <a class="is-btn" href="#">Operating Systems</a>
-                    </center>
-                </div>
-                <div class="footer">
-                    <button class="right is-btn" >Submit</button>
-                    <button class="right is-modal-close is-btn" target-modal="explore-modal">Close</button>
-                    <div class="clear-float"></div>
-                </div>
-            </div>
-        </div>
-
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="/main/main.js"></script>
-        <script src="/content/content.js"></script>
-        <script src="/navbar/navbar.js"></script>
-        <script src="/sidebar/sidebar.js"></script>
-        <script src="/infobar/infobar.js"></script>
-        <script src="/utils/modal.js"></script>
-        <script src="/utils/dropdown.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     </body>
 </html>

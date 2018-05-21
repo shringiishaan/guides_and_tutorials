@@ -1,77 +1,283 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <description>Computer Guide</description>
-    <!-- filter>
-        <filter-name>Chief</filter-name>
-        <filter-class>filter.Chief</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>Chief</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping -->
-    <servlet>
-        <servlet-name>NewTutorial</servlet-name>
-        <servlet-class>controller.NewTutorial</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>NewArticle</servlet-name>
-        <servlet-class>controller.NewArticle</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>NewCategory</servlet-name>
-        <servlet-class>controller.NewCategory</servlet-class>
-    </servlet>
+    <!--#
+        #
+        #       Utils
+        #
+        ################################-->
     <servlet>
         <servlet-name>LoginController</servlet-name>
-        <servlet-class>controller.Login</servlet-class>
+        <servlet-class>controller.util.Login</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>LoginController</servlet-name>
+        <url-pattern>/Login</url-pattern>
+    </servlet-mapping>
     <servlet>
-        <servlet-name>EditArticle</servlet-name>
-        <servlet-class>controller.EditArticle</servlet-class>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>controller.util.Logout</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>MoveArticle</servlet-name>
-        <servlet-class>controller.MoveArticle</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>Article</servlet-name>
-        <jsp-file>/article.jsp</jsp-file>
-    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>HomePage</servlet-name>
         <jsp-file>/homePage.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
+        <servlet-name>HomePage</servlet-name>
+        <url-pattern/>
+    </servlet-mapping>
+    <!--#
+        #
+        #       Tutorials
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>ViewTutorial</servlet-name>
+        <servlet-class>controller.tutorial.ViewTutorial</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewTutorial</servlet-name>
+        <url-pattern>/Tutorial/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteTutorial</servlet-name>
+        <servlet-class>controller.tutorial.DeleteTutorial</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteTutorial</servlet-name>
+        <url-pattern>/DeleteTutorial/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NewTutorial</servlet-name>
+        <servlet-class>controller.tutorial.NewTutorial</servlet-class>
+    </servlet>
+    <servlet-mapping>
         <servlet-name>NewTutorial</servlet-name>
         <url-pattern>/NewTutorial</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SetTutorialStatus</servlet-name>
+        <servlet-class>controller.tutorial.SetTutorialStatus</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetTutorialStatus</servlet-name>
+        <url-pattern>/SetTutorialStatus</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NewTopicTutorialLink</servlet-name>
+        <servlet-class>controller.link.NewTopicTutorialLink</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewTopicTutorialLink</servlet-name>
+        <url-pattern>/NewTopicTutorialLink</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RemoveTopicTutorialLink</servlet-name>
+        <servlet-class>controller.link.RemoveTopicTutorialLink</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemoveTopicTutorialLink</servlet-name>
+        <url-pattern>/RemoveTopicTutorialLink</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SetTopicTutorialPriority</servlet-name>
+        <servlet-class>controller.link.SetTopicTutorialPriority</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetTopicTutorialPriority</servlet-name>
+        <url-pattern>/SetTopicTutorialPriority</url-pattern>
+    </servlet-mapping>
+    <!--#
+        #
+        #       Articles
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>Article</servlet-name>
+        <jsp-file>/article.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Article</servlet-name>
+        <url-pattern>/Article/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NewArticle</servlet-name>
+        <servlet-class>controller.article.NewArticle</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewArticle</servlet-name>
         <url-pattern>/NewArticle</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SetTutorialArticlePriority</servlet-name>
+        <servlet-class>controller.link.SetTutorialArticlePriority</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>NewCategory</servlet-name>
-        <url-pattern>/NewCategory</url-pattern>
+        <servlet-name>SetTutorialArticlePriority</servlet-name>
+        <url-pattern>/SetTutorialArticlePriority</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SetArticleStatus</servlet-name>
+        <servlet-class>controller.article.SetArticleStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>LoginController</servlet-name>
-        <url-pattern>/login</url-pattern>
+        <servlet-name>SetArticleStatus</servlet-name>
+        <url-pattern>/SetArticleStatus</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>SetArticleScope</servlet-name>
+        <servlet-class>controller.article.SetArticleScope</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SetArticleScope</servlet-name>
+        <url-pattern>/SetArticleScope</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EditArticle</servlet-name>
+        <servlet-class>controller.article.EditArticle</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>EditArticle</servlet-name>
         <url-pattern>/EditArticle/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteArticle</servlet-name>
+        <servlet-class>controller.article.DeleteArticle</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>MoveArticle</servlet-name>
-        <url-pattern>/MoveArticle/*</url-pattern>
+        <servlet-name>DeleteArticle</servlet-name>
+        <url-pattern>/DeleteArticle/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>NewTopicArticleLink</servlet-name>
+        <servlet-class>controller.link.NewTopicArticleLink</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>Article</servlet-name>
-        <url-pattern>/article/*</url-pattern>
+        <servlet-name>NewTopicArticleLink</servlet-name>
+        <url-pattern>/NewTopicArticleLink</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>NewTutorialArticleLink</servlet-name>
+        <servlet-class>controller.link.NewTutorialArticleLink</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>HomePage</servlet-name>
-        <url-pattern/>
+        <servlet-name>NewTutorialArticleLink</servlet-name>
+        <url-pattern>/NewTutorialArticleLink</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RemoveTopicArticleLink</servlet-name>
+        <servlet-class>controller.link.RemoveTopicArticleLink</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemoveTopicArticleLink</servlet-name>
+        <url-pattern>/RemoveTopicArticleLink</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RemoveTutorialArticleLink</servlet-name>
+        <servlet-class>controller.link.RemoveTutorialArticleLink</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RemoveTutorialArticleLink</servlet-name>
+        <url-pattern>/RemoveTutorialArticleLink</url-pattern>
+    </servlet-mapping>
+    <!--#
+        #
+        #       Topics
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>ManageTopics</servlet-name>
+        <jsp-file>/manageTopics.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageTopics</servlet-name>
+        <url-pattern>/ManageTopics</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ViewTopic</servlet-name>
+        <jsp-file>/topic.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewTopic</servlet-name>
+        <url-pattern>/Topic/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>NewTopic</servlet-name>
+        <servlet-class>controller.topic.NewTopic</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewTopic</servlet-name>
+        <url-pattern>/NewTopic</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteTopic</servlet-name>
+        <servlet-class>controller.topic.DeleteTopic</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteTopic</servlet-name>
+        <url-pattern>/DeleteTopic/*</url-pattern>
+    </servlet-mapping>
+    <!--#
+        #
+        #       Images
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>ManageImages</servlet-name>
+        <jsp-file>/manageImages.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageImages</servlet-name>
+        <url-pattern>/ManageImages</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteImage</servlet-name>
+        <servlet-class>controller.image.DeleteImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteImage</servlet-name>
+        <url-pattern>/DeleteImage/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>controller.image.ImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/Image/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>UploadImage</servlet-name>
+        <servlet-class>controller.image.UploadImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadImage</servlet-name>
+        <url-pattern>/UploadImage</url-pattern>
+    </servlet-mapping>
+    <!--#
+        #
+        #       Comments
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>NewComment</servlet-name>
+        <servlet-class>controller.comment.NewComment</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewComment</servlet-name>
+        <url-pattern>/NewComment</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DeleteComment</servlet-name>
+        <servlet-class>controller.comment.DeleteComment</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteComment</servlet-name>
+        <url-pattern>/DeleteComment</url-pattern>
     </servlet-mapping>
     <resource-ref>
         <description>Application Connection pool</description>

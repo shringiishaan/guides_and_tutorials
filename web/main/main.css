@@ -1,8 +1,25 @@
 * {
-    font-family: 'Open Sans', sans-serif;
 }
 
-.container-fluid {
+p,h1,h2,h3,h4,h5,h6 {
+    color:rgba(0,0,0,0.85);
+}
+
+.btn-outline-info {
+    color:#557A95;
+    border-color:#557A95
+}
+
+.btn-info {
+    background-color:#557A95;
+    border-color:#557A95
+}
+
+.text-info {
+    color:#557A95 !important;
+}
+
+.container-fluid, .container{
     padding-top:60px;
 }
 
@@ -15,20 +32,63 @@ a:hover {
     text-decoration:none;
 }
 
-/*
-i {
-    color:inherit;
+.is-tutorial-card {
+    margin-bottom:20px;
 }
 
-a {
-    text-decoration: none;
+.is-tutorial-card .card-title {
+    font-size:16px;
+    color: rgba(0,0,0,0.85);
 }
 
-hr {
-    border: 0; 
-    height: 0; 
-    border-top: 1px solid rgba(0, 0, 0, 0.1); 
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+.is-tutorial-card .card-text{
+    display:block;
+    cursor:pointer;
+    font-size:14px;
+    color: rgba(109,121,147,0.65);
 }
 
-*/
+.is-tutorial-card .card-text:hover {
+    color: teal;
+}
+
+.navbar-brand {
+    overflow-x:hidden;
+    max-width:70%;
+}
+
+.is-navbar-footer {
+    max-width:150px;
+}
+
+#navigationModal .modal-body {
+    height: 60vh;
+    overflow-y: scroll;
+}
+
+#navigationModal a {
+    display:block;
+}
+
+#navigationModal .is-active {
+    font-weight: 600;
+    color: rgba(0,0,0,.85) !important;
+}
+
+#navigationModal .is-title {
+    font-size:16px;
+    padding-bottom:10px;
+    padding-top:10px;
+    color: rgba(0,0,0,0.85);
+}
+
+#navigationModal .is-label {
+    cursor:pointer;
+    font-size:14px;
+    padding-bottom:8px;
+    color: rgba(109,121,147,0.65);
+}
+
+#navigationModal .is-label:hover {
+    color: teal;
+}

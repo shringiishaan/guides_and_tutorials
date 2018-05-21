@@ -1,24 +1,23 @@
 package model;
 
-import dao.ArticleDAO;
 import java.sql.Timestamp;
 
 public class Article {
     
-    private Integer id;
+    private String id;
     private String title;
-    private String identifier;
-    private User owner;
+    private Integer owner_id;
+    private String status;
+    private String scope;
     private String data;
-    private Integer displayIndex;
     private Timestamp createTime;
     private Timestamp modifiedTime;
     
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
     
-    public Integer getId() {
+    public String getId() {
         return this.id;
     }
     
@@ -30,20 +29,28 @@ public class Article {
         return this.title;
     }
     
-    public void setIdentifier(String ident) {
-        this.identifier = ident;
+    public void setOwnerId(Integer owner_id) {
+        this.owner_id = owner_id;
     }
     
-    public String getIdentifier() {
-        return this.identifier;
+    public Integer getOwnerId() {
+        return this.owner_id;
     }
     
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setStatus(String status) {
+        this.status = status;
     }
     
-    public User getOwner() {
-        return this.owner;
+    public String getStatus () {
+        return this.status;
+    }
+    
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+    
+    public String getScope () {
+        return this.scope;
     }
     
     public void setData(String data) {
@@ -52,14 +59,6 @@ public class Article {
     
     public String getData() {
         return this.data;
-    }
-    
-    public void setDisplayIndex(Integer index) {
-        this.displayIndex = index;
-    }
-    
-    public Integer getDisplayIndex() {
-        return this.displayIndex;
     }
     
     public void setCreateTime(Timestamp time) {
@@ -76,9 +75,5 @@ public class Article {
     
     public Timestamp getModifiedTime() {
         return this.modifiedTime;
-    }
-    
-    public void fetchData() {
-        this.data = new ArticleDAO().getDataByArticleId(this.id);
     }
 }

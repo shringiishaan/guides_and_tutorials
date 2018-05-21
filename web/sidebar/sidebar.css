@@ -1,37 +1,42 @@
 
 .is-sidebar {
-    position: fixed;
-    height:100vh;
-    overflow: auto;
-    text-align:right;
-    padding-bottom:50px;
+    height:85vh;
+    overflow-x:hidden;
+    overflow-y: auto;
+    max-width:25%;
 }
 
 .is-sidebar a {
+    cursor: pointer;
     display:block;
-    padding-right:40px;
 }
 
 .is-sidebar .is-active {
-    color:teal;
+    font-weight: 600;
+    color: rgba(0,0,0,.85) !important;
 }
 
 .is-sidebar .is-title {
-    font-size:18px;
-    padding-bottom:15px;
+    font-size:16px;
+    padding-bottom:10px;
     padding-top:10px;
-    color:#555 !important;
+    color: rgba(0,0,0,0.85);
 }
 
 .is-sidebar .is-label {
     cursor:pointer;
-    font-size:16px;
+    font-size:14px;
     padding-bottom:8px;
-    color:#6d7993;
+    color: rgba(109,121,147,0.65);
 }
 
 .is-sidebar .is-label:hover {
     color: teal;
+}
+
+.is-sidebar .is-element-hover:hover {
+    background-color:#eee;
+    border-radius: 10px;
 }
 
 
