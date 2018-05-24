@@ -376,9 +376,9 @@ public class TutorialDAO {
                 statement = connection.prepareStatement(
                           "SELECT * FROM tutorials t WHERE id IN "
                             + "(SELECT tutorial_id FROM topic_tutorial_map "
-                                + "WHERE topic_id=( "
+                                + "WHERE topic_id=("
                                     + "SELECT topic_id FROM topic_article_map "
-                                    + "WHERE article_id=?)"
+                                    + "WHERE article_id=?) "
                                 + "ORDER BY priority DESC)");
             }
             else { //tutorial
@@ -749,6 +749,30 @@ public class TutorialDAO {
             statement = connection.prepareStatement("DELETE FROM topic_tutorial_map WHERE topic_id=? and tutorial_id=?");
             statement.setString(1, topicId);
             statement.setString(2, tutorialId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void removeAllLinksByTutorialId(String tutorialId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("DELETE FROM topic_tutorial_map WHERE tutorial_id=?");
+            statement.setString(1, tutorialId);
+            statement.executeUpdate();
+            statement = connection.prepareStatement("DELETE FROM tutorial_article_map WHERE tutorial_id=?");
+            statement.setString(1, tutorialId);
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);

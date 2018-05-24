@@ -628,19 +628,21 @@ public class ArticleDAO {
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO articles (id,title,owner_id"
-                    + data==null?"":",data"
-                    + ",scope,status) VALUES (?,?,?"
-                    + data==null?"":",?"
-                    + scope==null?",'unknown'":",?"
-                    + ",'new');");
-            statement.setString(1, id);
-            statement.setString(2, title);
-            statement.setInt(3, ownerId);
-            if(data!=null)
+            if(data==null) {
+                statement = connection.prepareStatement("INSERT INTO articles (id,title,owner_id,data,scope,status) VALUES (?,?,?,?,?,'new');");
+                statement.setString(1, id);
+                statement.setString(2, title);
+                statement.setInt(3, ownerId);
                 statement.setString(4,data);
-            if(scope!=null)
-                statement.setString((data==null?4:5),scope);
+                statement.setString(5,scope);
+            }
+            else {
+                statement = connection.prepareStatement("INSERT INTO articles (id,title,owner_id,scope,status) VALUES (?,?,?,?,'new');");
+                statement.setString(1, id);
+                statement.setString(2, title);
+                statement.setInt(3, ownerId);
+                statement.setString(4,scope);
+            }
             statement.executeUpdate();
             
         } catch (SQLException ex) {
@@ -935,12 +937,15 @@ public class ArticleDAO {
         }
     }
     
-    public void deleteAllArticleLinks(String articleId) {
+    public void removeAllLinksByArticleId(String articleId) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("DELECT FROM tutorial_article_map where article_id=?;");
+            statement = connection.prepareStatement("DELETE FROM tutorial_article_map WHERE article_id=?;");
+            statement.setString(1,articleId);
+            statement.executeUpdate();
+            statement = connection.prepareStatement("DELETE FROM topic_article_map WHERE article_id=?;");
             statement.setString(1,articleId);
             statement.executeUpdate();
         } catch (SQLException ex) {
@@ -961,7 +966,7 @@ public class ArticleDAO {
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("DELETE FROM topic_article_map where topic_id=? AND article_id=?;");
+            statement = connection.prepareStatement("DELETE FROM topic_article_map WHERE topic_id=? AND article_id=?;");
             statement.setString(1,topicId);
             statement.setString(2,articleId);
             statement.executeUpdate();

@@ -62,7 +62,7 @@
                         <a class="nav-link" href="/"><i class="fa fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#!" data-toggle="modal" data-target="#navigationModal"><i class="fa fa-bars"></i> Explore</a>
+                        <a class="nav-link" href="#!" data-toggle="modal" data-target="#navigationModal"><i class="fa fa-bars"></i> Topics</a>
                     </li>
                     <%
                         if(isAdmin) {
@@ -118,14 +118,7 @@
                     %>
                     <div class="row">
                         <div class="col-12">
-                            <p>
-                                Learn while understanding the core concepts of computer science.
-                            </p>
-                            <p>
-                                I hope to include more topics on this platform along with their tutorials and guides 
-                                to help everyone learn and understand Computer Science in a better way.
-                                Any contribution from your side will be welcome.
-                            </p>
+                            <p></p>
                         </div>
                     </div>
                     <div class="row mb-4 mt-3">
@@ -144,8 +137,12 @@
                         <div class="col-xl-10 offset-xl-1">
                             <div class="row">
                                 <div class="col-lg-9">
-                                    <h5 class="text-center text-info"><a href="/Topic/java">Java</a></h5>
+                                    <h4 class="text-center text-info"><a href="/Topic/java"><img class="img-thumbnail" style="height:70px;border:none;" src="/Image/tutorial-icon/java" /> Java</a></h4>
                                     <hr />
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-info mb-2" href="/StartTopicTutorial/java"><i class="fa mr-2 fa-sm fa-play"></i> Start Tutorial</a>
+                                        <a class="btn btn-outline-info mb-2" href="/Topic/java"><i class="fa mr-2 fa-sm fa-sitemap"></i> Explore</a>
+                                    </div>
                                     <div class="row mb-3">
                                         <div class="col-sm-6 col-md-4">
                                             <h6>Top Articles</h6>
@@ -156,6 +153,11 @@
                                                     %><small><a href="/Article/<%=tempArticles.get(k).getId()%>" class="d-block"><%=tempArticles.get(k).getTitle()%></a></small><%
                                                 } 
                                             %>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <h6>Tutorials</h6>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -193,8 +195,18 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
-                                    <h5 class="text-center text-info"><a href="/Topic/operating-systems">Operating Systems</a></h5><hr />
-                                    <div class="row">
+                                    <h4 class="text-center text-info"><a href="/Topic/operating-systems"><img class="img-thumbnail" style="height:70px;border:none;" src="/Image/tutorial-icon/operating-systems" /> Operating Systems</a></h4>
+                                    <hr />
+                                    <div class="text-center">
+                                        <a class="btn btn-outline-info mb-2" href="/StartTopicTutorial/operating-systems"><i class="fa mr-2 fa-sm fa-play"></i> Start Tutorial</a>
+                                        <a class="btn btn-outline-info mb-2" href="/Topic/operating-systems"><i class="fa mr-2 fa-sm fa-sitemap"></i> Explore</a>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-2">
+                                            <h6>Tutorials</h6>
+                                        </div>
+                                    </div>
+                                    <div class="row"
                                     <%
                                         tempTutorials = tutorialdao.getTutorialsByTopicIdAndStatus("operating-systems",(isAdmin?null:"final"));
                                         if(tempTutorials!=null)
@@ -251,10 +263,13 @@
                     <%
                         for(int i=0; i<allTopics.size(); i++) {
                             %><div class="card card-body mb-2 text-center">
+                                <div class="d-block">
+                                    <img class="img-thumbnail" style="height:50px;border:none;" src="/Image/tutorial-icon/<%=allTopics.get(i).getId()%>" />
+                                </div>
                                 <h6><%=allTopics.get(i).getTitle()%></h6>
                                 <hr />
-                                <a class="btn btn-sm btn-info mb-1" href="/Topic/<%=allTopics.get(i).getId()%>">Explore</a>
-                                <a class="btn btn-sm btn-info" href="/Topic/<%=allTopics.get(i).getId()%>">Start Tutorial</a>
+                                <a class="btn btn- btn-info mb-2" href="/StartTopicTutorial/<%=allTopics.get(i).getId()%>"><i class="fa mr-2 fa-sm fa-play"></i> Start Tutorial</a>
+                                <a class="btn btn- btn-info" href="/Topic/<%=allTopics.get(i).getId()%>"><i class="fa mr-2 fa-sm fa-sitemap"></i> Explore</a>
                             </div><%
                         }
                     %>

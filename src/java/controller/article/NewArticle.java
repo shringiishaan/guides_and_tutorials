@@ -1,7 +1,6 @@
 package controller.article;
 
 import dao.ArticleDAO;
-import dao.TutorialDAO;
 import dao.UserDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -18,8 +17,7 @@ public class NewArticle extends HttpServlet {
             throws ServletException, IOException {
         
         String title = request.getParameter("title").trim();
-        String data = request.getParameter("data").trim();
-        String scope = request.getParameter("scope");
+        String data = request.getParameter("data");
         
         UserDAO userdao = new UserDAO();
         HttpSession session = request.getSession(true);
@@ -48,7 +46,7 @@ public class NewArticle extends HttpServlet {
         if(data==null || data.trim().isEmpty()) {
             data = null;
         }
-        articledao.createNewArticle(id, title, user.getId(), scope, data);
+        articledao.createNewArticle(id, title, user.getId(), "unlinked", data);
         
         session.removeAttribute("articleFormTitle");
         session.removeAttribute("articleFormData");

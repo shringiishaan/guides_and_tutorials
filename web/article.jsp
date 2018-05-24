@@ -122,7 +122,7 @@
     <body>
         <!-- navigation bar -->
         <nav class="navbar navbar-expand-lg fixed-top navbar-dark is-navbar">
-            <a class="navbar-brand" href="/Topic/<%=currentTopic.getId()%>"><%=currentTopic.getTitle()%></a>
+            <a class="navbar-brand" href="/Topic/<%=currentTopic.getId()%>"><img class="img-thumbnail mr-2" style="height:30px;border:none;" src="/Image/tutorial-icon/<%=currentTopic.getId()%>" /> <%=currentTopic.getTitle()%></a>
             
             <button class="btn btn-info d-inline-block d-lg-none float-right" data-toggle="modal" data-target="#navigationModal">
                 <i class="fa fa-bars"></i>
@@ -320,13 +320,13 @@
 
         <!-- Modal -->
         <div class="modal fade" id="navigationModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <span class="text-muted mt-1 mr-2"><i>Current Topic : </i></span>
+                        <h5 class="mr-3 text-muted"><img class="img-thumbnail" style="height:30px;border:none;" src="/Image/tutorial-icon/<%=currentTopic.getId()%>" /> <%=currentTopic.getTitle()%></h5>
                         <div class="dropdown">
                             <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <%=currentTopic.getTitle()%>
+                                Other Topics
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <%
@@ -393,10 +393,10 @@
                 <div class="modal-content">
                     <form action="/EditArticle" method="post">
                         <div class="modal-body">
-                            <a href="/article/<%=currentArticle.getId()%>" class="btn btn-sm btn-secondary mt-2 ml-2">Cancel</a>
+                            <a href="#!" data-dismiss="modal">Cancel</a>
                             <div class="form-group">
                                 <input name="id" value="<%=currentArticle.getId()%>" type="text" hidden="true" />
-                                <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getId()%>" />
+                                <input type="text" name="redirectURL" hidden="true" value="/Article/<%=currentArticle.getId()%>" />
                             </div>
                             <div class="form-group">
                                 <textarea style="width:100%" name="data" rows="15"><%=currentArticle.getData()%></textarea>
@@ -419,8 +419,12 @@
                         <p class="text-danger">Do you really want to delete this article?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                        <a class="btn btn-outline-danger" href="/DeleteArticle/<%=currentArticle.getId()%>">Delete</a>
+                        <form action="/DeleteArticle" method="POST">
+                            <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
+                            <input name="redirectURL" value="/Article/<%=currentArticle.getId()%>" hidden="true" />
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
                     </div>
                 </div>
             </div>

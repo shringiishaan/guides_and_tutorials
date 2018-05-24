@@ -1,5 +1,6 @@
 package controller.image;
 
+import com.mysql.jdbc.StringUtils;
 import dao.ImageDAO;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -21,22 +22,21 @@ public class ImageServlet extends HttpServlet {
         String requestedPath = request.getRequestURI().substring(request.getContextPath().length());
         String[] parts = requestedPath.split("/");
 
-        if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("Image")) {
+        if(parts.length!=4 || !parts[0].isEmpty() || !parts[1].equals("Image")) {
             request.getRequestDispatcher("/error404.jsp").forward(request, response);
             return;
         }
         
-        Integer imageId;
-        try {
-            imageId = Integer.parseInt(parts[2]);
-        }
-        catch(NumberFormatException e) {
+        String k1 = parts[2];
+        String k2 = parts[3];
+        
+        if(StringUtils.isNullOrEmpty(k1) || StringUtils.isNullOrEmpty(k2)) {
             request.getRequestDispatcher("/error404.jsp").forward(request, response);
             return;
         }
         
         ImageDAO imagedao = new ImageDAO();
-        Image image = imagedao.getImageById(imageId);
+        Image image = imagedao.getImageByKeywords(k1,k2);
         
         if(image==null) {
             request.getRequestDispatcher("/error404.jsp").forward(request, response);

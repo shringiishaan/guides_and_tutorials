@@ -221,6 +221,14 @@
         <servlet-name>DeleteTopic</servlet-name>
         <url-pattern>/DeleteTopic/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>StartTopicTutorial</servlet-name>
+        <servlet-class>controller.topic.StartTopicTutorial</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>StartTopicTutorial</servlet-name>
+        <url-pattern>/StartTopicTutorial/*</url-pattern>
+    </servlet-mapping>
     <!--#
         #
         #       Images

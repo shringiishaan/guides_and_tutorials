@@ -38,6 +38,7 @@ public class NewTutorialArticleLink extends HttpServlet {
                 priority=1;
             }
         }
+        articledao.updateScopeByArticleId(articleId, "tutorial");
         articledao.createTutorialArticleLink(tutorialId, articleId, priority);
         session.setAttribute("message","Link created!");
         response.sendRedirect(request.getParameter("redirectURL"));

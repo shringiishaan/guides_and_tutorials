@@ -43,8 +43,43 @@ public class ImageDAO {
         Image image = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM images where id=?");
+            statement = connection.prepareStatement("SELECT * FROM images WHERE id=?");
             statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+            if(resultSet.first()) {
+                image = new Image();
+                image.setId(resultSet.getInt("id"));
+                image.setData(resultSet.getBlob("data"));
+                image.setKeyword1(resultSet.getString("keyword1"));
+                image.setKeyword2(resultSet.getString("keyword2"));
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ImageDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return image;
+    }
+    
+    public Image getImageByKeywords(String keyword1, String keyword2) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Image image = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM images WHERE keyword1=? and keyword2=?;");
+            statement.setString(1, keyword1);
+            statement.setString(2, keyword2);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 image = new Image();

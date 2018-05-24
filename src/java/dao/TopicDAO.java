@@ -281,4 +281,28 @@ public class TopicDAO {
             }
         }
     }
+    
+    public void removeAllLinksByTopicId(String topicId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("DELETE FROM topic_tutorial_map WHERE topic_id=?");
+            statement.setString(1, topicId);
+            statement.executeUpdate();
+            statement = connection.prepareStatement("DELETE FROM topic_article_map WHERE topic_id=?");
+            statement.setString(1, topicId);
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
 }

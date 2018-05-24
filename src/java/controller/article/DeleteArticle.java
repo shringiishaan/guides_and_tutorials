@@ -23,8 +23,12 @@ public class DeleteArticle extends HttpServlet {
         }
 
         String articleId = request.getParameter("articleId");
+        
         ArticleDAO articledao = new ArticleDAO();
+        
+        articledao.removeAllLinksByArticleId(articleId);
         articledao.deleteByArticleId(articleId);
+        
         session.setAttribute("message", "Article Deleted!");
         response.sendRedirect(request.getParameter("redirectURL"));
     }

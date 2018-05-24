@@ -23,9 +23,8 @@ public class DeleteTopic extends HttpServlet {
 
         String topicId = request.getParameter("topicId");
         TopicDAO topicdao = new TopicDAO();
-        //TODO
-        //clear topic tutorial links
-        //clear topic article links
+        
+        topicdao.removeAllLinksByTopicId(topicId);
         topicdao.deleteByTopicId(topicId);
         session.setAttribute("message", "Topic deleted!");
         response.sendRedirect(request.getParameter("redirectURL"));

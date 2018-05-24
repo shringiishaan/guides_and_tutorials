@@ -25,7 +25,9 @@ public class NewTopicArticleLink extends HttpServlet {
         String topicId = request.getParameter("topicId").trim();
         String articleId = request.getParameter("articleId").trim();
         
-        new ArticleDAO().createTopicArticleLink(topicId, articleId);
+        ArticleDAO articledao = new ArticleDAO();
+        articledao.updateScopeByArticleId(articleId, "topic");
+        articledao.createTopicArticleLink(topicId, articleId);
         session.setAttribute("message","Link created!");
         response.sendRedirect(request.getParameter("redirectURL"));
     }

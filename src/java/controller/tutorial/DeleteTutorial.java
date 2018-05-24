@@ -1,6 +1,5 @@
 package controller.tutorial;
 
-import dao.TopicDAO;
 import dao.TutorialDAO;
 import dao.UserDAO;
 import java.io.IOException;
@@ -26,9 +25,8 @@ public class DeleteTutorial extends HttpServlet {
 
         String tutorialId = request.getParameter("tutorialId");
         TutorialDAO tutorialdao = new TutorialDAO();
-        //TODO
-        //delete topic tutorial links
-        //delete tutorial article links
+        
+        tutorialdao.removeAllLinksByTutorialId(tutorialId);
         tutorialdao.deleteByTutorialId(tutorialId);
         
         session.setAttribute("message", "Tutorial deleted!");

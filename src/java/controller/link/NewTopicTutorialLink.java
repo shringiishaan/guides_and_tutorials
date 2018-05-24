@@ -38,6 +38,7 @@ public class NewTopicTutorialLink extends HttpServlet {
                 priority++;
             }
         }
+        
         tutorialdao.createTopicTutorialLink(topicId, tutorialId, priority);
         session.setAttribute("message","Link created!");
         response.sendRedirect(request.getParameter("redirectURL"));

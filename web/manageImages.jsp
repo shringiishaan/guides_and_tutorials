@@ -140,7 +140,7 @@
                                     for (int i = 0; i < images.size(); i++) {
                                     %>
                                     <div class="col-md-3">
-                                        <img class="img-thumbnail" src="/Image/<%=images.get(i).getId()%>" />
+                                        <img class="img-thumbnail" src="/Image/<%=images.get(i).getKeyword1()%>/<%=images.get(i).getKeyword2()%>" />
                                         <center>
                                             <small><i>ID</i> : <%=images.get(i).getId()%></small>
                                             <br><small><i>Size</i> : <%=images.get(i).getData().length()%></small>

@@ -76,7 +76,7 @@
     <body>
         <!-- navigation bar -->
         <nav class="navbar navbar-expand-lg fixed-top navbar-dark is-navbar">
-            <a class="navbar-brand" href="/Topic/<%=currentTopic.getId()%>"><%=currentTopic.getTitle()%></a>
+            <a class="navbar-brand" href="/"><i><small>The</small> Science <small>Of</small> Computing</i></a>
             
             <button class="btn btn-info d-inline-block d-lg-none float-right" data-toggle="modal" data-target="#navigationModal">
                 <i class="fa fa-bars"></i>
@@ -112,7 +112,7 @@
         <div class="container-fluid">
             <div class="row pt-5">
                 <div class="col-lg-8 offset-lg-2">
-                    <h4 class="text-center"><%=currentTopic.getTitle()%></h4>
+                    <h4 class="text-center text-muted"><img class="img-thumbnail" style="height:70px;border:none;" src="/Image/tutorial-icon/<%=currentTopic.getId()%>" /> <%=currentTopic.getTitle()%></h4>
                     <hr />
                     <div class="row mb-3">
                         <div class="col-lg-6 offset-lg-3">

@@ -146,7 +146,11 @@
                                                     %>
                                                         <tr class="table-secondary">
                                                             <td><small><b>Topic-Article : </b></small></td>
-                                                            <td><%=tempArticles.get(k).getTitle()%></td>
+                                                            <td>
+                                                                <%=tempArticles.get(k).getTitle()%>
+                                                                <br />
+                                                                <i>(<%=tempArticles.get(k).getId()%>)</i>
+                                                            </td>
                                                             <td>
                                                                 <form method="POST" action="/SetArticleScope">
                                                                     <div class="input-group">
@@ -246,7 +250,11 @@
                                                                 %>
                                                                     <tr class="table-success">
                                                                         <td><small><b>Topic-Tutorial-Article&nbsp;: </b></small></td>
-                                                                        <td><%=tempArticles.get(k).getTitle()%></td>
+                                                                        <td>
+                                                                            <%=tempArticles.get(k).getTitle()%>
+                                                                            <br />
+                                                                            <i>(<%=tempArticles.get(k).getId()%>)</i>
+                                                                        </td>
                                                                         <td>
                                                                             <form method="POST" action="/SetArticleScope">
                                                                                 <div class="input-group">
@@ -373,26 +381,90 @@
                                             </tr><%
                                         }
                                     %>
-                                    <tr>
-                                        <td></td>
-                                        <td>
-                                            <form method="POST" action="/NewTopic">
-                                                <div class="input-group">
-                                                    <input type="text" name="title" class="form-control" placeholder="New Title" />
-                                                    <div class="input-group-append">
-                                                        <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
-                                                        <button class="btn btn-sm btn-outline-info" type="submit">New Topic</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="card card-body">
+                                <form method="POST" action="/NewTopic">
+                                    <div class="input-group">
+                                        <input type="text" name="title" class="form-control" placeholder="New Title" />
+                                        <div class="input-group-append">
+                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <button class="btn btn-sm btn-outline-info" type="submit">New Topic</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-body">
+                                <form method="POST" action="/NewArticle">
+                                    <div class="input-group">
+                                        <input type="text" name="title" class="form-control" placeholder="New Title" />
+                                        <div class="input-group-append">
+                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <button class="btn btn-sm btn-outline-info" type="submit">New Article</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-body">
+                                <form method="POST" action="/NewTutorial">
+                                    <div class="input-group">
+                                        <input type="text" name="title" class="form-control" placeholder="New Title" />
+                                        <div class="input-group-append">
+                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <button class="btn btn-sm btn-outline-info" type="submit">New Tutorial</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-lg-4">
+                            <div class="card card-body">
+                                <form method="POST" action="/DeleteTopic">
+                                    <div class="input-group">
+                                        <input type="text" name="topicId" class="form-control" placeholder="Topic ID" />
+                                        <div class="input-group-append">
+                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete Topic</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-body">
+                                <form method="POST" action="/DeleteArticle">
+                                    <div class="input-group">
+                                        <input type="text" name="articleId" class="form-control" placeholder="Article ID" />
+                                        <div class="input-group-append">
+                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete Article</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card card-body">
+                                <form method="POST" action="/DeleteTutorial">
+                                    <div class="input-group">
+                                        <input type="text" name="tutorialId" class="form-control" placeholder="Tutorial ID" />
+                                        <div class="input-group-append">
+                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <button class="btn btn-sm btn-outline-danger" type="submit">Delete Tutorial</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
