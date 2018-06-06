@@ -22,8 +22,8 @@ public class ImageServlet extends HttpServlet {
         String requestedPath = request.getRequestURI().substring(request.getContextPath().length());
         String[] parts = requestedPath.split("/");
 
-        if(parts.length!=4 || !parts[0].isEmpty() || !parts[1].equals("Image")) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        if(parts.length!=4 || !parts[0].isEmpty() || !parts[1].equals("image")) {
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
@@ -31,7 +31,7 @@ public class ImageServlet extends HttpServlet {
         String k2 = parts[3];
         
         if(StringUtils.isNullOrEmpty(k1) || StringUtils.isNullOrEmpty(k2)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
@@ -39,7 +39,7 @@ public class ImageServlet extends HttpServlet {
         Image image = imagedao.getImageByKeywords(k1,k2);
         
         if(image==null) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
@@ -63,7 +63,7 @@ public class ImageServlet extends HttpServlet {
             }  
         }
         catch(IOException | SQLException e) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
         }
         finally {
             if(bufferedInputStream!=null) {

@@ -1,6 +1,7 @@
 package controller.tutorial;
 
 import dao.ArticleDAO;
+import dao.TutorialDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,15 +18,16 @@ public class ViewTutorial extends HttpServlet {
         String requestedPath = request.getRequestURI().substring(request.getContextPath().length());
         String[] parts = requestedPath.split("/");
 
-        if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("Tutorial")) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("tutorial")) {
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
 
-        String tutorialId = parts[2];
+        String tutorialKey = parts[2];
         ArticleDAO articledao = new ArticleDAO();
+        Integer tutorialId = new TutorialDAO().getIdByTutorialKey(tutorialKey);
         Article article = articledao.getMaximumPriorityArticleByTutorialIdAndStatus(tutorialId,"final",false);
-        response.sendRedirect("/Article/"+article.getId());
+        response.sendRedirect("/article/"+article.getKey());
     }
 
     @Override

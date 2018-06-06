@@ -18,12 +18,12 @@ public class RemoveTopicTutorialLink extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
-        String topicId = request.getParameter("topicId").trim();
-        String tutorialId = request.getParameter("tutorialId").trim();
+        Integer topicId = Integer.parseInt(request.getParameter("topicId"));
+        Integer tutorialId = Integer.parseInt(request.getParameter("tutorialId"));
         
         new TutorialDAO().removeTopicTutorialLink(topicId, tutorialId);
         session.setAttribute("message","Link removed!");

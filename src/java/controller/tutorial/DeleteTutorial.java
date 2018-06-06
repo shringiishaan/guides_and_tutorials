@@ -19,11 +19,11 @@ public class DeleteTutorial extends HttpServlet {
         UserDAO userdao = new UserDAO();
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
 
-        String tutorialId = request.getParameter("tutorialId");
+        Integer tutorialId = Integer.parseInt(request.getParameter("tutorialId"));
         TutorialDAO tutorialdao = new TutorialDAO();
         
         tutorialdao.removeAllLinksByTutorialId(tutorialId);

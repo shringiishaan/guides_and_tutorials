@@ -45,7 +45,7 @@ public class CommentDAO {
                 comment.setId(resultSet.getInt("id"));
                 comment.setOwnerId(resultSet.getInt("owner_id"));
                 comment.setMessage(resultSet.getString("message"));
-                comment.setArticleId(resultSet.getString("article_id"));
+                comment.setArticleId(resultSet.getInt("article_id"));
                 comment.setPriority(resultSet.getInt("priority"));
                 comment.setCreateTime(resultSet.getTimestamp("create_time"));
             }
@@ -58,7 +58,7 @@ public class CommentDAO {
                     connection.close();
                 if(statement!=null) 
                     statement.close();
-                if(resultSet!=null) 
+                if(resultSet!=null)
                     resultSet.close();
             } catch (SQLException e) {
             }
@@ -66,7 +66,7 @@ public class CommentDAO {
         return comment;
     }
     
-    public List<Comment> getCommentsByArticleId(String articleId) {
+    public List<Comment> getCommentsByArticleId(Integer articleId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -75,7 +75,7 @@ public class CommentDAO {
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * FROM comments where article_id=? ORDER BY priority DESC;");
-            statement.setString(1, articleId);
+            statement.setInt(1, articleId);
             resultSet = statement.executeQuery();
             comments = new ArrayList<>();
             while(resultSet.next()) {
@@ -83,7 +83,7 @@ public class CommentDAO {
                 comment.setId(resultSet.getInt("id"));
                 comment.setOwnerId(resultSet.getInt("owner_id"));
                 comment.setMessage(resultSet.getString("message"));
-                comment.setArticleId(resultSet.getString("article_id"));
+                comment.setArticleId(resultSet.getInt("article_id"));
                 comment.setPriority(resultSet.getInt("priority"));
                 comment.setCreateTime(resultSet.getTimestamp("create_time"));
                 comments.add(comment);
@@ -105,7 +105,7 @@ public class CommentDAO {
         return comments;
     }
     
-    public void createNewComment(Integer ownerId, String message, String articleId, Integer priority) {
+    public void createNewComment(Integer ownerId, String message, Integer articleId, Integer priority) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -116,7 +116,7 @@ public class CommentDAO {
                     + ownerId==null?"":",?"
                     + ")");
             statement.setString(1, message);
-            statement.setString(2, articleId);
+            statement.setInt(2, articleId);
             statement.setInt(3, priority);
             if(ownerId!=null)
                 statement.setInt(4, ownerId);
@@ -156,14 +156,14 @@ public class CommentDAO {
         }
     }
     
-    public Integer getMaximumCommentPriorityByArticleId(String articleId) {
+    public Integer getMaximumCommentPriorityByArticleId(Integer articleId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT max(priority) FROM comments where article_id=?");
-            statement.setString(1, articleId);
+            statement.setInt(1, articleId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 return resultSet.getInt("max(priority)");

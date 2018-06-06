@@ -18,10 +18,11 @@ public class NewTopic extends HttpServlet {
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId"); 
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
         }
         
         String title = request.getParameter("title");
+        
         TopicDAO topicdao = new TopicDAO();
         if(topicdao.verifyTopicTitle(title)) {
             session.setAttribute("error","Title already exists!");
@@ -29,7 +30,8 @@ public class NewTopic extends HttpServlet {
             response.sendRedirect(request.getParameter("redirectURL"));
             return;
         }
-        topicdao.createNewTopic(title.toLowerCase().replace(" ","-"),title);
+        String key = title.toLowerCase().replace(" ","-");
+        topicdao.createNewTopic(key,title);
         session.setAttribute("message","Topic created successfully");
         response.sendRedirect(request.getParameter("redirectURL"));
     }

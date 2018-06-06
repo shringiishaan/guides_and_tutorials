@@ -18,11 +18,11 @@ public class DeleteArticle extends HttpServlet {
         UserDAO userdao = new UserDAO();
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
 
-        String articleId = request.getParameter("articleId");
+        Integer articleId = Integer.parseInt(request.getParameter("articleId"));
         
         ArticleDAO articledao = new ArticleDAO();
         

@@ -18,11 +18,11 @@ public class SetTutorialStatus extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
-        String tutorialId = request.getParameter("tutorialId").trim();
+        Integer tutorialId = Integer.parseInt(request.getParameter("tutorialId"));
         String status = request.getParameter("status").trim();
         
         TutorialDAO tutorialdao = new TutorialDAO();

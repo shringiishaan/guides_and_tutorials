@@ -18,11 +18,11 @@ public class SetArticleStatus extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
-        String articleId = request.getParameter("articleId").trim();
+        Integer articleId = Integer.parseInt(request.getParameter("articleId"));
         String status = request.getParameter("status").trim();
         
         ArticleDAO articledao = new ArticleDAO();

@@ -18,12 +18,12 @@ public class EditArticle extends HttpServlet {
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
         String data = request.getParameter("data").trim();
-        String id = request.getParameter("id").trim();
+        Integer id = Integer.parseInt(request.getParameter("id"));
         
         ArticleDAO articledao = new ArticleDAO();
         articledao.updateDataByArticleId(id, data);

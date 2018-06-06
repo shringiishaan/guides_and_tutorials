@@ -2,8 +2,27 @@ package model;
 
 public class Topic {
     
+    private Integer id;
+    private String key;
     private String title;
-    private String id;
+    private Integer priority;
+    private String status;
+    
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
+    public Integer getId() {
+        return this.id;
+    }
+    
+    public void setKey(String key) {
+        this.key = key;
+    }
+    
+    public String getKey () {
+        return this.key;
+    }
     
     public void setTitle(String title) {
         this.title = title;
@@ -13,11 +32,19 @@ public class Topic {
         return this.title;
     }
     
-    public void setId(String ident) {
-        this.id = ident;
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
     
-    public String getId() {
-        return this.id;
+    public Integer getPriority() {
+        return this.priority;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    public String getStatus() {
+        return this.status;
     }
 }

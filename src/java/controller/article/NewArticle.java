@@ -23,12 +23,12 @@ public class NewArticle extends HttpServlet {
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId");
         if(userId==null) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         User user = userdao.getUserById((Integer)userId);
         if(!user.getType().equals("admin")) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
@@ -42,11 +42,11 @@ public class NewArticle extends HttpServlet {
             return;
         }
         
-        String id = title.replace(" ","-").replace("/","").replaceAll("[^a-zA-Z/-]", "").toLowerCase();
+        String key = title.replace(" ","-").replace("/","").replaceAll("[^a-zA-Z/-]", "").toLowerCase();
         if(data==null || data.trim().isEmpty()) {
             data = null;
         }
-        articledao.createNewArticle(id, title, user.getId(), "unlinked", data);
+        articledao.createNewArticle(key, title, user.getId(), "unlinked", data);
         
         session.removeAttribute("articleFormTitle");
         session.removeAttribute("articleFormData");

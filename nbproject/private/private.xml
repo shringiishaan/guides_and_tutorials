@@ -3,9 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/shrin/projects/ComputerGuide/web/article.jsp</file>
-            <file>file:/C:/Users/shrin/projects/ComputerGuide/web/manageTopics.jsp</file>
-            <file>file:/C:/Users/shrin/projects/ComputerGuide/src/java/dao/ArticleDAO.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/model/Article.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/CommentDAO.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/controller/util/SiteMap.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/TutorialDAO.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/ArticleDAO.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/filter/Chief.java</file>
         </group>
     </open-files>
 </project-private>

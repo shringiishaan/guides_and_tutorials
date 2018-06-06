@@ -7,7 +7,7 @@ public class Comment {
     private Integer id;
     private Integer owner_id;
     private String message;
-    private String article_id;
+    private Integer article_id;
     private Integer priority;
     private Timestamp createTime;
     
@@ -35,11 +35,11 @@ public class Comment {
         return this.message;
     }
     
-    public void setArticleId(String article_id) {
+    public void setArticleId(Integer article_id) {
         this.article_id = article_id;
     }
     
-    public String getArticleId() {
+    public Integer getArticleId() {
         return this.article_id;
     }
     

@@ -18,12 +18,12 @@ public class NewTopicArticleLink extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
-        String topicId = request.getParameter("topicId").trim();
-        String articleId = request.getParameter("articleId").trim();
+        Integer topicId = Integer.parseInt(request.getParameter("topicId"));
+        Integer articleId = Integer.parseInt(request.getParameter("articleId"));
         
         ArticleDAO articledao = new ArticleDAO();
         articledao.updateScopeByArticleId(articleId, "topic");

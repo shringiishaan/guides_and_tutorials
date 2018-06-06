@@ -16,11 +16,16 @@
 <%@page import="dao.TutorialDAO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
+    if(1==1) {
+        request.getRequestDispatcher("/").forward(request, response);
+        return;
+    }
+    
     String requestedPath = request.getRequestURI().substring(request.getContextPath().length());
     String[] parts = requestedPath.split("/");
     
     if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("Topic")) {
-        request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        request.getRequestDispatcher("/Error").forward(request, response);
         return;
     }
     
@@ -37,7 +42,7 @@
     String requestTopicId = parts[2];
     currentTopic = topicdao.getTopicById(requestTopicId);
     if(currentTopic==null) {
-        request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        request.getRequestDispatcher("/Error").forward(request, response);
         return;
     }
    
@@ -139,7 +144,7 @@
                                         <%
                                             tempArticles = articledao.getArticlesByTopicIdAndStatus(currentTopic.getId(),(isAdmin?null:"final"), false);
                                             for(int j=0; j<tempArticles.size(); j++) { 
-                                                %><a href="/Article/<%=tempArticles.get(j).getId()%>"><%=tempArticles.get(j).getTitle()%></a><%
+                                                %><a href="/article/<%=tempArticles.get(j).getId()%>"><%=tempArticles.get(j).getTitle()%></a><%
                                             }
                                         %>
                                     </div>
@@ -151,7 +156,7 @@
                                         <%
                                             tempArticles = articledao.getArticlesByTopicIdAndStatus(currentTopic.getId(),(isAdmin?null:"final"), false);
                                             for(int j=0; j<tempArticles.size(); j++) { 
-                                                %><a href="/Article/<%=tempArticles.get(j).getId()%>"><%=tempArticles.get(j).getTitle()%></a><%
+                                                %><a href="/article/<%=tempArticles.get(j).getId()%>"><%=tempArticles.get(j).getTitle()%></a><%
                                             }
                                         %>
                                     </div>
@@ -177,7 +182,7 @@
                                                 <%
                                                     tempArticles = articledao.getArticlesByTutorialIdAndStatus((topicTutorials.get(i)).getId(),(isAdmin?null:"final"), false);
                                                     for(int j=0; j<tempArticles.size(); j++) { 
-                                                        %><a href="/Article/<%=tempArticles.get(j).getId()%>"><%=tempArticles.get(j).getTitle()%></a><%
+                                                        %><a href="/article/<%=tempArticles.get(j).getId()%>"><%=tempArticles.get(j).getTitle()%></a><%
                                                     }
                                                 %>
                                             </div>

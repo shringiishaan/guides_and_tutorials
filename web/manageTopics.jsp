@@ -13,12 +13,12 @@
     User user = null;
     UserDAO userdao = new UserDAO();
     if(session.getAttribute("userId")==null) {
-        response.sendRedirect("/Logout");
+        response.sendRedirect("/logout");
         return;
     }
     user = userdao.getUserById((Integer)session.getAttribute("userId"));
     if(user==null || !user.getType().equals("admin")) {
-        response.sendRedirect("/Logout");
+        response.sendRedirect("/logout");
         return;
     }
     
@@ -65,12 +65,12 @@
                             Admin
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/ManageTopics">Topics</a>
-                            <a class="dropdown-item" href="/ManageImages">Images</a>
+                            <a class="dropdown-item" href="/managetopics">Topics</a>
+                            <a class="dropdown-item" href="/manageimages">Images</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Logout">Logout</a>
+                        <a class="nav-link" href="/logout">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -132,7 +132,7 @@
                                             <td>
                                                 <%=allTopics.get(i).getTitle()%>
                                                 <br>
-                                                <i>(<%=allTopics.get(i).getTitle()%>)</i>
+                                                <i>(<%=allTopics.get(i).getId()%>)</i>
                                             </td>
                                             <td></td>
                                             <td></td>
@@ -152,7 +152,7 @@
                                                                 <i>(<%=tempArticles.get(k).getId()%>)</i>
                                                             </td>
                                                             <td>
-                                                                <form method="POST" action="/SetArticleScope">
+                                                                <form method="POST" action="/setarticlescope">
                                                                     <div class="input-group">
                                                                         <input type="text" name="scope" class="form-control" value="<%=tempArticles.get(k).getScope()%>" />
                                                                         <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
@@ -164,12 +164,12 @@
                                                                 </form>
                                                             </td>
                                                             <td>
-                                                                <form method="POST" action="/SetArticleStatus">
+                                                                <form method="POST" action="/setarticlestatus">
                                                                     <div class="input-group">
                                                                         <input type="text" name="status" class="form-control" value="<%=tempArticles.get(k).getStatus()%>" />
                                                                         <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
                                                                         <div class="input-group-append">
-                                                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                             <button class="btn btn-sm btn-outline-info" type="submit">Update Status</button>
                                                                         </div>
                                                                     </div>
@@ -177,12 +177,12 @@
                                                             </td>
                                                             <td></td>
                                                             <td>
-                                                                <form method="POST" action="/RemoveTopicArticleLink">
+                                                                <form method="POST" action="/removetopicarticlelink">
                                                                     <div class="input-group">
                                                                         <input type="text" name="topicId" hidden="true" value="<%=allTopics.get(i).getId()%>" />
                                                                         <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
                                                                         <div class="input-group-append">
-                                                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                             <button class="btn btn-sm btn-outline-warning" type="submit">Remove Link</button>
                                                                         </div>
                                                                     </div>
@@ -205,37 +205,37 @@
                                                                     </td>
                                                                     <td></td>
                                                                     <td>
-                                                                        <form method="POST" action="/SetTutorialStatus">
+                                                                        <form method="POST" action="/settutorialstatus">
                                                                             <div class="input-group">
                                                                                 <input type="text" name="status" class="form-control" value="<%=tempTutorials.get(j).getStatus()%>" />
                                                                                 <input type="text" name="tutorialId" hidden="true" value="<%=tempTutorials.get(j).getId()%>" />
                                                                                 <div class="input-group-append">
-                                                                                    <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                    <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                     <button class="btn btn-sm btn-outline-info" type="submit">Update Status</button>
                                                                                 </div>
                                                                             </div>
                                                                         </form>
                                                                     </td>
                                                                     <td>
-                                                                        <form method="POST" action="/SetTopicTutorialPriority">
+                                                                        <form method="POST" action="/settopictutorialpriority">
                                                                             <div class="input-group">
                                                                                 <input type="text" name="priority" class="form-control" value="<%=tutorialdao.getPriorityByTopicIdAndTutorialId(allTopics.get(i).getId(),tempTutorials.get(j).getId())%>" />
                                                                                 <input type="text" name="topicId" hidden="true" value="<%=allTopics.get(i).getId()%>" />
                                                                                 <input type="text" name="tutorialId" hidden="true" value="<%=tempTutorials.get(j).getId()%>" />
                                                                                 <div class="input-group-append">
-                                                                                    <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                    <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                     <button class="btn btn-sm btn-outline-info" type="submit">Update Priority</button>
                                                                                 </div>
                                                                             </div>
                                                                         </form>
                                                                     </td>
                                                                     <td>
-                                                                        <form method="POST" action="/RemoveTopicTutorialLink">
+                                                                        <form method="POST" action="/removetopictutoriallink">
                                                                             <div class="input-group">
                                                                                 <input type="text" name="topicId" hidden="true" value="<%=allTopics.get(i).getId()%>" />
                                                                                 <input type="text" name="tutorialId" hidden="true" value="<%=tempTutorials.get(j).getId()%>" />
                                                                                 <div class="input-group-append">
-                                                                                    <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                    <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                     <button class="btn btn-sm btn-outline-warning" type="submit">Remove Link</button>
                                                                                 </div>
                                                                             </div>
@@ -256,49 +256,49 @@
                                                                             <i>(<%=tempArticles.get(k).getId()%>)</i>
                                                                         </td>
                                                                         <td>
-                                                                            <form method="POST" action="/SetArticleScope">
+                                                                            <form method="POST" action="/setarticlescope">
                                                                                 <div class="input-group">
                                                                                     <input type="text" name="scope" class="form-control" value="<%=tempArticles.get(k).getScope()%>" />
                                                                                     <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
                                                                                     <div class="input-group-append">
-                                                                                        <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                        <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                         <button class="btn btn-sm btn-outline-info" type="submit">Update Scope</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </form>
                                                                         </td>
                                                                         <td>
-                                                                            <form method="POST" action="/SetArticleStatus">
+                                                                            <form method="POST" action="/setarticlestatus">
                                                                                 <div class="input-group">
                                                                                     <input type="text" name="status" class="form-control" value="<%=tempArticles.get(k).getStatus()%>" />
                                                                                     <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
                                                                                     <div class="input-group-append">
-                                                                                        <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                        <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                         <button class="btn btn-sm btn-outline-info" type="submit">Update Status</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </form>
                                                                         </td>
                                                                         <td>
-                                                                            <form method="POST" action="/SetTutorialArticlePriority">
+                                                                            <form method="POST" action="/settutorialarticlepriority">
                                                                                 <div class="input-group">
                                                                                     <input type="text" name="priority" class="form-control" value="<%=articledao.getPriorityByTutorialIdAndArticleId(tempTutorials.get(j).getId(),tempArticles.get(k).getId())%>" />
                                                                                     <input type="text" name="tutorialId" hidden="true" value="<%=tempTutorials.get(j).getId()%>" />
                                                                                     <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
                                                                                     <div class="input-group-append">
-                                                                                        <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                        <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                         <button class="btn btn-sm btn-outline-info" type="submit">Update Priority</button>
                                                                                     </div>
                                                                                 </div>
                                                                             </form>
                                                                         </td>
                                                                         <td>
-                                                                            <form method="POST" action="/RemoveTutorialArticleLink">
+                                                                            <form method="POST" action="/removetutorialarticlelink">
                                                                                 <div class="input-group">
                                                                                     <input type="text" name="tutorialId" hidden="true" value="<%=tempTutorials.get(j).getId()%>" />
                                                                                     <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(k).getId()%>" />
                                                                                     <div class="input-group-append">
-                                                                                        <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                                        <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                                         <button class="btn btn-sm btn-outline-warning" type="submit">Remove Link</button>
                                                                                     </div>
                                                                                 </div>
@@ -328,12 +328,12 @@
                                                 <td><small><b>Unlinked-Tutorial : </b></small></td>
                                                 <td><%=tempTutorials.get(j).getTitle()%></td>
                                                 <td>
-                                                    <form method="POST" action="/NewTopicTutorialLink">
+                                                    <form method="POST" action="/newtopictutoriallink">
                                                         <div class="input-group">
                                                             <input type="text" name="topicId" class="form-control" placeholder="Topic Id" />
                                                             <div class="input-group-append">
                                                                 <input type="text" name="tutorialId" hidden="true" value="<%=tempTutorials.get(j).getId()%>" />
-                                                                <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                 <button class="btn btn-sm btn-outline-info" type="submit">New Link</button>
                                                             </div>
                                                         </div>
@@ -355,24 +355,24 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td>
-                                                    <form method="POST" action="/NewTopicArticleLink">
+                                                    <form method="POST" action="/newtopicarticlelink">
                                                         <div class="input-group">
                                                             <input type="text" name="topicId" class="form-control" placeholder="Topic Id" />
                                                             <div class="input-group-append">
                                                                 <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(j).getId()%>" />
-                                                                <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                 <button class="btn btn-sm btn-outline-info" type="submit">New Link</button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </td>
                                                 <td>
-                                                    <form method="POST" action="/NewTutorialArticleLink">
+                                                    <form method="POST" action="/newtutorialarticlelink">
                                                         <div class="input-group">
                                                             <input type="text" name="tutorialId" class="form-control" placeholder="Tutorial Id" />
                                                             <div class="input-group-append">
                                                                 <input type="text" name="articleId" hidden="true" value="<%=tempArticles.get(j).getId()%>" />
-                                                                <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                                                <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                                                 <button class="btn btn-sm btn-outline-info" type="submit">New Link</button>
                                                             </div>
                                                         </div>
@@ -388,11 +388,11 @@
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="card card-body">
-                                <form method="POST" action="/NewTopic">
+                                <form method="POST" action="/newtopic">
                                     <div class="input-group">
                                         <input type="text" name="title" class="form-control" placeholder="New Title" />
                                         <div class="input-group-append">
-                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                             <button class="btn btn-sm btn-outline-info" type="submit">New Topic</button>
                                         </div>
                                     </div>
@@ -401,11 +401,11 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card card-body">
-                                <form method="POST" action="/NewArticle">
+                                <form method="POST" action="/newarticle">
                                     <div class="input-group">
                                         <input type="text" name="title" class="form-control" placeholder="New Title" />
                                         <div class="input-group-append">
-                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                             <button class="btn btn-sm btn-outline-info" type="submit">New Article</button>
                                         </div>
                                     </div>
@@ -414,11 +414,11 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card card-body">
-                                <form method="POST" action="/NewTutorial">
+                                <form method="POST" action="/newtutorial">
                                     <div class="input-group">
                                         <input type="text" name="title" class="form-control" placeholder="New Title" />
                                         <div class="input-group-append">
-                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                             <button class="btn btn-sm btn-outline-info" type="submit">New Tutorial</button>
                                         </div>
                                     </div>
@@ -429,11 +429,11 @@
                     <div class="row mt-2">
                         <div class="col-lg-4">
                             <div class="card card-body">
-                                <form method="POST" action="/DeleteTopic">
+                                <form method="POST" action="/deletetopic">
                                     <div class="input-group">
                                         <input type="text" name="topicId" class="form-control" placeholder="Topic ID" />
                                         <div class="input-group-append">
-                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                             <button class="btn btn-sm btn-outline-danger" type="submit">Delete Topic</button>
                                         </div>
                                     </div>
@@ -442,11 +442,11 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card card-body">
-                                <form method="POST" action="/DeleteArticle">
+                                <form method="POST" action="/deletearticle">
                                     <div class="input-group">
                                         <input type="text" name="articleId" class="form-control" placeholder="Article ID" />
                                         <div class="input-group-append">
-                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                             <button class="btn btn-sm btn-outline-danger" type="submit">Delete Article</button>
                                         </div>
                                     </div>
@@ -455,11 +455,11 @@
                         </div>
                         <div class="col-lg-4">
                             <div class="card card-body">
-                                <form method="POST" action="/DeleteTutorial">
+                                <form method="POST" action="/deletetutorial">
                                     <div class="input-group">
                                         <input type="text" name="tutorialId" class="form-control" placeholder="Tutorial ID" />
                                         <div class="input-group-append">
-                                            <input type="text" name="redirectURL" hidden="true" value="/ManageTopics" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managetopics" />
                                             <button class="btn btn-sm btn-outline-danger" type="submit">Delete Tutorial</button>
                                         </div>
                                     </div>

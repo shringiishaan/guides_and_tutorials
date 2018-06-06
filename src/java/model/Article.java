@@ -4,21 +4,31 @@ import java.sql.Timestamp;
 
 public class Article {
     
-    private String id;
+    private Integer id;
+    private String key;
     private String title;
     private Integer owner_id;
     private String status;
     private String scope;
     private String data;
+    private String shortDescription;
     private Timestamp createTime;
     private Timestamp modifiedTime;
     
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     
-    public String getId() {
+    public Integer getId() {
         return this.id;
+    }
+    
+    public void setKey(String key) {
+        this.key = key;
+    }
+    
+    public String getKey () {
+        return this.key;
     }
     
     public void setTitle(String title) {
@@ -59,6 +69,14 @@ public class Article {
     
     public String getData() {
         return this.data;
+    }
+    
+    public void setShortDescription(String desc) {
+        this.shortDescription = desc;
+    }
+    
+    public String getShortDescription() {
+        return this.shortDescription;
     }
     
     public void setCreateTime(Timestamp time) {

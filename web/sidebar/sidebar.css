@@ -1,44 +1,43 @@
 
 .is-sidebar {
-    height:85vh;
-    overflow-x:hidden;
-    overflow-y: auto;
-    max-width:25%;
+    padding-top:50px;
+    padding-left:15px;
+    padding-bottom:20px;
 }
 
-.is-sidebar a {
+.is-nav-list a {
+    padding-left:10px;
+    padding-right:10px;
     cursor: pointer;
     display:block;
 }
 
-.is-sidebar .is-active {
-    font-weight: 600;
-    color: rgba(0,0,0,.85) !important;
+.is-nav-list .is-active {
+    background-color:#ddd;
 }
 
-.is-sidebar .is-title {
-    font-size:16px;
-    padding-bottom:10px;
-    padding-top:10px;
-    color: rgba(0,0,0,0.85);
-}
-
-.is-sidebar .is-label {
-    cursor:pointer;
-    font-size:14px;
+.is-nav-list .is-title {
+    font-size:15px;
+    color: #333;
+    
     padding-bottom:8px;
-    color: rgba(109,121,147,0.65);
+    padding-top:14px;
 }
 
-.is-sidebar .is-label:hover {
-    color: teal;
+.is-nav-list .is-label {
+    cursor:pointer;
+    
+    color: #555555;
+    font-size:14px;
+    font-weight:300;
+    
+    padding-top:5px;
+    padding-bottom:5px;
 }
 
-.is-sidebar .is-element-hover:hover {
-    background-color:#eee;
-    border-radius: 10px;
+.is-nav-list .is-label:hover {
+    background-color:#ddd;
 }
-
 
 /*
 .is-sb {

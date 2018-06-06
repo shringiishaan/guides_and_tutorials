@@ -35,9 +35,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>The Science of Computing | Home</title>
+        <title>Computer Science and Programming Tutorials</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
+        <meta name="google-site-verification" content="q94Vj4nrbIhqG6KIgr4iAWZmLVQa3Pm5UV2gGWSAwHE" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
@@ -49,21 +50,21 @@
     </head>
     <body>
         <!-- navigation bar -->
-        <nav class="navbar navbar-expand-lg fixed-top navbar-dark is-navbar">
-            <a class="navbar-brand" href="/"><i><small>The</small> Science <small>Of</small> Computing</i></a>
+        <nav class="navbar navbar-expand-lg navbar-dark is-navbar">
+            <a class="navbar-brand" href="/">Computer Science and Programming Tutorials</a>
             
-            <button class="btn btn-info d-inline-block d-lg-none float-right" data-toggle="modal" data-target="#navigationModal">
+            <!-- button class="btn btn-info d-inline-block d-lg-none float-right" data-toggle="modal" data-target="#navigationModal">
                 <i class="fa fa-bars"></i>
-            </button>
+            </button -->
 
             <div class="d-none d-lg-inline-block ml-auto">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
+                    <!--li class="nav-item active">
                         <a class="nav-link" href="/"><i class="fa fa-home"></i> Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#!" data-toggle="modal" data-target="#navigationModal"><i class="fa fa-bars"></i> Topics</a>
-                    </li>
+                    </li-->
                     <%
                         if(isAdmin) {
                             %><li class="nav-item dropdown">
@@ -72,14 +73,14 @@
                                     Admin
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/ManageTopics">Topics</a>
-                                    <a class="dropdown-item" href="/ManageImages">Images</a>
+                                    <a class="dropdown-item" href="/managetopics">Topics</a>
+                                    <a class="dropdown-item" href="/manageimages">Images</a>
                                 </div>
                             </li><%
                         }
                         if(isUser||isAdmin) {
                             %><li class="nav-item">
-                                <a class="nav-link" href="/Logout">Logout</a>
+                                <a class="nav-link" href="/logout">Logout</a>
                             </li><%
                         }
                     %>
@@ -88,40 +89,11 @@
         </nav>
 
         <!-- container -->
-        <div class="container">
+        <div class="container home-page-container">
             <div class="row">
                 <!-- main content -->
-                <div class="col-12 p-4 pt-3 pt-lg-4 is-content">
-                    <%
-                        if (session.getAttribute("error") != null) {
-                        %>
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <%=session.getAttribute("error")%>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <%
-                            session.removeAttribute("error");
-                        }
-                        if (session.getAttribute("message") != null) {
-                        %>
-                            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                                <%=session.getAttribute("message")%>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        <%
-                            session.removeAttribute("message");
-                        }
-                    %>
-                    <div class="row">
-                        <div class="col-12">
-                            <p></p>
-                        </div>
-                    </div>
-                    <div class="row mb-4 mt-3">
+                <div class="col-12 p-4 is-content">
+                    <!-- div class="row mb-4 mt-3">
                         <div class="col-lg-6 offset-lg-3">
                             <form action="/Search" method="GET">
                                 <div class="input-group">
@@ -132,44 +104,57 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div -->
                     <div class="row">
                         <div class="col-xl-10 offset-xl-1">
                             <div class="row">
-                                <div class="col-lg-9">
-                                    <h4 class="text-center text-info"><a href="/Topic/java"><img class="img-thumbnail" style="height:70px;border:none;" src="/Image/tutorial-icon/java" /> Java</a></h4>
-                                    <hr />
-                                    <div class="text-center">
-                                        <a class="btn btn-outline-info mb-2" href="/StartTopicTutorial/java"><i class="fa mr-2 fa-sm fa-play"></i> Start Tutorial</a>
-                                        <a class="btn btn-outline-info mb-2" href="/Topic/java"><i class="fa mr-2 fa-sm fa-sitemap"></i> Explore</a>
-                                    </div>
-                                    <div class="row mb-3">
-                                        <div class="col-sm-6 col-md-4">
-                                            <h6>Top Articles</h6>
-                                            <%
-                                                tempArticles = articledao.getArticlesByTopicIdAndStatus("java",(isAdmin?null:"final"),false);
-                                                if(tempArticles!=null)
-                                                for(int k=0; k<tempArticles.size(); k++) {
-                                                    %><small><a href="/Article/<%=tempArticles.get(k).getId()%>" class="d-block"><%=tempArticles.get(k).getTitle()%></a></small><%
-                                                } 
-                                            %>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <h6>Tutorials</h6>
-                                        </div>
-                                    </div>
-                                    <div class="row">
+                                <div class="col-lg-12">
                                     <%
-                                        tempTutorials = tutorialdao.getTutorialsByTopicIdAndStatus("java",(isAdmin?null:"final"));
-                                        if(tempTutorials!=null)
-                                        for(int k=0; k<tempTutorials.size(); k++) {
-                                            tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorials.get(k).getId(),isAdmin?null:"final",false);
-                                            %><div class="col-sm-6 col-md-4">
-                                                <div class="card is-tutorial-card">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">
+                                        if (session.getAttribute("error") != null) {
+                                        %>
+                                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                                <%=session.getAttribute("error")%>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        <%
+                                            session.removeAttribute("error");
+                                        }
+                                        if (session.getAttribute("message") != null) {
+                                        %>
+                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                <%=session.getAttribute("message")%>
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        <%
+                                            session.removeAttribute("message");
+                                        }
+                                    %>
+                                    <p>
+                                        Learn with an ever growing set of tutorials on topics that will brush up your computer programming skills and 
+                                        test your fundamental understanding of the subject.
+                                    </p>
+                                    <p>
+                                        We've included example code blocks and
+                                        descriptive images to help you better understand the concepts. 
+                                        Extra information in expandible boxes are optional but recommended to read.
+                                    </p>
+                                    <% for(int i=0; i<allTopics.size(); i++) { %>
+                                        <br />
+                                        <h4 class="text-center text-info"><a href="/topic/<%=allTopics.get(i).getId()%>"><%=allTopics.get(i).getTitle()%></a></h4>
+                                        <br />
+                                        <div class="row is-nav-list">
+                                        <%
+                                            tempTutorials = tutorialdao.getTutorialsByTopicIdAndStatus(allTopics.get(i).getId(),(isAdmin?null:"final"));
+                                            if(tempTutorials!=null)
+                                            for(int k=0; k<tempTutorials.size(); k++) {
+                                                tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorials.get(k).getId(),isAdmin?null:"final",false);
+                                                %><div class="col-sm-6 col-md-4">
+                                                    <div class="card card-body is-tutorial-card p-0 pb-3">
+                                                        <h6 class="is-title">
                                                             <%=tempTutorials.get(k).getTitle()%>
                                                             <% if(isAdmin) { %><sup class="<%=
                                                                 (tempTutorials.get(k).getStatus().equals("final"))?"text-success":"text-warning"
@@ -178,7 +163,7 @@
                                                         </h6>
                                                         <%
                                                             for(int j=0; j<tempArticles.size(); j++) {
-                                                                %><a class="card-text" href="/Article/<%=tempArticles.get(j).getId()%>">
+                                                                %><a class="card-article-link" href="/article/<%=tempArticles.get(j).getKey()%>">
                                                                         <%=tempArticles.get(j).getTitle()%>
                                                                         <% if(isAdmin) { %><sup class="<%=
                                                                                 (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
@@ -188,69 +173,29 @@
                                                             }
                                                         %>
                                                     </div>
-                                                </div>
-                                            </div><%
-                                        } 
-                                    %>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <h4 class="text-center text-info"><a href="/Topic/operating-systems"><img class="img-thumbnail" style="height:70px;border:none;" src="/Image/tutorial-icon/operating-systems" /> Operating Systems</a></h4>
-                                    <hr />
-                                    <div class="text-center">
-                                        <a class="btn btn-outline-info mb-2" href="/StartTopicTutorial/operating-systems"><i class="fa mr-2 fa-sm fa-play"></i> Start Tutorial</a>
-                                        <a class="btn btn-outline-info mb-2" href="/Topic/operating-systems"><i class="fa mr-2 fa-sm fa-sitemap"></i> Explore</a>
-                                    </div>
-                                    <div class="row mt-2">
-                                        <div class="col-2">
-                                            <h6>Tutorials</h6>
+                                                </div><%
+                                            } 
+                                        %>
                                         </div>
-                                    </div>
-                                    <div class="row"
-                                    <%
-                                        tempTutorials = tutorialdao.getTutorialsByTopicIdAndStatus("operating-systems",(isAdmin?null:"final"));
-                                        if(tempTutorials!=null)
-                                        for(int k=0; k<tempTutorials.size(); k++) {
-                                            tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorials.get(k).getId(),isAdmin?null:"final",false);
-                                            %><div class="col-sm-6 offset-sm-3 col-md-4 offset-md-4 col-lg-12 offset-lg-0">
-                                                <div class="card is-tutorial-card">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title">
-                                                            <%=tempTutorials.get(k).getTitle()%>
-                                                            <% if(isAdmin) { %><sup class="<%=
-                                                                (tempTutorials.get(k).getStatus().equals("final"))?"text-success":"text-warning"
-                                                                %>"></i>(<%=tempTutorials.get(k).getStatus()%>)</i></sup>
-                                                            <% } %>
-                                                        </h6>
-                                                        <%
-                                                            for(int j=0; j<tempArticles.size(); j++) {
-                                                                %><a class="card-text" href="/Article/<%=tempArticles.get(j).getId()%>">
-                                                                        <%=tempArticles.get(j).getTitle()%>
-                                                                        <% if(isAdmin) { %><sup class="<%=
-                                                                                (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
-                                                                                %>"><i><%=tempArticles.get(j).getStatus()%></i></sup>
-                                                                        <% } %>
-                                                                </a><%
-                                                            }
-                                                        %>
-                                                    </div>
-                                                </div>
-                                            </div><%
-                                        } 
-                                    %>
-                                    </div>
+                                    <% } %>
+                                    <br />
+                                    <p>
+                                        More tutorials on these topics coming soon. <b>Operating Systems</b>, <b>Computer Networks</b>, <b>Database Systems</b>,
+                                        <b>Computer Architecture</b>. 
+                                        Any suggestions welcome : <i>shringiishaan@gmail.com</i>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div
+            </div>
             <br>
             <hr />
             <p class="text-muted float-right"><small>Developed By <span class="text-info" data-toggle="modal" data-target="#loginModal">Ishaan Shringi</span></small></p>
         </div>
                         
-        <div class="modal fade" id="navigationModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <!-- div class="modal fade" id="navigationModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -279,12 +224,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div -->
         
         <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
                 <div class="modal-content">
-                    <form action="/Login" method="post">
+                    <form action="/login" method="post">
                         <div class="modal-body">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="email" placeholder="Email" />

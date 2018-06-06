@@ -19,7 +19,7 @@ public class NewTutorial extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
@@ -31,7 +31,8 @@ public class NewTutorial extends HttpServlet {
             response.sendRedirect(request.getParameter("redirectURL"));
         }
         else {
-            tutorialdao.createNewTutorial(title.toLowerCase().replace(" ","-"),title);
+            String key = title.toLowerCase().replace(" ","-");
+            tutorialdao.createNewTutorial(key,title);
             session.setAttribute("message","Tutorial created successfully");
             response.sendRedirect(request.getParameter("redirectURL"));
         }

@@ -17,7 +17,7 @@ public class NewComment extends HttpServlet {
             throws ServletException, IOException {
         
         String message = request.getParameter("message").trim();
-        String articleId = request.getParameter("articleId").trim();
+        Integer articleId = Integer.parseInt(request.getParameter("articleId"));
         
         UserDAO userdao = new UserDAO();
         CommentDAO commentdao = new CommentDAO();

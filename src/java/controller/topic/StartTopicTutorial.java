@@ -18,17 +18,19 @@ public class StartTopicTutorial extends HttpServlet {
         String[] parts = requestedPath.split("/");
 
         if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("StartTopicTutorial")) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
+        
+        Integer topicId = Integer.parseInt(parts[2]);
         
         TopicDAO topicdao = new TopicDAO();
-        if(!topicdao.verifyTopicId(parts[2])) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+        if(!topicdao.verifyTopicId(topicId)) {
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
-        response.sendRedirect("/Article/"+new ArticleDAO().getMaximumPriorityArticleByTutorialIdAndStatus(new TutorialDAO().getMaximumPriorityTutorialByTopicId(parts[2]).getId(), "final", false).getId());
+        response.sendRedirect("/article/"+new ArticleDAO().getMaximumPriorityArticleByTutorialIdAndStatus(new TutorialDAO().getMaximumPriorityTutorialByTopicId(topicId).getId(),"final", false).getKey());
     }
 
     @Override

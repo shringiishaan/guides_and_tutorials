@@ -19,12 +19,12 @@ public class NewTutorialArticleLink extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
         
-        String tutorialId = request.getParameter("tutorialId").trim();
-        String articleId = request.getParameter("articleId").trim();
+        Integer articleId = Integer.parseInt(request.getParameter("articleId"));
+        Integer tutorialId = Integer.parseInt(request.getParameter("tutorialId"));
         
         ArticleDAO articledao = new ArticleDAO();
         Integer priority = articledao.getMinimumPriorityValueByTutorialId(tutorialId);

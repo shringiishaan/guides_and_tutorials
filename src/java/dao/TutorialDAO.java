@@ -32,7 +32,7 @@ public class TutorialDAO {
         }
     }
     
-    public Tutorial getTutorialById(String id) {
+    public Tutorial getTutorialById(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -40,11 +40,12 @@ public class TutorialDAO {
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * FROM tutorials where id=?");
-            statement.setString(1, id);
+            statement.setInt(1, id);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
             }
@@ -77,7 +78,8 @@ public class TutorialDAO {
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
             }
@@ -98,7 +100,7 @@ public class TutorialDAO {
         return tutorial;
     }
     
-    public Tutorial getTutorialByArticleId(String articleId) {
+    public Tutorial getTutorialByArticleId(Integer articleId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -110,11 +112,12 @@ public class TutorialDAO {
                     + "FROM tutorial_article_map m JOIN tutorials t "
                     + "ON m.tutorial_id=t.id "
                     + "WHERE m.article_id=?");
-            statement.setString(1, articleId);
+            statement.setInt(1, articleId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("t.id"));
+                tutorial.setId(resultSet.getInt("t.id"));
+                tutorial.setKey(resultSet.getString("t.key"));
                 tutorial.setTitle(resultSet.getString("t.title"));
                 tutorial.setStatus(resultSet.getString("t.status"));
             }
@@ -135,7 +138,7 @@ public class TutorialDAO {
         return tutorial;
     }
     
-    public Tutorial getMaximumPriorityTutorialByTopicId(String topicId) {
+    public Tutorial getMaximumPriorityTutorialByTopicId(Integer topicId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -145,12 +148,13 @@ public class TutorialDAO {
             statement = connection.prepareStatement("SELECT * FROM tutorials WHERE id="
                         + "(SELECT tutorial_id FROM topic_tutorial_map "
                             + "WHERE topic_id=? AND priority=(SELECT max(priority) FROM topic_tutorial_map WHERE topic_id=?))");
-            statement.setString(1, topicId);
-            statement.setString(2, topicId);
+            statement.setInt(1, topicId);
+            statement.setInt(2, topicId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
             }
@@ -171,7 +175,7 @@ public class TutorialDAO {
         return tutorial;
     }
     
-    public Tutorial getTutorialByTopicIdByPriorityGTE(String topicId, Integer minimumPriority) {
+    public Tutorial getTutorialByTopicIdByPriorityGTE(Integer topicId, Integer minimumPriority) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -180,12 +184,13 @@ public class TutorialDAO {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * from tutorials where id in "
                     + "(SELECT tutorial_id from topic_tutorial_map WHERE topic_id=? and priority>=? ORDER BY priority ASC LIMIT 1);");
-            statement.setString(1, topicId);
+            statement.setInt(1, topicId);
             statement.setInt(2, minimumPriority);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
             }
@@ -206,7 +211,7 @@ public class TutorialDAO {
         return tutorial;
     }
     
-    public Tutorial getTutorialByTopicIdByPriorityLTE(String topicId, Integer maximumPriority) {
+    public Tutorial getTutorialByTopicIdByPriorityLTE(Integer topicId, Integer maximumPriority) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -215,12 +220,13 @@ public class TutorialDAO {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT * from tutorials WHERE id in "
                     + "(SELECT tutorial_id from topic_tutorial_map WHERE topic_id=? and priority<=? ORDER BY priority DESC LIMIT 1);");
-            statement.setString(1, topicId);
+            statement.setInt(1, topicId);
             statement.setInt(2, maximumPriority);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
             }
@@ -253,7 +259,8 @@ public class TutorialDAO {
             tutorials = new ArrayList<>();
             while(resultSet.next()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
                 tutorials.add(tutorial);
@@ -275,7 +282,7 @@ public class TutorialDAO {
         return tutorials;
     }
     
-    public List<Tutorial> getTutorialsByTopicIdAndStatus(String topicId, String status) {
+    public List<Tutorial> getTutorialsByTopicIdAndStatus(Integer topicId, String status) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -289,7 +296,7 @@ public class TutorialDAO {
                         + "ON tmap.tutorial_id = t.id "
                         + "WHERE topic_id=? "
                         + "ORDER BY priority DESC;");
-                statement.setString(1, topicId);
+                statement.setInt(1, topicId);
             }
             else {
                 statement = connection.prepareStatement("SELECT * "
@@ -297,14 +304,15 @@ public class TutorialDAO {
                         + "ON tmap.tutorial_id = t.id "
                         + "WHERE topic_id=? AND status=? "
                         + "ORDER BY priority DESC;");
-                statement.setString(1, topicId);
+                statement.setInt(1, topicId);
                 statement.setString(2, status);
             }
             resultSet = statement.executeQuery();
             tutorials = new ArrayList<>();
             while(resultSet.next()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("t.id"));
+                tutorial.setId(resultSet.getInt("t.id"));
+                tutorial.setKey(resultSet.getString("t.key"));
                 tutorial.setTitle(resultSet.getString("t.title"));
                 tutorial.setStatus(resultSet.getString("t.status"));
                 tutorials.add(tutorial);
@@ -342,7 +350,8 @@ public class TutorialDAO {
             tutorials = new ArrayList<>();
             while(resultSet.next()) {
                 tutorial = new Tutorial();
-                tutorial.setId(resultSet.getString("id"));
+                tutorial.setId(resultSet.getInt("id"));
+                tutorial.setKey(resultSet.getString("key"));
                 tutorial.setTitle(resultSet.getString("title"));
                 tutorial.setStatus(resultSet.getString("status"));
                 tutorials.add(tutorial);
@@ -364,7 +373,7 @@ public class TutorialDAO {
         return tutorials;
     }
     
-    public List<Tutorial> getRelatedTutorialsByArticleId(String articleId, String status, String scope) {
+    public List<Tutorial> getRelatedTutorialsByArticleId(Integer articleId, String status, String scope) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -387,16 +396,17 @@ public class TutorialDAO {
                         + "WHERE m.tutorial_id IN "
                             + "(SELECT tutorial_id FROM topic_tutorial_map WHERE topic_id="
                                 + "(SELECT topic_id FROM topic_tutorial_map WHERE tutorial_id="
-                                    + "(SELECT DISTINCT tutorial_id FROM tutorial_article_map WHERE article_id=?))) "
+                                    + "(SELECT tutorial_id FROM tutorial_article_map WHERE article_id=? LIMIT 1))) "
                         + "ORDER BY m.priority DESC;");
             }
-            statement.setString(1, articleId);
+            statement.setInt(1, articleId);
                 
             resultSet = statement.executeQuery();
             relatedTutorials = new ArrayList<>();
             while(resultSet.next()) {
                 tempTutorial = new Tutorial();
-                tempTutorial.setId(resultSet.getString("t.id"));
+                tempTutorial.setId(resultSet.getInt("t.id"));
+                tempTutorial.setKey(resultSet.getString("t.key"));
                 tempTutorial.setTitle(resultSet.getString("t.title"));
                 tempTutorial.setStatus(resultSet.getString("t.status"));
                 relatedTutorials.add(tempTutorial);
@@ -417,7 +427,7 @@ public class TutorialDAO {
         return relatedTutorials;
     }
     
-    public Map<Tutorial,List<Article>> getRelatedTutorialsAndArticlesByArticleId(String articleId, String status, String scope) {
+    public Map<Tutorial,List<Article>> getRelatedTutorialsAndArticlesByArticleId(Integer articleId, String status, String scope) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -439,14 +449,15 @@ public class TutorialDAO {
                             + "ORDER BY priority DESC)"
                         + "ORDER BY priority DESC);");
             }
-            statement.setString(1, articleId);
+            statement.setInt(1, articleId);
             
             resultSet = statement.executeQuery();
             relatedTutorials = new HashMap<>();
             ArticleDAO articledao = new ArticleDAO();
             while(resultSet.next()) {
                 tempTutorial = new Tutorial();
-                tempTutorial.setId(resultSet.getString("id"));
+                tempTutorial.setId(resultSet.getInt("id"));
+                tempTutorial.setKey(resultSet.getString("key"));
                 tempTutorial.setTitle(resultSet.getString("title"));
                 tempTutorial.setStatus(resultSet.getString("status"));
                 tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorial.getId(), status, false);
@@ -468,13 +479,13 @@ public class TutorialDAO {
         return relatedTutorials;
     }
     
-    public void createNewTutorial(String id, String title) {
+    public void createNewTutorial(String key, String title) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO tutorials (id,title,status) VALUES (?,?,'new')");
-            statement.setString(1, id);
+            statement = connection.prepareStatement("INSERT INTO tutorials (key,title,status) VALUES (?,?,'new')");
+            statement.setString(1, key);
             statement.setString(2, title);
             statement.executeUpdate();
             
@@ -491,14 +502,14 @@ public class TutorialDAO {
         }
     }
     
-    public Integer getMaximumTutorialPriorityValueByTopicId(String topicId) {
+    public Integer getMaximumTutorialPriorityValueByTopicId(Integer topicId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT max(priority) FROM topic_tutorial_map where topic_id=?");
-            statement.setString(1, topicId);
+            statement.setInt(1, topicId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 return resultSet.getInt("max(priority)");
@@ -519,13 +530,69 @@ public class TutorialDAO {
         return null;
     }
     
-    public void incrementPriorityForAllTutorialsByTopicId(String topicId) {
+    public Integer getIdByTutorialKey(String tutorialKey) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT id FROM tutorials where key=?");
+            statement.setString(1, tutorialKey);
+            resultSet = statement.executeQuery();
+            if(resultSet.first()) {
+                return resultSet.getInt("id");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return null;
+    }
+    
+    public String getKeyByTutorialId(Integer tutorialId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT key FROM tutorials where id=?");
+            statement.setInt(1, tutorialId);
+            resultSet = statement.executeQuery();
+            if(resultSet.first()) {
+                return resultSet.getString("key");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return null;
+    }
+    
+    public void incrementPriorityForAllTutorialsByTopicId(Integer topicId) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("UPDATE topic_tutorial_map SET priority=priority+1 WHERE topic_id=?");
-            statement.setString(1,topicId);
+            statement.setInt(1,topicId);
             statement.executeUpdate();
             
         } catch (SQLException ex) {
@@ -541,14 +608,14 @@ public class TutorialDAO {
         }
     }
     
-    public Integer getMinimumTutorialPriorityValueByTopicId(String topicId) {
+    public Integer getMinimumTutorialPriorityValueByTopicId(Integer topicId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT min(priority) FROM topic_tutorial_map where topic_id=?");
-            statement.setString(1, topicId);
+            statement.setInt(1, topicId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 return resultSet.getInt("min(priority)");
@@ -569,15 +636,15 @@ public class TutorialDAO {
         return null;
     }
     
-    public Integer getPriorityByTopicIdAndTutorialId(String topicId, String tutorialId) {
+    public Integer getPriorityByTopicIdAndTutorialId(Integer topicId, Integer tutorialId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT priority FROM topic_tutorial_map where topic_id=? and tutorial_id=?");
-            statement.setString(1, topicId);
-            statement.setString(2, tutorialId);
+            statement.setInt(1, topicId);
+            statement.setInt(2, tutorialId);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
                 return resultSet.getInt("priority");
@@ -598,15 +665,15 @@ public class TutorialDAO {
         return null;
     }
     
-    public void updatePriorityByTopicIdAndTutorialId(String topicId, String tutorialId, Integer priority) {
+    public void updatePriorityByTopicIdAndTutorialId(Integer topicId, Integer tutorialId, Integer priority) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("UPDATE topic_tutorial_map SET priority=? WHERE topic_id=? and tutorial_id=?");
             statement.setInt(1, priority);
-            statement.setString(2,topicId);
-            statement.setString(3,tutorialId);
+            statement.setInt(2,topicId);
+            statement.setInt(3,tutorialId);
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -621,13 +688,13 @@ public class TutorialDAO {
         }
     }
     
-    public void updateStatusByTutorialId(String tutorialId, String status) {
+    public void updateStatusByTutorialId(Integer tutorialId, String status) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("UPDATE tutorials SET status=? WHERE id=?");
-            statement.setString(2, tutorialId);
+            statement.setInt(2, tutorialId);
             statement.setString(1, status);
             statement.executeUpdate();
             
@@ -670,14 +737,14 @@ public class TutorialDAO {
         return false;
     }
     
-    public Boolean verifyTutorialId(String id) {
+    public Boolean verifyTutorialId(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("SELECT 1 FROM tutorials WHERE id=?");
-            statement.setString(1, id);
+            statement.setInt(1, id);
             resultSet = statement.executeQuery();
             return (resultSet.first());
         } catch (SQLException ex) {
@@ -696,13 +763,13 @@ public class TutorialDAO {
         return false;
     }
     
-    public void deleteByTutorialId(String id) {
+    public void deleteByTutorialId(Integer id) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("DELETE FROM tutorials WHERE id=?");
-            statement.setString(1, id);
+            statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -717,14 +784,14 @@ public class TutorialDAO {
         }
     }
     
-    public void createTopicTutorialLink(String topicId, String tutorialId, Integer priority) {
+    public void createTopicTutorialLink(Integer topicId, Integer tutorialId, Integer priority) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("INSERT INTO topic_tutorial_map (topic_id,tutorial_id,priority) VALUES (?,?,?)");
-            statement.setString(1, topicId);
-            statement.setString(2, tutorialId);
+            statement.setInt(1, topicId);
+            statement.setInt(2, tutorialId);
             statement.setInt(3, priority);
             statement.executeUpdate();
             
@@ -741,14 +808,14 @@ public class TutorialDAO {
         }
     }
     
-    public void removeTopicTutorialLink(String topicId, String tutorialId) {
+    public void removeTopicTutorialLink(Integer topicId, Integer tutorialId) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("DELETE FROM topic_tutorial_map WHERE topic_id=? and tutorial_id=?");
-            statement.setString(1, topicId);
-            statement.setString(2, tutorialId);
+            statement.setInt(1, topicId);
+            statement.setInt(2, tutorialId);
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -763,16 +830,16 @@ public class TutorialDAO {
         }
     }
     
-    public void removeAllLinksByTutorialId(String tutorialId) {
+    public void removeAllLinksByTutorialId(Integer tutorialId) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("DELETE FROM topic_tutorial_map WHERE tutorial_id=?");
-            statement.setString(1, tutorialId);
+            statement.setInt(1, tutorialId);
             statement.executeUpdate();
             statement = connection.prepareStatement("DELETE FROM tutorial_article_map WHERE tutorial_id=?");
-            statement.setString(1, tutorialId);
+            statement.setInt(1, tutorialId);
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(TutorialDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -19,10 +19,6 @@ p,h1,h2,h3,h4,h5,h6 {
     color:#557A95 !important;
 }
 
-.container-fluid, .container{
-    padding-top:60px;
-}
-
 a {
     color:#6d7993;
 }
@@ -32,24 +28,25 @@ a:hover {
     text-decoration:none;
 }
 
-.is-tutorial-card {
-    margin-bottom:20px;
+.is-sidebar .is-tutorial-card {
+    border-radius: 4px;
+    /* box-shadow: 0 24px 33px -20px #bbb; */
+    background: #f3f3f3;
+    border:none;
+    margin-bottom:25px;
 }
 
-.is-tutorial-card .card-title {
-    font-size:16px;
-    color: rgba(0,0,0,0.85);
+.is-sidebar .is-tutorial-card .card-title {
+    font-size:14px;
+    color: #333;
 }
 
-.is-tutorial-card .card-text{
+.is-sidebar .is-tutorial-card .card-article-link {
     display:block;
     cursor:pointer;
     font-size:14px;
-    color: rgba(109,121,147,0.65);
-}
-
-.is-tutorial-card .card-text:hover {
-    color: teal;
+    font-weight:300;
+    color:#333;
 }
 
 .navbar-brand {
@@ -91,4 +88,142 @@ a:hover {
 
 #navigationModal .is-label:hover {
     color: teal;
+}
+
+#is-transparent-modal-wrapper {
+    height:100%;
+    width:100%;
+    left: 0;
+    top: 0;
+    position:fixed;
+    display:block;
+    box-sizing: border-box;
+    z-index:1000;
+    
+    background-color:#333;
+    opacity:0.9;
+    
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#is-transparent-modal-content {
+    height:100%;
+    width:100%;
+    left: 0;
+    top: 0;
+    position:fixed;
+    display:block;
+    box-sizing: border-box;
+    z-index:1005;
+    
+    opacity:1;
+    
+    overflow-x: hidden;
+    overflow-y: auto;
+    
+    max-height:80vh;
+}
+
+#is-transparent-modal-content  .is-tutorial-card {
+    z-index: 1005;
+    
+    border-radius: 4px;
+    box-shadow: 0 24px 33px -20px #333 !important;
+    border:none;
+    
+    border-radius: 2px;
+    box-shadow: 0 24px 33px -20px #bbb;
+    background: #f3f3f3;
+    border:none;
+    margin-bottom:25px;
+    
+    padding:0;
+    padding-bottom:10px;
+}
+
+#is-transparent-modal-content  .is-tutorial-card .is-active {
+    font-weight:350;
+    background-color:#ddd;
+}
+
+#is-transparent-modal-content  .is-tutorial-card .card-title {
+    font-size:14px;
+    color: #333;
+    padding-top:15px;
+    padding-bottom:5px;
+    padding-left:15px;
+    padding-right:15px;
+    margin:0;
+}
+
+#is-transparent-modal-content  .is-tutorial-card .card-article-link {
+    display:block;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:300;
+    color:#333;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+#is-transparent-modal-content .is-tutorial-card .card-article-link:hover {
+    font-weight:300;
+    background-color:#ddd;
+}
+    
+#is-float-bottom {
+    bottom:20px;
+    left:20px;
+    position:fixed;
+    z-index: 1010;
+}
+
+.home-page-container .is-tutorial-card {
+    border-radius: 4px;
+    box-shadow: 0 24px 33px -20px #bbb;
+    background: #f3f3f3;
+    border:none;
+    margin-bottom:25px;
+    padding-bottom:20px;
+}
+
+.home-page-container .is-nav-list a {
+    padding-left:10px;
+    padding-right:10px;
+    cursor: pointer;
+    display:block;
+}
+
+.home-page-container .is-nav-list .is-active {
+    background-color:#ddd;
+}
+
+.home-page-container .is-nav-list .is-title {
+    font-size:15px;
+    color: #333;
+    
+    padding-bottom:5px;
+    padding-top:18px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.home-page-container .is-nav-list .card-article-link {
+    cursor:pointer;
+    
+    color: #555555;
+    font-size:14px;
+    font-weight:300;
+    
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.home-page-container .is-nav-list .card-article-link:hover {
+    background-color:#ddd;
 }

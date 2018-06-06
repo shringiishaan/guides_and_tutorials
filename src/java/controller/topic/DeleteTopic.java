@@ -17,11 +17,11 @@ public class DeleteTopic extends HttpServlet {
         UserDAO userdao = new UserDAO();
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/error404.jsp").forward(request, response);
+            request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }
 
-        String topicId = request.getParameter("topicId");
+        Integer topicId = Integer.parseInt(request.getParameter("topicId"));
         TopicDAO topicdao = new TopicDAO();
         
         topicdao.removeAllLinksByTopicId(topicId);
