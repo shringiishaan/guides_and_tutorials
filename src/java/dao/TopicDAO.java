@@ -201,7 +201,7 @@ public class TopicDAO {
         Topic topic;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM topics");
+            statement = connection.prepareStatement("SELECT * FROM topics ORDER BY priority DESC;");
             resultSet = statement.executeQuery();
             topics = new ArrayList<>();
             while(resultSet.next()) {

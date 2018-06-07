@@ -1,43 +1,56 @@
-<%@page import="model.Image"%>
-<%@page import="dao.ImageDAO"%>
-<%@page import="java.util.ArrayList"%>
 <%@page import="model.Topic"%>
 <%@page import="dao.TopicDAO"%>
-<%@page import="model.User"%>
-<%@page import="dao.UserDAO"%>
 <%@page import="dao.ArticleDAO"%>
-<%@page import="java.util.List"%>
 <%@page import="model.Article"%>
+<%@page import="dao.UserDAO"%>
+<%@page import="model.User"%>
+<%@page import="dao.TutorialDAO"%>
+<%@page import="java.util.List"%>
+<%@page import="model.Tutorial"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    if(session.getAttribute("userId")==null) {
-        response.sendRedirect("/");
+    User user = null;
+    
+    if(session.getAttribute("userId") == null) {
+        response.sendRedirect("/logout");
         return;
     }
-    User user = null;
+    
     UserDAO userdao = new UserDAO();
     user = userdao.getUserById((Integer)session.getAttribute("userId"));
-    if(user==null || !user.getType().equals("admin")) {
-        response.sendRedirect("/");
+    if(!user.getType().equals("admin")) {
+        response.sendRedirect("/logout");
         return;
     }
-    TopicDAO topicdao = new TopicDAO();
-    List<Topic> allTopics = topicdao.getAllTopics();
     
-    String currentKeyword1 = request.getParameter("currentKeyword1");
+    ArticleDAO articledao = new ArticleDAO();
+    List<Article> allArticles = articledao.getAllArticles(false);
     
-    ImageDAO imagedao = new ImageDAO();
-    List<String> keywords = imagedao.getAllDistinctKeyword1();
-    if(currentKeyword1==null && keywords!=null && keywords.size()>0) {
-        response.sendRedirect("/manageimages?currentKeyword1="+keywords.get(0));
+    Integer articleId = null;
+    String articleIdString = request.getParameter("aid");
+    if(articleIdString == null) {
+        response.sendRedirect("/managearticle?aid="+allArticles.get(0).getId());
         return;
     }
-    List<Image> images = (currentKeyword1==null)?null:imagedao.getImagesByKeyword1(currentKeyword1);
+    else {
+        articleId = Integer.parseInt(articleIdString);
+    }
+    
+    Article currentArticle = null;
+    
+    for(int i=0; i<allArticles.size(); i++) {
+        if(allArticles.get(i).getId().compareTo(articleId)==0) {
+            currentArticle = allArticles.get(i);
+            break;
+        }
+    }
+    
+    currentArticle.setData(articledao.getDataByArticleId(currentArticle.getId()));
 %>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Manage Images | Computer Science and Programming Tutorials</title>
+        <title>Manage Article | Computer Science and Programming Tutorials</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
         <meta name="google-site-verification" content="q94Vj4nrbIhqG6KIgr4iAWZmLVQa3Pm5UV2gGWSAwHE" />
@@ -105,8 +118,8 @@
                             <a class="btn btn-sm btn-outline-secondary" href="/managetopictutoriallink">Topic-Tutorial</a>
                             <a class="btn btn-sm btn-outline-secondary" href="/managetutorial">Tutorial</a>
                             <a class="btn btn-sm btn-outline-secondary" href="/managetutorialarticlelink">Tutorial-Article</a>
-                            <a class="btn btn-sm btn-outline-secondary" href="/managearticle">Article</a>
-                            <a class="btn btn-sm btn-secondary" href="/manageimages">Images</a>
+                            <a class="btn btn-sm btn-secondary" href="/managearticle">Article</a>
+                            <a class="btn btn-sm btn-outline-secondary" href="/manageimages">Images</a>
                         </div>
                     </div>
                     <div class="row">
@@ -139,76 +152,89 @@
                                     %>
                                 </div>
                             </div>
+                            <br />
                             <div class="row">
                                 <div class="col-12">
-                                    <select class="form-control" onchange="changeKeywordSelection()" id="currentKeyword1">
-                                        <%
-                                            if(keywords!=null)
-                                            for(int i=0; i<keywords.size(); i++) {
-                                                out.println("<option value='" + keywords.get(i)+"' ");
-                                                if(currentKeyword1.equals(keywords.get(i))) {
-                                                    out.println(" selected='true' ");
-                                                }
-                                                out.println(" >"+keywords.get(i)+"</option>");
-                                            }
-                                        %>
+                                    <select id="aid-select" name="aid" class="form-control" onchange="changeArticleIdSelection()">
+                                        <% for(int i=0; i<allArticles.size(); i++) { %>
+                                        <option value="<%=allArticles.get(i).getId()%>" <%=(allArticles.get(i).getId().compareTo(currentArticle.getId())==0)?"selected='true'":""%> ><%=allArticles.get(i).getTitle()%></option>
+                                        <% } %>
                                     </select>
                                 </div>
                             </div>
                             <hr />
                             <div class="row">
-                                <%
-                                    if(images!=null)
-                                    for (int i = 0; i < images.size(); i++) {
-                                    %>
-                                    <div class="col-md-3">
-                                        <img class="img-thumbnail" src="/image/<%=images.get(i).getKeyword1()%>/<%=images.get(i).getKeyword2()%>" />
-                                        <center>
-                                            <small><i>ID</i> : <%=images.get(i).getId()%></small>
-                                            <br><small><i>Size</i> : <%=images.get(i).getData().length()%></small>
-                                            <br><small><i>Keyword2</i> : <%=images.get(i).getKeyword2()%></small>
-                                            <br>
-                                            <small>
-                                                <form action="DeleteImage" method="POST">
-                                                    <input name="imageId" hidden="true" value="<%=images.get(i).getId()%>" />
-                                                    <input name="redirectURL" hidden="true" value="/manageimages?currentKeyword1=<%=currentKeyword1%>" />
-                                                    <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
-                                                </form>
-                                            </small>
-                                        </center>
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <small>Title : <%=currentArticle.getTitle()%></small><br />
+                                            <small>ID : <%=currentArticle.getId()%></small><br />
+                                            <small>Key : <%=currentArticle.getKey()%></small>
+                                            <br />
+                                            <form action="/updatearticlestatus" method="POST" class="mt-3">
+                                                <div class="input-group">
+                                                    <input type="text" name="status" class="form-control" value="<%=currentArticle.getStatus()%>" />
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-info" type="submit">Update Status</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <form action="/updatearticlescope" method="POST" class="mt-3">
+                                                <div class="input-group">
+                                                    <input type="text" name="scope" class="form-control" value="<%=currentArticle.getScope()%>" />
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-info" type="submit">Update Scope</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <form action="/updatearticleshortdescription" method="POST" class="mt-3">
+                                                <div class="input-group">
+                                                    <textarea type="text" name="shortdescription" class="form-control" ><%=currentArticle.getShortDescription()%></textarea>
+                                                    <button class="btn btn-outline-info" type="submit">Update Short Description</button>
+                                                </div>
+                                            </form>
+                                            <form action="/updatearticledata" method="POST" class="mt-3">
+                                                <div class="input-group">
+                                                    <textarea type="text" name="data" class="form-control" ><%=currentArticle.getData()%></textarea>
+                                                    <button class="btn btn-outline-info" type="submit">Update Data</button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <%
-                                    }
-                                %>
+                                                    <hr />
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card card-body">
+                                                <h6>New Article</h6>
+                                                <hr />
+                                                <form action="/newarticle" method="GET">
+                                                    <div class="input-group">
+                                                        <input type="text" name="title" class="form-control" placeholder="New Title" />
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-success" type="submit">Create New</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <hr/>
-                            <form action="/uploadimage" method="post" enctype="multipart/form-data" class="row">
-                                <div class="col-md-3">
-                                    <input type="file" class="form-control" name="image"  />
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="text" name="keyword1" class="form-control" placeholder="Keyword 1" value="<%=currentKeyword1%>" />
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="text" name="keyword2" class="form-control" placeholder="Keyword 2" />
-                                    <input name="redirectURL" hidden="true" value="/manageimages?currentKeyword1=<%=currentKeyword1%>" />
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="submit" class="btn btn-outline-info">Upload</button>
-                                </div>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
+            <hr />
+            <p class="text-muted float-right"><small>Developed By <span class="text-info" data-toggle="modal" data-target="#loginModal">Ishaan Shringi</span></small></p>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script lang="text/javascript">
-            function changeKeywordSelection() {
-                window.location.href = "/manageimages?currentKeyword1=" + $("#currentKeyword1").val();
+            function changeArticleIdSelection() {
+                window.location.href = "/managearticle?aid=" + $("#aid-select").val();
             }
         </script>
     </body>

@@ -118,24 +118,26 @@
         <link rel="stylesheet" href="/infobar/infobar.css" type="text/css" />
         <link rel="stylesheet" href="/content/content.css" type="text/css" />
         <link rel="stylesheet" href="/prism/prism.css" />
+        <link rel="icon" type="image/png" href="/image/cstutorials/icon-sm" />
     </head>
     <body>
         <!-- navigation bar -->
-        <nav class="navbar navbar-expand-lg navbar-dark is-navbar">
-            <a class="navbar-brand" href="/">Computer Science and Programming Tutorials</a>
+        <nav class="navbar navbar-expand-lg is-navbar">
+            <a class="navbar-brand ml-sm-3 ml-md-5" href="/"><img height="50" src="/image/cstutorials/icon-lg" alt="cstutorials icon" /></a>
             
-            <!-- button class="btn btn-info d-inline-block d-lg-none float-right" data-toggle="modal" data-target="#navigationModal">
-                <i class="fa fa-bars"></i>
-            </button -->
+            <div class="ml-auto mr-auto d-none d-sm-inline-block">
+                <form action="/search" method="GET">
+                    <div class="input-group">
+                        <input type="text" name="s" class="form-control" placeholder="Search All Tutorials and Articles..." />
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
-            <div class="d-none d-lg-inline-block ml-auto">
+            <div class="d-none d-lg-inline-block ml-auto mr-5">
                 <ul class="navbar-nav ml-auto">
-                    <!-- li class="nav-item">
-                        <a class="nav-link" href="/"><i class="fa fa-th"></i> Tutorials</a>
-                    </li>
-                    <!-- li class="nav-item">
-                        <a class="nav-link" href="#!" data-toggle="modal" data-target="#navigationModal"><i class="fa fa-bars"></i> Explore</a>
-                    </li -->
                     <%
                         if(isAdmin) {
                             %><li class="nav-item dropdown">
@@ -144,12 +146,23 @@
                                     Admin
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/managetopics">Topics</a>
+                                    <a class="dropdown-item" href="/managetopic">Topic</a>
+                                    <a class="dropdown-item" href="/managetopictutoriallink">Topic-Tutorial</a>
+                                    <a class="dropdown-item" href="/managetutotial">Tutorial</a>
+                                    <a class="dropdown-item" href="/managetutorialarticlelink">Tutorial-Article</a>
+                                    <a class="dropdown-item" href="/managearticle">Article</a>
                                     <a class="dropdown-item" href="/manageimages">Images</a>
+                                    <a class="dropdown-item" href="/logout">Logout</a>
                                 </div>
                             </li><%
                         }
                     %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/explore"\><i class="fa fa-compass"></i> Explore</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#!"><i class="fa fa-bars"></i> Articles</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -509,7 +522,7 @@
         </div>
               
         <div id="is-float-bottom">
-            <button id="bottomNavigationToggleButton" class="btn btn-info" onclick="toggleTransparentNavigationModal()"><i class="fa fa-bars"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></button>
+            <button id="bottomNavigationToggleButton" class="btn btn-info" onclick="toggleTransparentNavigationModal()"><i class="fa fa-th"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></button>
             <a href="/" id="hiddenhomebutton" style="display:none;" class="btn btn-info ml-2"><i class="fa fa-th"></i> <span class="ml-2">All Tutorials</span></a>
         </div>
         

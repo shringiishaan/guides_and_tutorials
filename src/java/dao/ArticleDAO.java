@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -167,9 +168,9 @@ public class ArticleDAO {
         Article article;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,scope"
-                    + (includeData?",data":"")
-                    + ",short_description,create_time,modified_time FROM articles;");
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`"
+                    + (includeData?",`data`":"")
+                    + ",`short_description`,`create_time`,`modified_time` FROM `articles`;");
             resultSet = statement.executeQuery();
             articles = new ArrayList<>();
             while(resultSet.next()) {
@@ -262,9 +263,9 @@ public class ArticleDAO {
         Article article;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,scope,short_description,create_time,modified_time "
-                    + "FROM articles "
-                    + "WHERE id NOT IN (SELECT DISTINCT article_id FROM tutorial_article_map UNION SELECT DISTINCT article_id FROM topic_article_map)");
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`,`short_description`,`create_time`,`modified_time` "
+                    + "FROM `articles` "
+                    + "WHERE `id` NOT IN (SELECT DISTINCT `article_id` FROM `tutorial_article_map` UNION SELECT DISTINCT `article_id` FROM `topic_article_map`)");
             resultSet = statement.executeQuery();
             articles = new ArrayList<>();
             while(resultSet.next()) {
@@ -342,6 +343,50 @@ public class ArticleDAO {
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
                 article.setData(includeData?resultSet.getString("data"):null);
+                articles.add(article);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return articles;
+    }
+    
+    public List<Article> getArticlesBySearchQuery(String query) {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List<Article> articles = null;
+        Article article;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`,`short_description`,`create_time`,`modified_time` "
+                    + "FROM `articles` "
+                    + "WHERE title LIKE '%"+query+"%' or short_description LIKE '%"+query+"%';");
+            articles = new ArrayList<>();
+            while(resultSet.next()) {
+                article = new Article();
+                article.setId(resultSet.getInt("id"));
+                article.setKey(resultSet.getString("key"));
+                article.setTitle(resultSet.getString("title"));
+                article.setOwnerId(resultSet.getInt("owner_id"));
+                article.setStatus(resultSet.getString("status"));
+                article.setScope(resultSet.getString("scope"));
+                article.setShortDescription(resultSet.getString("short_description"));
+                article.setCreateTime(resultSet.getTimestamp("create_time"));
+                article.setModifiedTime(resultSet.getTimestamp("modified_time"));
+                article.setData(null);
                 articles.add(article);
             }
             

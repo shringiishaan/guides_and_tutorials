@@ -3,12 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/manageTopicTutorialLink.jsp</file>
             <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/model/Article.java</file>
-            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/CommentDAO.java</file>
-            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/controller/util/SiteMap.java</file>
-            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/TutorialDAO.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/TopicDAO.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/explore.jsp</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/main/main.css</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/manageImages.jsp</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/article.jsp</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/homePage.jsp</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/manageTutorial.jsp</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/manageArticle.jsp</file>
             <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/dao/ArticleDAO.java</file>
-            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/filter/Chief.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/model/Topic.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/src/java/model/Tutorial.java</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/manageTopics.jsp</file>
+            <file>file:/C:/Users/Ishaan/projects/guides_and_tutorials/web/search.jsp</file>
         </group>
     </open-files>
 </project-private>

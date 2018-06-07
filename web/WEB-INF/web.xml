@@ -31,12 +31,20 @@
         <url-pattern/>
     </servlet-mapping>
     <servlet>
-        <servlet-name>SiteMap</servlet-name>
-        <servlet-class>controller.util.SiteMap</servlet-class>
+        <servlet-name>Explore</servlet-name>
+        <jsp-file>/explore.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-        <servlet-name>SiteMap</servlet-name>
-        <url-pattern>/sitemap</url-pattern>
+        <servlet-name>Explore</servlet-name>
+        <url-pattern>/explore</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Search</servlet-name>
+        <jsp-file>/search.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Search</servlet-name>
+        <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <!--#
         #
@@ -198,14 +206,6 @@
         #
         ################################-->
     <servlet>
-        <servlet-name>ManageTopics</servlet-name>
-        <jsp-file>/manageTopics.jsp</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ManageTopics</servlet-name>
-        <url-pattern>/managetopics</url-pattern>
-    </servlet-mapping>
-    <servlet>
         <servlet-name>ViewTopic</servlet-name>
         <jsp-file>/topic.jsp</jsp-file>
     </servlet>
@@ -295,6 +295,55 @@
         <servlet-name>DeleteComment</servlet-name>
         <url-pattern>/deletecomment</url-pattern>
     </servlet-mapping>
+    
+    
+    <!--#
+        #
+        #       Admin
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>ManageTopic</servlet-name>
+        <jsp-file>/manageTopic.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageTopic</servlet-name>
+        <url-pattern>/managetopic</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ManageTopicTutorialLink</servlet-name>
+        <jsp-file>/manageTopicTutorialLink.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageTopicTutorialLink</servlet-name>
+        <url-pattern>/managetopictutoriallink</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ManageTutorial</servlet-name>
+        <jsp-file>/manageTutorial.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageTutorial</servlet-name>
+        <url-pattern>/managetutorial</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ManageTutorialArticleLink</servlet-name>
+        <jsp-file>/manageTutorialArticleLink.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageTutorialArticleLink</servlet-name>
+        <url-pattern>/managetutorialarticlelink</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ManageArticle</servlet-name>
+        <jsp-file>/manageArticle.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageArticle</servlet-name>
+        <url-pattern>/managearticle</url-pattern>
+    </servlet-mapping>
+        
+        
     <resource-ref>
         <description>Application Connection pool</description>
         <res-ref-name>appConnPool</res-ref-name>

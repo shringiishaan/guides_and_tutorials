@@ -35,7 +35,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Computer Science and Programming Tutorials</title>
+        <title>Explore | Computer Science and Programming Tutorials</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
         <meta name="google-site-verification" content="q94Vj4nrbIhqG6KIgr4iAWZmLVQa3Pm5UV2gGWSAwHE" />
@@ -64,7 +64,7 @@
                     </div>
                 </form>
             </div>
-            
+
             <div class="d-none d-lg-inline-block ml-auto mr-5">
                 <ul class="navbar-nav ml-auto">
                     <%
@@ -77,7 +77,7 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="/managetopic">Topic</a>
                                     <a class="dropdown-item" href="/managetopictutoriallink">Topic-Tutorial</a>
-                                    <a class="dropdown-item" href="/managetutorial">Tutorial</a>
+                                    <a class="dropdown-item" href="/managetutotial">Tutorial</a>
                                     <a class="dropdown-item" href="/managetutorialarticlelink">Tutorial-Article</a>
                                     <a class="dropdown-item" href="/managearticle">Article</a>
                                     <a class="dropdown-item" href="/manageimages">Images</a>
@@ -86,7 +86,7 @@
                             </li><%
                         }
                     %>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="/explore"><i class="fa fa-compass"></i> Explore</a>
                     </li>
                     <li class="nav-item">
@@ -101,7 +101,7 @@
             <div class="row">
                 <!-- main content -->
                 <div class="col-12 p-4 is-content">
-                    <div class="row mb-4 mt-3 d-block d-sm-none">
+                    <div class="row mb-4 mt-3 d-sm-none">
                         <div class="col-lg-6 offset-lg-3">
                             <form action="/search" method="GET">
                                 <div class="input-group">
@@ -141,44 +141,62 @@
                                             session.removeAttribute("message");
                                         }
                                     %>
-                                    <p>
-                                        Learn with an ever growing set of tutorials on topics that will brush up your computer programming skills and 
-                                        test your fundamental understanding of the subject.
-                                    </p>
-                                    <p class="text-center d-lg-none">
-                                        <a class="btn btn-outline-secondary" href="/explore"><i class="fa fa-compass"></i> Explore Articles</a>
-                                    </p>
-                                    <p>
-                                        We've included example code blocks and
-                                        descriptive images to help you better understand the concepts. 
-                                        Extra information in expandible boxes are optional but recommended to read.
-                                    </p>
-                                    <div class="row is-nav-list">
-                                        <div class="col-sm-12">
-                                            <div class="card card-body is-tutorial-card" style="background-color:white;">
-                                                <a class="card-article-link">Example Code Blocks</a>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-12">
+                                    <% for(int i=0; i<allTopics.size(); i++) { %>
+                                        <div class="row">
+                                            <div class="col-sm-12 col-lg-4">
+                                                <div onclick="toggleTopicContainer(this,'<%=allTopics.get(i).getId()%>')" is-collapse="false" class="card card-body p-2 mb-2">
+                                                    <div class="row">
+                                                        <div class="col-8 offset-1">
+                                                            <%=allTopics.get(i).getTitle()%>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <i id="topic-<%=allTopics.get(i).getId()%>-icon" class="fa fa-minus-square"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-lg-8" id="topic-<%=allTopics.get(i).getId()%>-container">
+                                                <% tempTutorials = tutorialdao.getTutorialsByTopicIdAndStatus(allTopics.get(i).getId(), "final");
+                                                    for (int j=0; j<tempTutorials.size(); j++) { %>
+                                                        <div class="row">
+                                                            <div class="col-sm-12 col-lg-6">
+                                                                <div onclick="toggleTutorialContainer(this,'<%=tempTutorials.get(j).getId()%>')" class="card card-body p-2 mb-2" is-collapse="false">
+                                                                    <div class="row">
+                                                                        <div class="col-8 offset-1">
+                                                                            <a href="/"><%=tempTutorials.get(j).getTitle()%></a>
+                                                                        </div>
+                                                                        <div class="col-2">
+                                                                            <i id="tutorial-<%=tempTutorials.get(j).getId()%>-icon" class="fa fa-minus-square"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="tutorial-<%=tempTutorials.get(j).getId()%>-container" class="col-sm-12 col-lg-6">
+                                                                <% tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorials.get(j).getId(), "final", false);
+                                                                    for(int k=0; k<tempArticles.size(); k++) { %>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <div class="card card-body p-2 mb-2">
+                                                                                <div class="row">
+                                                                                    <div class="col-10 offset-1">
+                                                                                        <a href="/article/<%=tempArticles.get(k).getKey()%>"><%=tempArticles.get(k).getTitle()%></a>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                <% } %>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="row is-nav-list">
-                                        <div class="col-sm-12">
-                                            <div class="card card-body is-tutorial-card" style="background-color:white;">
-                                                <a class="card-article-link">Descriptive Images</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row is-nav-list">
-                                        <div class="col-sm-12">
-                                            <div class="card card-body is-tutorial-card" style="background-color:white;">
-                                                <a class="card-article-link">Expandible Info Boxes</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p>
-                                        More tutorials on these topics coming soon. <b>Operating Systems</b>, <b>Computer Networks</b>, <b>Database Systems</b>,
-                                        <b>Computer Architecture</b>. 
-                                        Any suggestions welcome : <i>shringiishaan@gmail.com</i>
-                                    </p>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
@@ -243,8 +261,35 @@
             </div>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script lang="text/javascript">
+            function toggleTopicContainer(divBlock, topicId) {
+                if($(divBlock).attr('is-collapse')=="false") {
+                    $("#topic-"+topicId+"-container").slideUp();
+                    $("#topic-"+topicId+"-icon").removeClass("fa-minus-square").addClass("fa-plus-square");
+                    $(divBlock).attr('is-collapse',"true");
+                }
+                else {
+                    $("#topic-"+topicId+"-container").slideDown();
+                    $("#topic-"+topicId+"-icon").removeClass("fa-plus-square").addClass("fa-minus-square");
+                    $(divBlock).attr('is-collapse',"false");
+                }
+            }
+            
+            function toggleTutorialContainer(divBlock, tutorialId) {
+                if($(divBlock).attr('is-collapse')=="false") {
+                    $("#tutorial-"+tutorialId+"-container").slideUp();
+                    $("#tutorial-"+tutorialId+"-icon").removeClass("fa-minus-square").addClass("fa-plus-square");
+                    $(divBlock).attr('is-collapse',"true");
+                }
+                else {
+                    $("#tutorial-"+tutorialId+"-container").slideDown();
+                    $("#tutorial-"+tutorialId+"-icon").removeClass("fa-plus-square").addClass("fa-minus-square");
+                    $(divBlock).attr('is-collapse',"false");
+                }
+            }
+        </script>
     </body>
 </html>
