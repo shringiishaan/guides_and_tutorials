@@ -344,6 +344,77 @@
     </servlet-mapping>
         
         
+    
+    
+    <!--#
+        #
+        #       Recommendations
+        #
+        ################################-->
+    <servlet>
+        <servlet-name>ManageRecommendations</servlet-name>
+        <jsp-file>/manageRecommendations.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageRecommendations</servlet-name>
+        <url-pattern>/managerecommendations</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>NewRecommendation</servlet-name>
+        <servlet-class>controller.recommendation.NewRecommendation</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>NewRecommendation</servlet-name>
+        <url-pattern>/newrecommendation</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>UpdateRecommendationTitle</servlet-name>
+        <servlet-class>controller.recommendation.UpdateRecommendationTitle</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateRecommendationTitle</servlet-name>
+        <url-pattern>/updaterecommendationtitle</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>UpdateRecommendationLink</servlet-name>
+        <servlet-class>controller.recommendation.UpdateRecommendationLink</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateRecommendationLink</servlet-name>
+        <url-pattern>/updaterecommendationlink</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>UpdateRecommendationPriority</servlet-name>
+        <servlet-class>controller.recommendation.UpdateRecommendationPriority</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateRecommendationPriority</servlet-name>
+        <url-pattern>/updaterecommendationpriority</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>UpdateRecommendationType</servlet-name>
+        <servlet-class>controller.recommendation.UpdateRecommendationType</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateRecommendationType</servlet-name>
+        <url-pattern>/updaterecommendationtype</url-pattern>
+    </servlet-mapping>
+        
+    <servlet>
+        <servlet-name>DeleteRecommendation</servlet-name>
+        <servlet-class>controller.recommendation.DeleteRecommendation</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteRecommendation</servlet-name>
+        <url-pattern>/deleterecommendation</url-pattern>
+    </servlet-mapping>
+    
+        
     <resource-ref>
         <description>Application Connection pool</description>
         <res-ref-name>appConnPool</res-ref-name>

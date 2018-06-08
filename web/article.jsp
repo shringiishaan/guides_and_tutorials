@@ -125,17 +125,6 @@
         <nav class="navbar navbar-expand-lg is-navbar">
             <a class="navbar-brand ml-sm-3 ml-md-5" href="/"><img height="50" src="/image/cstutorials/icon-lg" alt="cstutorials icon" /></a>
             
-            <div class="ml-auto mr-auto d-none d-sm-inline-block">
-                <form action="/search" method="GET">
-                    <div class="input-group">
-                        <input type="text" name="s" class="form-control" placeholder="Search All Tutorials and Articles..." />
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-
             <div class="d-none d-lg-inline-block ml-auto mr-5">
                 <ul class="navbar-nav ml-auto">
                     <%
@@ -151,17 +140,24 @@
                                     <a class="dropdown-item" href="/managetutotial">Tutorial</a>
                                     <a class="dropdown-item" href="/managetutorialarticlelink">Tutorial-Article</a>
                                     <a class="dropdown-item" href="/managearticle">Article</a>
+                                    <a class="dropdown-item" href="/managerecommendations">Recommendations</a>
                                     <a class="dropdown-item" href="/manageimages">Images</a>
                                     <a class="dropdown-item" href="/logout">Logout</a>
                                 </div>
                             </li><%
                         }
                     %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/explore"\><i class="fa fa-compass"></i> Explore</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="#!"><i class="fa fa-bars"></i> Articles</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <i class="fa fa-bars mr-1"></i> <%=currentTopic.getTitle()%>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <% for(int i=0; i<allTopics.size(); i++) {
+                                if(allTopics.get(i).getId().compareTo(currentTopic.getId())==0) continue; %>
+                                <a class="dropdown-item" href="/starttopictutorial/<%=allTopics.get(i).getId()%>"><%=allTopics.get(i).getTitle()%></a>
+                            <% } %>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -170,42 +166,40 @@
         <!-- container -->
         <div class="container-fluid">
             <div class="row">
+                
                 <!-- side bar -->
                 <div class="col-lg-2 is-sidebar is-nav-list d-none d-lg-inline-block">
-                    <h5 class="d-block text-center mb-3 text-muted"><%=currentTopic.getTitle()%></h5>
                     <%
                         for (int i = 0; i < relatedTutorials.size(); i++) {
                             if(!(relatedTutorials.get(i)).getStatus().equals("final") && !isAdmin) {
                                 continue;
                             }
-                            %><div class="card is-tutorial-card pb-3">
-                                    <a class="is-title">
-                                        <%=(relatedTutorials.get(i)).getTitle()%>
-                                        <% if(isAdmin) { %><sup class="<%=
-                                                ((relatedTutorials.get(i)).getStatus().equals("final"))?"text-success":"text-warning"
-                                                %>"><i>(<%=(relatedTutorials.get(i)).getStatus()%>)</i></sup>
-                                        <% } %>
-                                    </a>
-                                    <%
-                                        tempArticles = articledao.getArticlesByTutorialIdAndStatus((relatedTutorials.get(i)).getId(),(isAdmin?null:"final"), false);
-                                        for(int j=0; j<tempArticles.size(); j++) { 
-                                            %>
-                                        <a class='<%=(currentArticle.getScope().equals("tutorial") && currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
-                                                is-label' href='/article/<%=tempArticles.get(j).getKey()%>'>
-                                            <%=tempArticles.get(j).getTitle()%>
-                                            <% if(isAdmin) { %><sup class="<%=
-                                                    (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
-                                                    %>"><i>(<%=tempArticles.get(j).getStatus()%>)</i></sup>
-                                            <% } %>
-                                        </a>
-                                    <% }
-                            %></div><%
+                            %><a class="is-title">
+                                <%=(relatedTutorials.get(i)).getTitle()%>
+                                <% if(isAdmin) { %><sup class="<%=
+                                        ((relatedTutorials.get(i)).getStatus().equals("final"))?"text-success":"text-warning"
+                                        %>"><i>(<%=(relatedTutorials.get(i)).getStatus()%>)</i></sup>
+                                <% } %>
+                            </a>
+                            <%
+                                tempArticles = articledao.getArticlesByTutorialIdAndStatus((relatedTutorials.get(i)).getId(),(isAdmin?null:"final"), false);
+                                for(int j=0; j<tempArticles.size(); j++) { 
+                                    %>
+                                <a class='<%=(currentArticle.getScope().equals("tutorial") && currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
+                                        is-label' href='/article/<%=tempArticles.get(j).getKey()%>'>
+                                    <%=tempArticles.get(j).getTitle()%>
+                                    <% if(isAdmin) { %><sup class="<%=
+                                            (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
+                                            %>"><i>(<%=tempArticles.get(j).getStatus()%>)</i></sup>
+                                    <% } %>
+                                </a>
+                            <% }
                         }
                     %>
                 </div>
 
                 <!-- main content -->
-                <div class="col-lg-10 pt-4 px-sm-4 pr-lg-5">
+                <div class="col-lg-8 pt-4 px-sm-4 pr-lg-5">
                     <h3><%=currentArticle.getTitle()%></h3>
                     <small class="text-muted"><i class="fa fa-clock"></i> Last modified on <%= new SimpleDateFormat("MMM d, yyyy").format(currentArticle.getModifiedTime().getTime()) %></small>
                     <%
@@ -317,8 +311,18 @@
                     <hr />
                     <p class="text-muted float-right"><small>Developed By <span data-toggle="modal" data-target="#loginModal" class="text-info">Ishaan Shringi</span></small></p>
                 </div>
-                <!-- div class="col-lg-2 is-nav-list d-none d-lg-inline-block pt-4">
-                    <a class="is-title">Recommended Articles</a>
+                <div class="col-lg-2 is-nav-list d-none d-lg-inline-block pt-5">
+                    <div class="d-block">
+                        <form action="/search" method="GET">
+                            <div class="input-group">
+                                <input type="text" name="s" class="form-control" placeholder="Search" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <a class="is-title">Related Articles</a>
                     <%
                         for(int j=0; j<tempArticles.size(); j++) { 
                             %>
@@ -332,7 +336,7 @@
                         </a>
                     <% }
                     %>
-                    <a class="is-title">Recommended Wikipedia Links</a>
+                    <a class="is-title">Recommended External Links</a>
                     <%
                         for(int j=0; j<tempArticles.size(); j++) { 
                             %>
@@ -346,21 +350,7 @@
                         </a>
                     <% }
                     %>
-                    <a class="is-title">Top Articles</a>
-                    <%
-                        for(int j=0; j<tempArticles.size(); j++) { 
-                            %>
-                        <a class='<%=(currentArticle.getScope().equals("tutorial") && currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
-                                is-label' href='/article/<%=tempArticles.get(j).getKey()%>'>
-                            <%=tempArticles.get(j).getTitle()%>
-                            <% if(isAdmin) { %><sup class="<%=
-                                    (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
-                                    %>"><i>(<%=tempArticles.get(j).getStatus()%>)</i></sup>
-                            <% } %>
-                        </a>
-                    <% }
-                    %>
-                </div -->
+                </div>
             </div>
         </div>
 
@@ -436,54 +426,54 @@
                             
         <% if(isAdmin) { %>
                             
-        <div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                <div class="modal-content">
-                    <form action="/editarticle" method="post">
-                        <div class="modal-body">
-                            <a href="#!" data-dismiss="modal">Cancel</a>
-                            <div class="form-group">
-                                <input name="id" value="<%=currentArticle.getId()%>" type="text" hidden="true" />
-                                <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getId()%>" />
+            <div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-content">
+                        <form action="/editarticle" method="post">
+                            <div class="modal-body">
+                                <a href="#!" data-dismiss="modal">Cancel</a>
+                                <div class="form-group">
+                                    <input name="id" value="<%=currentArticle.getId()%>" type="text" hidden="true" />
+                                    <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getId()%>" />
+                                </div>
+                                <div class="form-group">
+                                    <textarea style="width:100%" name="data" rows="15"><%=currentArticle.getData()%></textarea>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <textarea style="width:100%" name="data" rows="15"><%=currentArticle.getData()%></textarea>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <a class="btn btn-outline-secondary" href="/editarticle/<%=currentArticle.getId()%>">Full-Screen Editor</a>
+                                <input type="submit" name="submit" value="Update Content" class="btn btn-info" />
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                            <a class="btn btn-outline-secondary" href="/editarticle/<%=currentArticle.getId()%>">Full-Screen Editor</a>
-                            <input type="submit" name="submit" value="Update Content" class="btn btn-info" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-                            
-        <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <p class="text-danger">Do you really want to delete this article?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <form action="/deletearticle" method="POST">
-                            <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
-                            <input name="redirectURL" value="/" hidden="true" />
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <p class="text-danger">Do you really want to delete this article?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form action="/deletearticle" method="POST">
+                                <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
+                                <input name="redirectURL" value="/" hidden="true" />
+                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         <% } %>
         
-        <div id="is-transparent-modal-wrapper" style="display:none;" onclick="toggleTransparentNavigationModal()" is-hidden="true">
+        <div id="is-tm-wrapper" style="display:none;">
         </div>      
         
-        <div id="is-transparent-modal-content" style="display:none;" onclick="toggleTransparentNavigationModal()">
+        <div id="is-tm-content-quicklinks" class="is-tm-content" style="display:none;">
             <div class="row p-4">
                 <div class="col-md-10 offset-md-1">
                     <div class="row">
@@ -503,7 +493,7 @@
                                     </h6>
                                     <%
                                         for(int j=0; j<tempArticles.size(); j++) {
-                                    %><a class="card-article-link <%=(tempArticles.get(j).getId().equals(currentArticle.getId()))?"is-active":""%>" href="/article/<%=tempArticles.get(j).getId()%>">
+                                    %><a class="card-article-link <%=(tempArticles.get(j).getId().equals(currentArticle.getId()))?"is-active":""%>" href="/article/<%=tempArticles.get(j).getKey()%>">
                                                     <%=tempArticles.get(j).getTitle()%>
                                                     <% if(isAdmin) { %><sup class="<%=
                                                             (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
@@ -520,10 +510,53 @@
                 </div>
             </div>
         </div>
+        
+        <div id="is-tm-content-topics" class="is-tm-content" style="display:none;">
+            <div class="row p-4">
+                <div class="col-sm-6 offset-sm-3 col-md-4 offset-md-4">
+                    <div class="card card-body is-tutorial-card">
+                        <h6 class="card-title">
+                            All Topics
+                        </h6>
+                        <%
+                            for(int j=0; j<allTopics.size(); j++) {
+                        %><a class="card-article-link 
+                                <%=(allTopics.get(j).getId().compareTo(currentTopic.getId())==0)?"is-active":""%>" 
+                                href="/starttopictutorial/<%=allTopics.get(j).getId()%>">
+                                        <%=allTopics.get(j).getTitle()%>
+                                        <% if(isAdmin) { %><sup class="<%=
+                                                (allTopics.get(j).getStatus().equals("final"))?"text-success":"text-warning"
+                                                %>"><i><%=allTopics.get(j).getStatus()%></i></sup>
+                                        <% } %>
+                                </a><%
+                            }
+                        %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="is-tm-content-search" class="is-tm-content" style="display:none;">
+            <div class="row p-4">
+                <div class="col-sm-6 col-md-4 col-md-4 offset-md-4">
+                    <form class="is-tm-searchbar" action="/search" method="GET">
+                        <div class="input-group">
+                            <input type="text" name="s" class="form-control" placeholder="Search" />
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
               
         <div id="is-float-bottom">
-            <button id="bottomNavigationToggleButton" class="btn btn-info" onclick="toggleTransparentNavigationModal()"><i class="fa fa-th"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></button>
-            <a href="/" id="hiddenhomebutton" style="display:none;" class="btn btn-info ml-2"><i class="fa fa-th"></i> <span class="ml-2">All Tutorials</span></a>
+            <a id="is-tm-readmode-btn" is-readmode="false" onclick="toggleReadMode()" class="btn btn-outline-secondary"><i class="fa fa-eye"></i></a>
+            <a id="is-tm-quicklinks-btn" onclick="openTM('quicklinks')" class="btn btn-outline-secondary"><i class="fa fa-sitemap"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></a>
+            <a id="is-tm-topics-btn" onclick="openTM('topics')" class="btn btn-outline-secondary"><i class="fa fa-bars"></i> <span class="d-none d-md-inline-block ml-2">Topics</span></a>
+            <a id="is-tm-search-btn" onclick="openTM('search')" class="btn btn-outline-secondary"><i class="fa fa-search"></i> <span class="d-none d-md-inline-block ml-2">Search</span></a>
+            <a id="is-tm-close-btn" onclick="closeTM()" class="btn btn-outline-danger" style="display:none;"><i class="fa fa-times"></i></a>
         </div>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -531,23 +564,60 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <script src="/prism/prism.js"></script>
         <script lang="text/javascript">
-            function toggleTransparentNavigationModal() {
-                if($("#is-transparent-modal-wrapper").attr("is-hidden")==="true") {
-                    $("#is-transparent-modal-wrapper").show();
-                    $("#is-transparent-modal-content").slideDown();
-                    $("#hiddenhomebutton").fadeIn();
-                    $("#is-transparent-modal-wrapper").attr("is-hidden","false");
-                    $("#bottomNavigationToggleButton").removeClass("btn-info").addClass("btn-primary");
+            
+            currentTM = null;
+            
+            function openTM(modalName) {
+                if($("#is-tm-"+modalName+"-btn").hasClass("btn-info")) {
+                    closeTM();
+                }
+                else if(currentTM !== null) {
+                    $("#is-tm-content-"+currentTM).slideUp(function() {
+                        $("#is-tm-content-"+modalName).slideDown(); 
+                    });
+                    $("#is-tm-"+currentTM+"-btn").removeClass("btn-info").addClass("btn-outline-secondary");
+                    $("#is-tm-"+modalName+"-btn").removeClass("btn-outline-secondary").addClass("btn-info");
+                    $("#is-tm-close-btn").fadeIn();
+                    currentTM = modalName;
                 }
                 else {
-                    $("#is-transparent-modal-content").slideUp(function() {
-                        $("#is-transparent-modal-wrapper").hide();
-                    });
-                    $("#is-transparent-modal-wrapper").attr("is-hidden","true");
-                    $("#hiddenhomebutton").fadeOut();
-                    $("#bottomNavigationToggleButton").removeClass("btn-primary").addClass("btn-info");
+                    $("#is-tm-wrapper").show();
+                    $("#is-tm-content-"+modalName).slideDown();
+                    $("#is-tm-"+modalName+"-btn").removeClass("btn-outline-secondary").addClass("btn-info");
+                    $("#is-tm-close-btn").fadeIn();
+                    currentTM = modalName;
                 }
             }
+            
+            function closeTM() {
+                $("#is-float-bottom > a").removeClass("btn-info").addClass("btn-outline-secondary");
+                $(".is-tm-content").slideUp(function() {
+                    $("#is-tm-wrapper").hide();
+                });
+                $("#is-tm-close-btn").fadeOut();
+                currentTM = null;
+            }
+           
+            
+            function toggleReadMode() {
+                console.log($("#is-tm-readmode-btn").attr("is-readmode"));
+                closeTM();
+                if($("#is-tm-readmode-btn").attr("is-readmode")==="false") {
+                    $('#is-tm-readmode-btn').removeClass("btn-outline-secondary").addClass("btn-info");
+                    $('#is-tm-quicklinks-btn').fadeOut();
+                    $('#is-tm-topics-btn').fadeOut();
+                    $('#is-tm-search-btn').fadeOut();
+                    $("#is-tm-readmode-btn").attr("is-readmode","true");
+                }
+                else {
+                    $('#is-tm-readmode-btn').removeClass("btn-info").addClass("btn-outline-secondary");
+                    $('#is-tm-quicklinks-btn').fadeIn();
+                    $('#is-tm-topics-btn').fadeIn();
+                    $('#is-tm-search-btn').fadeIn();
+                    $("#is-tm-readmode-btn").attr("is-readmode","false");
+                }
+            };
+            
         </script>
     </body>
 </html>

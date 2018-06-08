@@ -17,7 +17,7 @@ public class StartTopicTutorial extends HttpServlet {
         String requestedPath = request.getRequestURI().substring(request.getContextPath().length());
         String[] parts = requestedPath.split("/");
 
-        if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("StartTopicTutorial")) {
+        if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("starttopictutorial")) {
             request.getRequestDispatcher("/Error").forward(request, response);
             return;
         }

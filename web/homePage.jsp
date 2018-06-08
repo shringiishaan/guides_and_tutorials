@@ -80,17 +80,23 @@
                                     <a class="dropdown-item" href="/managetutorial">Tutorial</a>
                                     <a class="dropdown-item" href="/managetutorialarticlelink">Tutorial-Article</a>
                                     <a class="dropdown-item" href="/managearticle">Article</a>
+                                    <a class="dropdown-item" href="/managerecommendations">Recommendations</a>
                                     <a class="dropdown-item" href="/manageimages">Images</a>
                                     <a class="dropdown-item" href="/logout">Logout</a>
                                 </div>
                             </li><%
                         }
                     %>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/explore"><i class="fa fa-compass"></i> Explore</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#!"><i class="fa fa-bars"></i> Articles</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+                           role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <i class="fa fa-bars mr-1"></i> Topics
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <% for(int i=0; i<allTopics.size(); i++) { %>
+                                <a class="dropdown-item" href="/starttopictutorial/<%=allTopics.get(i).getId()%>"><%=allTopics.get(i).getTitle()%></a>
+                            <% } %>
+                        </div>
                     </li>
                 </ul>
             </div>

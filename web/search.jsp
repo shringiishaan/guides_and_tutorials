@@ -12,6 +12,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     String query = request.getParameter("s");
+    if(query==null) {
+        query = "";
+    }
     ArticleDAO articledao = new ArticleDAO();
     List<Article> tempArticles = null;
     

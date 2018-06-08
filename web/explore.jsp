@@ -260,7 +260,21 @@
                 </div>
             </div>
         </div>
-
+        
+        <div id="is-float-bottom">
+            <div class="row">
+                <div class="col-4 text-center element" onclick="toggleQuickLinks()">
+                    <a id="bottomNavigationToggleButton"><i class="fa fa-th"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></a>
+                </div>
+                <div class="col-4 text-center element">
+                    <a href="/search"><i class="fa fa-search"></i> <span class="d-none d-md-inline-block ml-2">Search</span></a>
+                </div>
+                <div class="col-4 text-center element">
+                    <a href="/explore"><i class="fa fa-compass"></i> <span class="d-none d-md-inline-block ml-2">Explore</span></a>
+                </div>
+            </div>
+        </div>
+                    
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
