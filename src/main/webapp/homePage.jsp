@@ -32,7 +32,6 @@
         }
     }
 %>
-<!-- Jenkins Testing 17-6-2018 -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -49,7 +48,7 @@
         <link rel="icon" type="image/png" href="/image/cstutorials/icon-sm" />
     </head>
     <body>
-        <!-- navigation bar -->
+        <!-- navigation bar Jenkins Testing 17-6-2018 -->
         <nav class="navbar navbar-expand-lg is-navbar">
             <a class="navbar-brand ml-sm-3 ml-md-5" href="/"><img height="50" src="/image/cstutorials/icon-lg" alt="cstutorials icon" /></a>
             
