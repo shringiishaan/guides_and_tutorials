@@ -11,6 +11,7 @@ CSTutorials is a Java Web application designed to host tutorials and articles.
 * Javascript, JQuery
 * prism - java code highlighter
 * Build Tool - Gradle
+* Continuous Deployment - Jenkins
 
 ## Server
 
