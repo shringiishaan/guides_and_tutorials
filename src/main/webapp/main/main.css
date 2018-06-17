@@ -1,0 +1,322 @@
+* {
+}
+
+p,h1,h2,h3,h4,h5,h6 {
+    color:rgba(0,0,0,0.85);
+}
+
+.btn-outline-info {
+    color:#557A95;
+    border-color:#557A95
+}
+
+.btn-info {
+    background-color:#557A95;
+    border-color:#557A95
+}
+
+.text-info {
+    color:#557A95 !important;
+}
+
+a {
+    color:#6d7993;
+}
+
+a:hover {
+    color:teal;
+    text-decoration:none;
+}
+
+.navbar-brand {
+  display: block;
+  max-width:100px;
+  max-height:60px;
+  width: auto;
+  height: auto;
+}
+
+.is-navbar {
+    background-color: #3aafa9;
+    color:#fff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 3px 2px -2px rgba(200,200,200,0.2);
+}
+
+.is-navbar .nav-link {
+    color:#fff;
+}
+
+.is-navbar .active > a {
+    opacity:0.8;
+    color:#fff;
+}
+
+.is-sidebar .is-tutorial-card {
+    border-radius: 4px;
+    /* box-shadow: 0 24px 33px -20px #bbb; */
+    background: #f3f3f3;
+    border:none;
+    margin-bottom:25px;
+}
+
+.is-sidebar .is-tutorial-card .card-title {
+    font-size:14px;
+    color: #333;
+}
+
+.is-sidebar .is-tutorial-card .card-article-link {
+    display:block;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:300;
+    color:#333;
+}
+
+.navbar-brand {
+    overflow-x:hidden;
+    max-width:70%;
+}
+
+.is-navbar-footer {
+    max-width:150px;
+}
+
+#navigationModal .modal-body {
+    height: 60vh;
+    overflow-y: scroll;
+}
+
+#navigationModal a {
+    display:block;
+}
+
+
+.is-article-data p, .is-article-data ul {
+    font-size:15px;
+}
+
+.is-article-data h5 {
+    padding-top:18px;
+}
+
+
+.is-sidebar {
+    background: #f3f3f3;
+}
+
+.is-nav-list a {
+    padding-left:10px;
+    padding-right:10px;
+    cursor: pointer;
+    display:block;
+}
+
+.is-nav-list .is-active {
+    background-color:#ddd;
+}
+
+.is-nav-list .is-title {
+    font-size:15px;
+    color: #333;
+    
+    padding-bottom:8px;
+    padding-top:14px;
+}
+
+.is-nav-list .is-label {
+    cursor:pointer;
+    
+    color: #555555;
+    font-size:14px;
+    font-weight:300;
+    
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.is-nav-list .is-label:hover {
+    background-color:#ddd;
+}
+
+    
+#is-tm-wrapper {
+    height:100%;
+    width:100%;
+    left: 0;
+    top: 0;
+    position:fixed;
+    display:block;
+    box-sizing: border-box;
+    z-index:1000;
+    
+    background-color:#f4f4f4;
+    
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.is-tm-content {
+    height:100%;
+    width:100%;
+    left: 0;
+    top: 0;
+    position:fixed;
+    display:block;
+    box-sizing: border-box;
+    z-index:1005;
+    opacity:1;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.is-tm-content .is-tutorial-card {
+    z-index: 1005;
+    border-radius: 4px;
+    border:none;
+    background: #f3f3f3;
+    border:none;
+    padding:0;
+}
+
+.is-tm-content .is-tutorial-card .is-active {
+    font-weight:350;
+    background-color:#ddd;
+}
+
+.is-tm-content .is-tutorial-card .card-title {
+    font-size:14px;
+    color: #333;
+    padding-top:15px;
+    padding-bottom:10px;
+    padding-left:15px;
+    padding-right:15px;
+    margin:0;
+}
+
+.is-tm-content .is-tutorial-card .card-article-link {
+    display:block;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:300;
+    color:#333;
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.is-tm-content .is-tutorial-card .card-article-link:hover {
+    font-weight:300;
+    background-color:#ddd;
+}
+    
+#is-float-bottom {
+    bottom:10px;
+    left:10px;
+    position:fixed;
+    z-index: 1010;
+}
+
+#is-float-bottom .btn {
+    cursor:pointer;
+    background-color: #3aafa9;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.22);
+    margin-right:5px;
+    color:white;
+}
+
+#is-float-bottom .btn:hover {
+    background-color: teal;
+}
+
+#is-float-bottom .active {
+    background-color: teal;
+}
+
+.home-page-container .is-tutorial-card {
+    border-radius: 4px;
+    box-shadow: 0 24px 33px -20px #bbb;
+    background: #f4f4f4;
+    border:none;
+    margin-bottom:25px;
+    padding:0px;
+    padding-bottom:20px;
+}
+
+.home-page-container .is-nav-list a {
+    padding-left:10px;
+    padding-right:10px;
+    cursor: pointer;
+    display:block;
+}
+
+.home-page-container .is-nav-list .card-title {
+    font-size:15px;
+    color: #333;
+    
+    padding-bottom:5px;
+    padding-top:18px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.home-page-container .is-nav-list .card-article-link {
+    cursor:pointer;
+    
+    color: #555555;
+    font-size:14px;
+    font-weight:300;
+    
+    padding-top:5px;
+    padding-bottom:5px;
+    padding-left:15px;
+    padding-right:15px;
+}
+
+.home-page-container .is-nav-list .card-article-link:hover {
+    background-color:#ddd;
+}
+
+.is-article-util-panel .element {
+    display:inline-block;
+}
+
+.is-article-util-panel .is-pointer {
+    cursor:pointer;
+}
+
+.is-footer {
+    background-color:#3aafa9;
+    color:#fff;
+    height:20vh;
+    max-height:170px;
+}
+
+.is-btn-primary {
+    background-color:#3aafa9 !important;
+    border:none;
+    color:#fff !important;
+}
+
+.is-btn-primary:hover {
+    color:#fff;
+    background-color: teal !important;
+}
+
+.is-btn-primary-outline {
+    background-color: #fff;
+    border-color: #3aafa9;
+    color:#3aafa9;
+}
+
+.is-btn-primary-outline:hover {
+    background-color: #3aafa9;
+    color:#fff;
+}
+
+.is-comment {
+    border:none;
+    background-color: #f6f6f6;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+}
