@@ -43,7 +43,8 @@ public class CommentDAO {
             if(resultSet.first()) {
                 comment = new Comment();
                 comment.setId(resultSet.getInt("id"));
-                comment.setOwnerId(resultSet.getInt("owner_id"));
+                comment.setOwnerKey(resultSet.getString("owner_key"));
+                comment.setStatus(resultSet.getString("status"));
                 comment.setMessage(resultSet.getString("message"));
                 comment.setArticleId(resultSet.getInt("article_id"));
                 comment.setPriority(resultSet.getInt("priority"));
@@ -66,7 +67,7 @@ public class CommentDAO {
         return comment;
     }
     
-    public List<Comment> getCommentsByArticleId(Integer articleId) {
+    public List<Comment> getAllComments() {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -74,14 +75,14 @@ public class CommentDAO {
         Comment comment;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM comments where article_id=? ORDER BY priority DESC;");
-            statement.setInt(1, articleId);
+            statement = connection.prepareStatement("SELECT * FROM comments ORDER BY create_time DESC;");
             resultSet = statement.executeQuery();
             comments = new ArrayList<>();
             while(resultSet.next()) {
                 comment = new Comment();
                 comment.setId(resultSet.getInt("id"));
-                comment.setOwnerId(resultSet.getInt("owner_id"));
+                comment.setOwnerKey(resultSet.getString("owner_key"));
+                comment.setStatus(resultSet.getString("status"));
                 comment.setMessage(resultSet.getString("message"));
                 comment.setArticleId(resultSet.getInt("article_id"));
                 comment.setPriority(resultSet.getInt("priority"));
@@ -105,21 +106,58 @@ public class CommentDAO {
         return comments;
     }
     
-    public void createNewComment(Integer ownerId, String message, Integer articleId, Integer priority) {
+    public List<Comment> getCommentsByArticleId(Integer articleId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<Comment> comments = null;
+        Comment comment;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM comments where article_id=? ORDER BY priority DESC;");
+            statement.setInt(1, articleId);
+            resultSet = statement.executeQuery();
+            comments = new ArrayList<>();
+            while(resultSet.next()) {
+                comment = new Comment();
+                comment.setId(resultSet.getInt("id"));
+                comment.setOwnerKey(resultSet.getString("owner_key"));
+                comment.setStatus(resultSet.getString("status"));
+                comment.setMessage(resultSet.getString("message"));
+                comment.setArticleId(resultSet.getInt("article_id"));
+                comment.setPriority(resultSet.getInt("priority"));
+                comment.setCreateTime(resultSet.getTimestamp("create_time"));
+                comments.add(comment);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CommentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return comments;
+    }
+    
+    public void createNewComment(String ownerKey, String status, String message, Integer articleId, Integer priority) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO comments (message,article_id,priority"
-                    + ownerId==null?"":",owner_id"
-                    + ") VALUES (?,?,?"
-                    + ownerId==null?"":",?"
-                    + ")");
-            statement.setString(1, message);
-            statement.setInt(2, articleId);
-            statement.setInt(3, priority);
-            if(ownerId!=null)
-                statement.setInt(4, ownerId);
+            statement = connection.prepareStatement("INSERT INTO comments (owner_key,status,message,article_id,priority) VALUES (?,?,?,?,?)");
+            statement.setString(1, ownerKey);
+            statement.setString(2, status);
+            statement.setString(3, message);
+            statement.setInt(4, articleId);
+            statement.setInt(5, priority);
+            
             statement.executeUpdate();
             
         } catch (SQLException ex) {
@@ -182,5 +220,28 @@ public class CommentDAO {
             }
         }
         return null;
+    }
+    
+    public void updateStatus(Integer commentId, String status) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE comments SET status=? WHERE id=?");
+            statement.setString(1,status);
+            statement.setInt(2,commentId);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(CommentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
     }
 }

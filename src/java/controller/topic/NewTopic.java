@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/newtopic")
 public class NewTopic extends HttpServlet {
 
     @Override
@@ -18,7 +20,7 @@ public class NewTopic extends HttpServlet {
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId"); 
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
         }
         
         String title = request.getParameter("title");
@@ -26,14 +28,13 @@ public class NewTopic extends HttpServlet {
         TopicDAO topicdao = new TopicDAO();
         if(topicdao.verifyTopicTitle(title)) {
             session.setAttribute("error","Title already exists!");
-            session.setAttribute("topicFormTitle",title);
-            response.sendRedirect(request.getParameter("redirectURL"));
+            response.sendRedirect("/error");
             return;
         }
         String key = title.toLowerCase().replace(" ","-");
         topicdao.createNewTopic(key,title);
         session.setAttribute("message","Topic created successfully");
-        response.sendRedirect(request.getParameter("redirectURL"));
+        response.sendRedirect("/managetopic?tid="+topicdao.getTopicByTitle(title).getId());
     }
 
     @Override

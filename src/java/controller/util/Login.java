@@ -8,14 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/login")
 public class Login extends HttpServlet {
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.getRequestDispatcher("/login.jsp").forward(request, response);
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -25,7 +21,6 @@ public class Login extends HttpServlet {
         UserDAO userdao = new UserDAO();
         HttpSession session = request.getSession(true);
         if(userdao.validateUser(email, password)) {
-            session.removeAttribute("loginFormEmail");
             User user = userdao.getUserByEmail(email);
             session.setAttribute("userId", user.getId());
             session.setAttribute("message", "Login successful!");
@@ -33,7 +28,6 @@ public class Login extends HttpServlet {
         }
         else {
             session.setAttribute("error", "Invalid Email or Password");
-            session.setAttribute("loginFormEmail", email);
             request.getRequestDispatcher(request.getParameter("redirectURL")).forward(request, response);
         }
     }

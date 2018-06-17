@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Image;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/image/*")
 public class ImageServlet extends HttpServlet {
 
     @Override
@@ -23,7 +25,7 @@ public class ImageServlet extends HttpServlet {
         String[] parts = requestedPath.split("/");
 
         if(parts.length!=4 || !parts[0].isEmpty() || !parts[1].equals("image")) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         
@@ -31,7 +33,7 @@ public class ImageServlet extends HttpServlet {
         String k2 = parts[3];
         
         if(StringUtils.isNullOrEmpty(k1) || StringUtils.isNullOrEmpty(k2)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         
@@ -39,7 +41,7 @@ public class ImageServlet extends HttpServlet {
         Image image = imagedao.getImageByKeywords(k1,k2);
         
         if(image==null) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         

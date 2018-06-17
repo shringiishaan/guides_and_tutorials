@@ -1,5 +1,6 @@
 package controller.comment;
 
+import com.mysql.jdbc.StringUtils;
 import dao.CommentDAO;
 import dao.UserDAO;
 import java.io.IOException;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/newcomment")
 public class NewComment extends HttpServlet {
 
     @Override
@@ -25,14 +28,21 @@ public class NewComment extends HttpServlet {
         Integer priority = commentdao.getMaximumCommentPriorityByArticleId(articleId);
         priority++;
         
+        String ownerKey = "anonymous";
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId");
         User user=null;
-        if(userId !=null) {
-            user = userdao.getUserById((Integer)userId);
+        if(userId !=null && userdao.validateAdminByUserId((Integer)userId)) {
+            ownerKey = "admin";
         }
-        commentdao.createNewComment(user==null?null:user.getId(), message, articleId, priority);
-        session.setAttribute("message","Comment posted!");
+        else if(request.getParameter("ownerKey")!=null) {
+            ownerKey = request.getParameter("ownerKey");
+            if(StringUtils.isEmptyOrWhitespaceOnly(ownerKey) || ownerKey.equals("admin")) {
+                ownerKey = "anonymous";
+            }
+        }
+        commentdao.createNewComment(ownerKey, "new", message, articleId, priority);
+        session.setAttribute("message","New comment posted!");
         response.sendRedirect(request.getParameter("redirectURL"));
     }
 }

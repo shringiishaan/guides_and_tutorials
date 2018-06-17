@@ -5,7 +5,8 @@ import java.sql.Timestamp;
 public class Comment {
     
     private Integer id;
-    private Integer owner_id;
+    private String owner_key;
+    private String status;
     private String message;
     private Integer article_id;
     private Integer priority;
@@ -19,12 +20,20 @@ public class Comment {
         return this.id;
     }
     
-    public void setOwnerId(Integer owner_id) {
-        this.owner_id = owner_id;
+    public void setOwnerKey(String owner_key) {
+        this.owner_key = owner_key;
     }
     
-    public Integer getOwnerId() {
-        return this.owner_id;
+    public String getOwnerKey() {
+        return this.owner_key;
+    }
+    
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    public String getStatus() {
+        return this.status;
     }
     
     public void setMessage(String message) {

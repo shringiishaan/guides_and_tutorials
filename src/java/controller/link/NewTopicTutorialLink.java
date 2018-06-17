@@ -1,6 +1,5 @@
 package controller.link;
 
-import dao.TopicDAO;
 import dao.TutorialDAO;
 import dao.UserDAO;
 import java.io.IOException;
@@ -9,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/newtopictutoriallink")
 public class NewTopicTutorialLink extends HttpServlet {
 
     @Override
@@ -19,7 +20,7 @@ public class NewTopicTutorialLink extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         

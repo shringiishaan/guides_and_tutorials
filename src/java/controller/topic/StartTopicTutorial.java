@@ -8,7 +8,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/starttopictutorial/*")
 public class StartTopicTutorial extends HttpServlet {
 
     @Override
@@ -18,7 +20,7 @@ public class StartTopicTutorial extends HttpServlet {
         String[] parts = requestedPath.split("/");
 
         if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("starttopictutorial")) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         

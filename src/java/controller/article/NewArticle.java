@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.User;
+import javax.servlet.annotation.WebServlet;
+import model.Article;
 
+
+@WebServlet("/newarticle")
 public class NewArticle extends HttpServlet {
 
     @Override
@@ -17,41 +21,33 @@ public class NewArticle extends HttpServlet {
             throws ServletException, IOException {
         
         String title = request.getParameter("title").trim();
-        String data = request.getParameter("data");
         
         UserDAO userdao = new UserDAO();
         HttpSession session = request.getSession(true);
         Object userId = session.getAttribute("userId");
         if(userId==null) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         User user = userdao.getUserById((Integer)userId);
         if(!user.getType().equals("admin")) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         
         ArticleDAO articledao = new ArticleDAO();
-        
-        if(articledao.verifyArticleTitle(title)) {
+        Article tempArticle = null;
+        tempArticle = articledao.getArticleByTitle(title, false);
+        if(tempArticle!=null) {
             session.setAttribute("error","Title already exists!");
-            session.setAttribute("articleFormTitle",title);
-            session.setAttribute("articleFormData",data);
-            response.sendRedirect(request.getParameter("redirectURL"));
+            response.sendRedirect("/managearticle?aid="+tempArticle.getId());
             return;
         }
         
         String key = title.replace(" ","-").replace("/","").replaceAll("[^a-zA-Z/-]", "").toLowerCase();
-        if(data==null || data.trim().isEmpty()) {
-            data = null;
-        }
-        articledao.createNewArticle(key, title, user.getId(), "unlinked", data);
-        
-        session.removeAttribute("articleFormTitle");
-        session.removeAttribute("articleFormData");
+        articledao.createNewArticle(key, title, user.getId());
         session.setAttribute("message","Article created successfully");
-        response.sendRedirect(request.getParameter("redirectURL"));
+        response.sendRedirect("/managearticle?aid="+articledao.getIdByArticleKey(key));
     }
 
     @Override

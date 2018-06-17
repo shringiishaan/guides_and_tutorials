@@ -1,3 +1,8 @@
+<%@page import="dao.VoteDAO"%>
+<%@page import="dao.PageViewDAO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.HashMap"%>
+<%@page import="dao.RecommendationDAO"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Map"%>
@@ -65,60 +70,94 @@
     
     allTopics = topicdao.getAllTopics();
     
-    relatedTutorials = tutorialdao.getRelatedTutorialsByArticleId(currentArticle.getId(),isAdmin?null:"final",currentArticle.getScope());
+    relatedTutorials = tutorialdao.getRelatedTutorialsByArticleId(currentArticle.getId(),isAdmin?null:"final");
     
     //set next previous articles, tutorials
-    if(currentArticle.getScope().equals("tutorial")) {
-        for(int j=0; j<relatedTutorials.size(); j++) {
-            tempTutorial = relatedTutorials.get(j);
-            tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorial.getId(),isAdmin?null:"final",false);
-            for(int i=0; i<tempArticles.size(); i++) {
-                tempArticle = tempArticles.get(i);
-                if(currentArticle.getId().equals(tempArticle.getId())) {
-                    currentTutorial = tempTutorial;
-                    if(j>0)
-                        previousTutorial = relatedTutorials.get(j-1);
-                    if(j<(relatedTutorials.size()-1))
-                        nextTutorial = relatedTutorials.get(j+1);
-                    if(i>0)
-                        previousArticle = tempArticles.get(i-1);
-                    if(i<(tempArticles.size()-1))
-                        nextArticle = tempArticles.get(i+1);
-                    break;
-                }
-            }
-            if(currentTutorial!=null) 
+    for(int j=0; j<relatedTutorials.size(); j++) {
+        tempTutorial = relatedTutorials.get(j);
+        tempArticles = articledao.getArticlesByTutorialIdAndStatus(tempTutorial.getId(),isAdmin?null:"final",false);
+        for(int i=0; i<tempArticles.size(); i++) {
+            tempArticle = tempArticles.get(i);
+            if(currentArticle.getId().equals(tempArticle.getId())) {
+                currentTutorial = tempTutorial;
+                if(j>0)
+                    previousTutorial = relatedTutorials.get(j-1);
+                if(j<(relatedTutorials.size()-1))
+                    nextTutorial = relatedTutorials.get(j+1);
+                if(i>0)
+                    previousArticle = tempArticles.get(i-1);
+                if(i<(tempArticles.size()-1))
+                    nextArticle = tempArticles.get(i+1);
                 break;
+            }
         }
-        currentTopic = topicdao.getTopicById(topicdao.getTopicIdByTutorialId(currentTutorial.getId()));
+        if(currentTutorial!=null) 
+            break;
     }
-    else {
-        currentTopic = topicdao.getTopicById(topicdao.getTopicIdByArticleId(currentArticle.getId()));
-    }
+    currentTopic = topicdao.getTopicById(topicdao.getTopicIdByTutorialId(currentTutorial.getId()));
     
-    if(currentArticle.getScope().equals("tutorial") && nextArticle==null && nextTutorial!=null) {
+    if(nextArticle==null && nextTutorial!=null) {
         nextArticle = articledao.getMaximumPriorityArticleByTutorialIdAndStatus(nextTutorial.getId(), isAdmin?null:"final", false);
     }
-    if(currentArticle.getScope().equals("tutorial") && previousArticle==null && previousTutorial!=null) {
+    if(previousArticle==null && previousTutorial!=null) {
         previousArticle = articledao.getMinimumPriorityArticleByTutorialIdAndStatus(previousTutorial.getId(), isAdmin?null:"final", false);
+    }
+    
+    RecommendationDAO recommendationsdao = new RecommendationDAO();
+    List<HashMap<String,String>> recommendations_internal = new ArrayList<>();
+    List<HashMap<String,String>> recommendations_external = new ArrayList<>();
+    List<HashMap<String,String>> recommendations = recommendationsdao.getRecommendationsByArticleId(currentArticle.getId());
+    for(int i=0; i<recommendations.size(); i++) {
+        if(recommendations.get(i).get("type").equals("internal")) {
+            recommendations_internal.add(recommendations.get(i));
+        }
+        else if(recommendations.get(i).get("type").equals("external")) {
+            recommendations_external.add(recommendations.get(i));
+        }
+    }
+    
+    PageViewDAO requestCounterDAO = new PageViewDAO();
+    if(session.getAttribute("view-count-"+currentArticle.getId())==null) {
+        if(!requestCounterDAO.verifyArticleId(currentArticle.getId())) {
+            requestCounterDAO.initializePageCountByArticleId(currentArticle.getId());
+        }
+        requestCounterDAO.incrementCountForArticle(currentArticle.getId());
+        session.setAttribute("view-count-"+currentArticle.getId(),true);
+    }
+    Integer pageCount = requestCounterDAO.getViewsByArticle(currentArticle.getId());
+    
+    VoteDAO articlevotesdao = new VoteDAO();
+    boolean isVotedUp = false;
+    boolean isVotedDown = false;
+    Integer upVoteCount = 0;
+    Integer downVoteCount = 0;
+    if(!(session.getAttribute("vote-up-"+currentArticle.getId())==null)) {
+        isVotedUp = true;
+    }
+    if(!(session.getAttribute("vote-down-"+currentArticle.getId())==null)) {
+        isVotedDown = true;
+    }
+    if(articlevotesdao.verifyArticleVoteType(currentArticle.getId(), "up")) {
+        upVoteCount = articlevotesdao.getVoteCountByArticleAndType(currentArticle.getId(), "up");
+    }
+    if(articlevotesdao.verifyArticleVoteType(currentArticle.getId(), "down")) {
+        downVoteCount = articlevotesdao.getVoteCountByArticleAndType(currentArticle.getId(), "down");
     }
 %>
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%=currentArticle.getTitle()%> | <%=(currentArticle.getScope().equals("tutorial")?currentTutorial.getTitle():currentTopic.getTitle())%></title>
+        <title><%=currentArticle.getTitle()%> | currentTutorial.getTitle()%></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
+        <meta name="description" content="<%=currentArticle.getDescription()%>" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
         <link rel="stylesheet" href="/main/main.css" type="text/css" />
-        <link rel="stylesheet" href="/navbar/navbar.css" type="text/css" />
-        <link rel="stylesheet" href="/sidebar/sidebar.css" type="text/css" />
-        <link rel="stylesheet" href="/infobar/infobar.css" type="text/css" />
-        <link rel="stylesheet" href="/content/content.css" type="text/css" />
         <link rel="stylesheet" href="/prism/prism.css" />
         <link rel="icon" type="image/png" href="/image/cstutorials/icon-sm" />
+        
     </head>
     <body>
         <!-- navigation bar -->
@@ -129,21 +168,11 @@
                 <ul class="navbar-nav ml-auto">
                     <%
                         if(isAdmin) {
-                            %><li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
-                                   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Admin
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/managetopic">Topic</a>
-                                    <a class="dropdown-item" href="/managetopictutoriallink">Topic-Tutorial</a>
-                                    <a class="dropdown-item" href="/managetutotial">Tutorial</a>
-                                    <a class="dropdown-item" href="/managetutorialarticlelink">Tutorial-Article</a>
-                                    <a class="dropdown-item" href="/managearticle">Article</a>
-                                    <a class="dropdown-item" href="/managerecommendations">Recommendations</a>
-                                    <a class="dropdown-item" href="/manageimages">Images</a>
-                                    <a class="dropdown-item" href="/logout">Logout</a>
-                                </div>
+                            %><li class="nav-item">
+                                <a class="nav-link" href="/admindashboard">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Logout</a>
                             </li><%
                         }
                     %>
@@ -168,7 +197,7 @@
             <div class="row">
                 
                 <!-- side bar -->
-                <div class="col-lg-2 is-sidebar is-nav-list d-none d-lg-inline-block">
+                <div class="col-md-3 col-lg-2 is-sidebar is-nav-list d-none d-md-inline-block p-0 pt-1">
                     <%
                         for (int i = 0; i < relatedTutorials.size(); i++) {
                             if(!(relatedTutorials.get(i)).getStatus().equals("final") && !isAdmin) {
@@ -185,7 +214,7 @@
                                 tempArticles = articledao.getArticlesByTutorialIdAndStatus((relatedTutorials.get(i)).getId(),(isAdmin?null:"final"), false);
                                 for(int j=0; j<tempArticles.size(); j++) { 
                                     %>
-                                <a class='<%=(currentArticle.getScope().equals("tutorial") && currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
+                                <a class='<%=(currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
                                         is-label' href='/article/<%=tempArticles.get(j).getKey()%>'>
                                     <%=tempArticles.get(j).getTitle()%>
                                     <% if(isAdmin) { %><sup class="<%=
@@ -199,281 +228,347 @@
                 </div>
 
                 <!-- main content -->
-                <div class="col-lg-8 pt-4 px-sm-4 pr-lg-5">
-                    <h3><%=currentArticle.getTitle()%></h3>
-                    <small class="text-muted"><i class="fa fa-clock"></i> Last modified on <%= new SimpleDateFormat("MMM d, yyyy").format(currentArticle.getModifiedTime().getTime()) %></small>
-                    <%
-                        if(currentArticle.getScope().equals("tutorial")) {
-                            %><hr /><%
-                            if(previousArticle!=null) {
-                                %><a class="btn btn-sm btn-outline-info" href="/article/<%=previousArticle.getKey()%>">
-                                    <i class="fa fa-angle-left"></i> Previous <span class="d-none d-sm-inline-block">Article</span></a><%
-                            }
-                            if(nextArticle!=null) {
-                                %><a class="btn btn-sm btn-outline-info float-right" href="/article/<%=nextArticle.getKey()%>">Next <span class="d-none d-sm-inline-block">Article</span> <i class="fa fa-angle-right"></i></a><%
-                            }
-                        }
-                        if(user!=null && user.getType().equals("admin")) {
-                            %><a class="btn btn-sm btn-outline-info ml-2" data-toggle="modal" data-target="#editArticleModal" href="#!">Edit</a><%
-                            %><a class="btn btn-sm btn-outline-danger ml-2" data-toggle="modal" data-target="#deleteArticleModal" href="#!">Delete</a><%
-                        }
-                    %>
-                    <div class="clearfix"></div>
-                    <%
-                        if(isAdmin) {
-                            %><br />
-                            <form method="POST" action="/setarticlestatus">
-                                <div class="input-group p-2">
-                                    <input type="text" name="status" class="form-control" value="<%=currentArticle.getStatus()%>" />
-                                    <input type="text" name="articleId" hidden="true" value="<%=currentArticle.getId()%>" />
-                                    <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-sm btn-outline-secondary" type="submit">Update Status</button>
-                                    </div>
+                <div class="col-md-9 col-lg-10 pt-3">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <%
+                            if (session.getAttribute("error") != null) {
+                            %>
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <%=session.getAttribute("error")%>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                            </form><%
-                        }
+                            <%
+                                session.removeAttribute("error");
+                            }
+                            if (session.getAttribute("message") != null) {
+                            %>
+                                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                    <%=session.getAttribute("message")%>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            <%
+                                session.removeAttribute("message");
+                            }
+                            %>
+                            
+                            <h3><%=currentArticle.getTitle()%></h3>
+                            
+                            <small class="text-muted is-article-util-panel">
+                                <div class="element mr-2"><i class="fa fa-eye"></i> <%=pageCount%> Views</div>
+                                <div onclick="triggerUpVote()" class="element is-pointer mr-2"><i class="fa fa-thumbs-up"></i> Up-Vote (<span class="is-upvote-count"><%=upVoteCount%></span>)</div>
+                                <div onclick="triggerDownVote()" class="element is-pointer mr-2"><i class="fa fa-thumbs-down"></i> Needs Improvement (<span class="is-downvote-count"><%=downVoteCount%></span>)</div>
+                                <div data-toggle="modal" data-target="#feedbackModal" class="element is-pointer"><i class="fa fa-comment"></i> Give Feedback</div>
+                            </small>
+                            <hr />
+                            <%
+                                if(previousArticle!=null) {
+                                    %><a class="btn btn-sm btn-default is-btn-primary-outline" href="/article/<%=previousArticle.getKey()%>">
+                                        <i class="fa fa-angle-left"></i> Previous Article</a><%
+                                }
+                                if(nextArticle!=null) {
+                                    %><a class="btn btn-sm btn-default is-btn-primary-outline float-right" href="/article/<%=nextArticle.getKey()%>">Next Article <i class="fa fa-angle-right"></i></a><%
+                                }
+                                if(user!=null && user.getType().equals("admin")) {
+                                    %><a class="btn btn-sm btn-default is-btn-primary ml-2"  href="/managearticle?aid=<%=currentArticle.getId()%>">Edit</a><%
+                                }
+                            %>
+                            <div class="clearfix"></div>
+                            <%
+                                if(isAdmin) {
+                                    %><form action="/updatearticletitle" method="POST" class="mt-3">
+                                        <div class="input-group">
+                                            <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
+                                            <input type="text" name="title" class="form-control" value="<%=currentArticle.getTitle()%>" />
+                                            <div class="input-group-append">
+                                                <button class="btn default is-btn-primary" type="submit">Update Title</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form action="/updatearticlekey" method="POST" class="mt-3">
+                                        <div class="input-group">
+                                            <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/managearticle?aid=<%=currentArticle.getId()%>" />
+                                            <input type="text" name="key" class="form-control" value="<%=currentArticle.getKey()%>" />
+                                            <div class="input-group-append">
+                                                <button class="btn default is-btn-primary" type="submit">Update Key</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form method="POST" action="/updatearticlestatus" class="mt-3">
+                                        <div class="input-group">
+                                            <input type="text" name="status" class="form-control" value="<%=currentArticle.getStatus()%>" />
+                                            <input type="text" name="articleId" hidden="true" value="<%=currentArticle.getId()%>" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sm btn-default is-btn-primary" type="submit">Update Status</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form method="POST" action="/updatearticledescription" class="mt-3">
+                                        <div class="input-group">
+                                            <textarea name="description" rows="4" maxlength="250" class="form-control"><%=currentArticle.getDescription()%></textarea>
+                                            <input type="text" name="articleId" hidden="true" value="<%=currentArticle.getId()%>" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sm btn-default is-btn-primary" type="submit">Update Description</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <form method="POST" action="/updatearticledata" class="mt-3">
+                                        <div class="input-group">
+                                            <textarea name="data" class="form-control"><%=currentArticle.getData()%></textarea>
+                                            <input type="text" name="articleId" hidden="true" value="<%=currentArticle.getId()%>" />
+                                            <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sm btn-default is-btn-primary" type="submit">Update Data</button>
+                                            </div>
+                                        </div>
+                                    </form><%
+                                }
+                            %>
+                            <hr />
+                            <div class="mb-3">
+                                <small class="text-muted">
+                                    <i class="fa fa-clock"></i> Last modified on <%= new SimpleDateFormat("MMM d, yyyy").format(currentArticle.getModifiedTime().getTime()) %>
+                                </small>
+                            </div>
+                            <div class="is-article-data">
+                                <%=currentArticle.getData()%>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted is-article-util-panel">
+                                    <div onclick="triggerUpVote()" class="element is-pointer mr-2"><i class="fa fa-thumbs-up"></i> Up-Vote (<span class="is-upvote-count"><%=upVoteCount%></span>)</div>
+                                    <div onclick="triggerDownVote()" class="element is-pointer mr-2"><i class="fa fa-thumbs-down"></i> Needs Improvement (<span class="is-downvote-count"><%=downVoteCount%></span>)</div>
+                                    <div data-toggle="modal" data-target="#feedbackModal" class="element is-pointer"><i class="fa fa-comment"></i> Give Feedback</div>
+                                </small>
+                            </div>
+                            <hr />
+                            <%
+                                if(previousArticle!=null) {
+                                    %><a class="btn btn-sm btn-default is-btn-primary-outline" href="/article/<%=previousArticle.getKey()%>"><i class="fa fa-angle-left"></i> Previous Article</a><%
+                                }
+                                if(nextArticle!=null) {
+                                    %><a class="btn btn-sm btn-default is-btn-primary-outline float-right" href="/article/<%=nextArticle.getKey()%>">Next Article <i class="fa fa-angle-right"></i></a><%
+                                }
+                            %>
+                        </div>
+                        <div class="col-xs-12 col-lg-3 is-nav-list pt-3 is-recommendation-bar">
+                            <div class="d-block">
+                                <form id="is-searchForm-sidebar">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control search-input" placeholder="Search all Tutorials..." />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-info is-btn-primary"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <%
+                                if(recommendations_internal!=null && recommendations_internal.size()>0) {
+                                    %><a class="is-title">Related Links</a><%
+                                    for(int j=0; j<recommendations_internal.size(); j++) { 
+                                        %><a class='is-label' href='<%=recommendations_internal.get(j).get("link")%>'><%=recommendations_internal.get(j).get("title")%></a><%
+                                    }
+                                }
 
-                    if (session.getAttribute("error") != null) {
-                    %>
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <%=session.getAttribute("error")%>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                                if(recommendations_external!=null && recommendations_external.size()>0) {
+                                    %><a class="is-title">Recommended External Links</a><%
+                                    for(int j=0; j<recommendations_external.size(); j++) { 
+                                        %><a class='is-label' target="_blank" href='<%=recommendations_external.get(j).get("link")%>'><%=recommendations_external.get(j).get("title")%></a><%
+                                    }
+                                }
+
+                                tempArticles = articledao.getTopArticles(5);
+                                if(tempArticles!=null && tempArticles.size()>0) {
+                                    %><a class="is-title">Top Articles</a><%
+                                    for(int j=0; j<tempArticles.size(); j++) { 
+                                        %><a class='is-label' href='/article/<%=tempArticles.get(j).getKey()%>'><%=tempArticles.get(j).getTitle()%></a><%
+                                    }
+                                }
+                            %>
                         </div>
-                    <%
-                        session.removeAttribute("error");
-                    }
-                    if (session.getAttribute("message") != null) {
-                    %>
-                        <div class="alert alert-info alert-dismissible fade show" role="alert">
-                            <%=session.getAttribute("message")%>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    <%
-                        session.removeAttribute("message");
-                    }
-                    %>
-                    <hr />
-                    <div class="is-article-data">
-                        <%=currentArticle.getData()%>
                     </div>
-                    <hr />
-                    <%
-                        if(currentArticle.getScope().equals("tutorial")) {
-                            if(previousArticle!=null) {
-                                %><a class="btn btn-sm btn-outline-info" href="/article/<%=previousArticle.getKey()%>"><i class="fa fa-angle-left"></i> Previous <span class="d-none d-sm-inline-block">Article</span></a><%
-                            }
-                            if(nextArticle!=null) {
-                                %><a class="btn btn-sm btn-outline-info float-right" href="/article/<%=nextArticle.getKey()%>">Next <span class="d-none d-sm-inline-block">Article</span> <i class="fa fa-angle-right"></i></a><%
-                            }
-                        }
-                    %>
-                    <div class="row mt-5">
-                        <div class="col-12 px-sm-5 px-md-3">
+                    <div class="row mt-5 pb-4">
+                        <div class="col-lg-9 px-sm-5 px-md-3">
                             <%
                                 CommentDAO commentdao = new CommentDAO();
                                 List<Comment> comments = commentdao.getCommentsByArticleId(currentArticle.getId());
-                                %><h5>Discussion (<%=comments.size()%>)</h5><hr /><%
+                                %><h5>Comments (<%=comments.size()%>)</h5><hr /><%
                                 for(Comment comment : comments) {
-                                    if(comment.getOwnerId()!=0) 
-                                        tempUser = userdao.getUserById(comment.getOwnerId());
-                                    %><div class="row mt-2">
-                                        <div class="col-12">
-                                            <div class="card">
-                                                <div class="card-body p-2 px-3">
-                                                    <%=comment.getMessage()%>
-                                                    <br>
-                                                    <small><i class="fa fa-clock"></i> <%= new SimpleDateFormat("MMM d, yyyy HH:mm").format(comment.getCreateTime().getTime()) %>
-                                                        <i class="ml-2 fa fa-user"></i> <%=(comment.getOwnerId()!=0)?tempUser.getName():"Anonymous"%></small> 
-                                                </div>
-                                            </div>
-                                        </div>
+                                    %><div class="card card-body is-comment p-1 px-2 mb-3">
+                                        <p class="m-0 mb-2 p-0"><%=comment.getMessage()%></p>
+                                        <small><i class="fa fa-clock mr-1"></i> <%= new SimpleDateFormat("MMM d, yyyy HH:mm").format(comment.getCreateTime().getTime()) %>
+                                            <i class="ml-2 fa fa-user mr-1"></i> <%
+                                                if(comment.getOwnerKey().equals("admin")) {
+                                                    out.println("Administrator");
+                                                }
+                                                else if(comment.getOwnerKey().equals("anonymous")) {
+                                                    out.println("Anonymous");
+                                                }
+                                                else {
+                                                    out.println(comment.getOwnerKey());
+                                                } 
+                                        %></small> 
                                     </div><%
                                 }
                             %>
-                            <div class="row mt-2">
+                            <div class="row mt-3">
                                 <div class="col-12">
-                                    <form action="/newcomment" method="post">
-                                        <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
-                                        <textarea class="form-control" name="message" placeholder="Add comment ..."></textarea>
-                                        <button type="submit" class="btn btn-info btn-sm mt-2">Comment</button>
-                                        <br><small><span class="text-muted"><a href="/Login">login</a> or post a comment anonymously</span></small>
-                                    </form>
+                                    <button  data-toggle="modal" data-target="#commentModal" class="btn btn-default is-btn-primary">Add Comment</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <br>
-                    <hr />
-                    <p class="text-muted float-right"><small>Developed By <span data-toggle="modal" data-target="#loginModal" class="text-info">Ishaan Shringi</span></small></p>
                 </div>
-                <div class="col-lg-2 is-nav-list d-none d-lg-inline-block pt-5">
-                    <div class="d-block">
-                        <form action="/search" method="GET">
-                            <div class="input-group">
-                                <input type="text" name="s" class="form-control" placeholder="Search" />
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
+            </div>
+        </div>   
+
+        <div class="container-fluid row pt-2 px-4 m-0 is-footer">
+            <div class="col-12 text-right" style="color:#fff;">
+                <small class="d-block">
+                    Developed By 
+                    <span data-toggle="modal" data-target="#loginModal"><b>Ishaan Shringi</b></span>
+                </small>
+                <a target="_black" href="https://www.linkedin.com/in/shringiishaan" style="color:#0077B5;"><i class="fab fa-linkedin ml-2"></i></a>
+                <a target="_black" href="https://github.com/shringiishaan/guides_and_tutorials" style="color:#333;"><i class="fab fa-github ml-2"></i></a>
+            </div>
+        </div>
+            
+        <% if(!isAdmin) { %>
+            <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                    <div class="modal-content">
+                        <form action="/login" method="post">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="email" placeholder="Email" />
                                 </div>
+                                <div class="form-group">
+                                    <input type="password" class="form-control" name="password" placeholder="Password" />
+                                    <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default is-btn-primary-outline" data-dismiss="modal">Close</button>
+                                <input type="submit" name="submit" value="Login" class="btn btn-info" />
                             </div>
                         </form>
                     </div>
-                    <a class="is-title">Related Articles</a>
-                    <%
-                        for(int j=0; j<tempArticles.size(); j++) { 
-                            %>
-                        <a class='<%=(currentArticle.getScope().equals("tutorial") && currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
-                                is-label' href='/article/<%=tempArticles.get(j).getId()%>'>
-                            <%=tempArticles.get(j).getTitle()%>
-                            <% if(isAdmin) { %><sup class="<%=
-                                    (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
-                                    %>"><i>(<%=tempArticles.get(j).getStatus()%>)</i></sup>
-                            <% } %>
-                        </a>
-                    <% }
-                    %>
-                    <a class="is-title">Recommended External Links</a>
-                    <%
-                        for(int j=0; j<tempArticles.size(); j++) { 
-                            %>
-                        <a class='<%=(currentArticle.getScope().equals("tutorial") && currentArticle.getId().equals(tempArticles.get(j).getId()))?"is-active":""%>
-                                is-label' href='/article/<%=tempArticles.get(j).getKey()%>'>
-                            <%=tempArticles.get(j).getTitle()%>
-                            <% if(isAdmin) { %><sup class="<%=
-                                    (tempArticles.get(j).getStatus().equals("final"))?"text-success":"text-warning"
-                                    %>"><i>(<%=tempArticles.get(j).getStatus()%>)</i></sup>
-                            <% } %>
-                        </a>
-                    <% }
-                    %>
+                </div>
+            </div>
+        <% } %>
+       
+        <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Contact Administrator</p>
+                        <div class="form-group">
+                            <input id="is-feedback-ownerkey" class="form-control" placeholder="Name or Email-ID (optional)" />
+                            <small class="text-muted ml-1 m-0 p-0">skip this to send anonymously</small>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="is-feedback-data" class="form-control" placeholder="Your message here..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default is-btn-primary-outline" data-dismiss="modal">Close</button>
+                        <button onclick="sendFeedback()" class="btn btn-default is-btn-primary">Send</button>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <!-- Modal -->
-        <!-- div class="modal fade" id="navigationModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+       
+        <div class="modal fade" id="postFeedbackModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                 <div class="modal-content">
-                    <!-- div class="modal-header">
-                        <h5 class="mr-3 text-muted"><!-- img class="img-thumbnail" style="height:30px;border:none;" src="/Image/tutorial-icon/<%=currentTopic.getId()%>" / -><%=currentTopic.getTitle()%></h5>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Other Topics
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <%
-                                    for (int i = 0; i < allTopics.size(); i++) {
-                                        if(allTopics.get(i).getId().equals(currentTopic.getId())) {
-                                            continue;
-                                        }
-                                        %><a class="dropdown-item" href="/topic/<%=allTopics.get(i).getId()%>"><%=allTopics.get(i).getTitle()%></a><%
-                                    }
-                                %>
-                            </div>
-                        </div>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div ->
-                    <div class="modal-body is-nav-list">
-                        <%
-                            for (int i = 0; i < relatedTutorials.size(); i++) {
-                                out.println("<a class='is-title'>"+(relatedTutorials.get(i)).getTitle()+"</a>");
-                                tempArticles = articledao.getArticlesByTutorialIdAndStatus((relatedTutorials.get(i)).getId(),(isAdmin?null:"final"),false);
-                                for(int j=0; j<tempArticles.size(); j++) {
-                                    out.println("<a class='");
-                                    if(currentArticle.getId().equals(tempArticles.get(j).getId())) {
-                                        out.println("is-active");
-                                    }
-                                    out.println(" is-label' href='/article/"+tempArticles.get(j).getId()+"'>"+tempArticles.get(j).getTitle()+"</a>");
-                                }
-                            }
-                        %>
+                    <div class="modal-body">
+                        <p>Thank You for your feedback!</p>
                     </div>
                     <div class="modal-footer">
-                        <a href="/" class="btn btn-sm btn-outline-info"><i class="fa fa-th"></i> Tutorials</a>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal">Back</button>
+                        <button class="btn btn-default is-btn-primary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
-        </div -->
-        
-        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+        </div>
+       
+        <div class="modal fade" id="upvoteModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                 <div class="modal-content">
-                    <form action="/login" method="post">
+                    <div class="modal-body">
+                        <p>Thank you for the vote! Would you like to give us a Feedback?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default is-btn-primary-outline" data-dismiss="modal">Close</button>
+                        <button data-dismiss="modal" data-toggle="modal" data-target="#feedbackModal" class="btn btn-default is-btn-primary">Give Feedback</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        <div class="modal fade" id="downvoteModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <p>Thank you for the vote we will definitely consider improvement! Would you like to give us a Feedback?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default is-btn-primary-outline" data-dismiss="modal">Close</button>
+                        <button data-dismiss="modal" data-toggle="modal" data-target="#feedbackModal" class="btn btn-default is-btn-primary">Give Feedback</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                <div class="modal-content">
+                    <form action="/newcomment" method="post">
                         <div class="modal-body">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="email" placeholder="Email" />
+                                <input type="text" class="form-control" name="ownerKey" placeholder="Name or Email-ID (optional)" />
+                                <small class="text-muted ml-1 m-0 p-0">skip this to post anonymously</small>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password" placeholder="Password" />
-                                <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getId()%>" />
+                                <textarea class="form-control" name="message" placeholder="Enter text here.."></textarea>
+                                <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
+                                <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                            <input type="submit" name="submit" value="Login" class="btn btn-info" />
+                            <button type="button" class="btn btn-default is-btn-primary-outline" data-dismiss="modal">Close</button>
+                            <input type="submit" name="submit" value="Post Comment" class="btn btn-default is-btn-primary" />
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-                            
-        <% if(isAdmin) { %>
-                            
-            <div class="modal fade" id="editArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                    <div class="modal-content">
-                        <form action="/editarticle" method="post">
-                            <div class="modal-body">
-                                <a href="#!" data-dismiss="modal">Cancel</a>
-                                <div class="form-group">
-                                    <input name="id" value="<%=currentArticle.getId()%>" type="text" hidden="true" />
-                                    <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getId()%>" />
-                                </div>
-                                <div class="form-group">
-                                    <textarea style="width:100%" name="data" rows="15"><%=currentArticle.getData()%></textarea>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                                <a class="btn btn-outline-secondary" href="/editarticle/<%=currentArticle.getId()%>">Full-Screen Editor</a>
-                                <input type="submit" name="submit" value="Update Content" class="btn btn-info" />
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal fade" id="deleteArticleModal" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <p class="text-danger">Do you really want to delete this article?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <form action="/deletearticle" method="POST">
-                                <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
-                                <input name="redirectURL" value="/" hidden="true" />
-                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        <% } %>
         
         <div id="is-tm-wrapper" style="display:none;">
         </div>      
         
-        <div id="is-tm-content-quicklinks" class="is-tm-content" style="display:none;">
+        <div id="is-tm-content-quicklinks" class="is-tm-content pb-4" style="display:none;overflow-y:auto;">
+            <div style="width:100%;height:60px;">
+                <div class="row p-4 text-center">
+                        <div class="col-sm-8 col-md-6 col-lg-4 btn-group mx-auto" style="z-index:1500;">
+                            <button type="button" class="btn btn-default is-btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+                                <i class="fa fa-bars mr-2"></i> <%=currentTopic.getTitle()%>
+                            </button>
+                            <div class="dropdown-menu" style="width:100%">
+                                <% for(int i=0; i<allTopics.size(); i++) { 
+                                    if(currentTopic.getId().compareTo(allTopics.get(i).getId())==0) continue; %>
+                                    <a class="dropdown-item" href="/starttopictutorial/<%=allTopics.get(i).getId()%>"><%=allTopics.get(i).getTitle()%></a>
+                                <% } %>
+                            </div>
+                        </div>
+                </div>
+            </div>
             <div class="row p-4">
                 <div class="col-md-10 offset-md-1">
                     <div class="row">
@@ -483,7 +578,7 @@
                         for(int k=0; k<relatedTutorials.size(); k++) {
                             tempArticles = articledao.getArticlesByTutorialIdAndStatus(relatedTutorials.get(k).getId(),isAdmin?null:"final",false);
                             %><div class="col-sm-6 col-md-4">
-                                <div class="card card-body is-tutorial-card">
+                                <div class="card card-body is-tutorial-card mb-2">
                                     <h6 class="card-title">
                                         <%=relatedTutorials.get(k).getTitle()%>
                                         <% if(isAdmin) { %><sup class="<%=
@@ -511,52 +606,79 @@
             </div>
         </div>
         
-        <div id="is-tm-content-topics" class="is-tm-content" style="display:none;">
+        <div id="is-tm-content-search" class="is-tm-content pb-5" style="display:none;overflow-y:auto;">
             <div class="row p-4">
-                <div class="col-sm-6 offset-sm-3 col-md-4 offset-md-4">
-                    <div class="card card-body is-tutorial-card">
-                        <h6 class="card-title">
-                            All Topics
-                        </h6>
-                        <%
-                            for(int j=0; j<allTopics.size(); j++) {
-                        %><a class="card-article-link 
-                                <%=(allTopics.get(j).getId().compareTo(currentTopic.getId())==0)?"is-active":""%>" 
-                                href="/starttopictutorial/<%=allTopics.get(j).getId()%>">
-                                        <%=allTopics.get(j).getTitle()%>
-                                        <% if(isAdmin) { %><sup class="<%=
-                                                (allTopics.get(j).getStatus().equals("final"))?"text-success":"text-warning"
-                                                %>"><i><%=allTopics.get(j).getStatus()%></i></sup>
-                                        <% } %>
-                                </a><%
-                            }
-                        %>
+                <div class="col-sm-6 offset-sm-3 col-md-4 col-md-4 offset-md-4">
+                    <div>
+                        <form id="is-searchForm-main" class="is-tm-searchbar">
+                            <div class="input-group">
+                                <input type="text" class="search-input form-control" placeholder="Search all Tutorials..." />
+                                <div class="input-group-append">
+                                    <button class="btn btn-info is-btn-primary" ><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row px-4">
+                <div class="col-md-10 offset-md-1">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card card-body is-tutorial-card">
+                                <h6 class="card-title">Search Results (<span id="searchresultscounter">0</span>)</h6>
+                                <hr />
+                                <div id="searchresultswrapper"></div>
+                                <hr/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <%
+                        if(recommendations_internal!=null && recommendations_internal.size()>0) {
+                            %><div class="col-sm-6 col-md-4">
+                                <div class="card card-body is-tutorial-card">
+                                    <h6 class="card-title">Related Links</h6><%
+                                    for(int j=0; j<recommendations_internal.size(); j++) { 
+                                        %><a class='card-article-link' href='<%=recommendations_internal.get(j).get("link")%>'><%=recommendations_internal.get(j).get("title")%></a><%
+                                    }
+                                %></div>
+                            </div><%
+                        }
+
+                        if(recommendations_external!=null && recommendations_external.size()>0) {
+                            %><div class="col-sm-6 col-md-4">
+                                <div class="card card-body is-tutorial-card">
+                                    <h6 class="card-title">Recommended External Links</h6><%
+                                    for(int j=0; j<recommendations_external.size(); j++) { 
+                                        %><a class='card-article-link' target="_blank" href='<%=recommendations_external.get(j).get("link")%>'><%=recommendations_external.get(j).get("title")%></a><%
+                                    }
+                                %></div>
+                            </div><%
+                        }
+
+                        tempArticles = articledao.getTopArticles(5);
+                        if(tempArticles!=null && tempArticles.size()>0) {
+                            %><div class="col-sm-6 col-md-4">
+                                <div class="card card-body is-tutorial-card">
+                                    <h6 class="card-title">Top Articles</h6><%
+                                    for(int j=0; j<tempArticles.size(); j++) { 
+                                        %><a class='card-article-link' href='/article/<%=tempArticles.get(j).getKey()%>'><%=tempArticles.get(j).getTitle()%></a><%
+                                    }
+                                %></div>
+                            </div><%
+                        }
+                    %>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div id="is-tm-content-search" class="is-tm-content" style="display:none;">
-            <div class="row p-4">
-                <div class="col-sm-6 col-md-4 col-md-4 offset-md-4">
-                    <form class="is-tm-searchbar" action="/search" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="s" class="form-control" placeholder="Search" />
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-info" type="submit"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-              
         <div id="is-float-bottom">
-            <a id="is-tm-readmode-btn" is-readmode="false" onclick="toggleReadMode()" class="btn btn-outline-secondary"><i class="fa fa-eye"></i></a>
-            <a id="is-tm-quicklinks-btn" onclick="openTM('quicklinks')" class="btn btn-outline-secondary"><i class="fa fa-sitemap"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></a>
-            <a id="is-tm-topics-btn" onclick="openTM('topics')" class="btn btn-outline-secondary"><i class="fa fa-bars"></i> <span class="d-none d-md-inline-block ml-2">Topics</span></a>
-            <a id="is-tm-search-btn" onclick="openTM('search')" class="btn btn-outline-secondary"><i class="fa fa-search"></i> <span class="d-none d-md-inline-block ml-2">Search</span></a>
-            <a id="is-tm-close-btn" onclick="closeTM()" class="btn btn-outline-danger" style="display:none;"><i class="fa fa-times"></i></a>
+            <a id="is-tm-quicklinks-btn" onclick="openTM('quicklinks')" class="btn btn-default"><i class="fa fa-sitemap"></i> <span class="d-none d-md-inline-block ml-2">Quick Links</span></a>
+            <a id="is-tm-search-btn" style='display:none;' onclick="openTM('search')" class="btn btn-default"><i class="fa fa-search"></i> <span class="d-none d-md-inline-block ml-2">Explore</span></a>
+            <a id="is-tm-scrolltop-btn" style='display:none;' onclick="scrollToTop()" class="btn btn-default"><i class="fa fa-angle-double-up"></i></a>
+            <a id="is-tm-close-btn" style='display:none;' onclick="closeTM()" class="btn btn-default"><i class="fa fa-times"></i></a>
         </div>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -567,56 +689,150 @@
             
             currentTM = null;
             
+            $(function(){
+                $('#is-searchForm-main').on('submit', function(event){
+                    event.preventDefault();
+                    displaySearchResults($("#is-searchForm-main .search-input").val());
+                });
+                
+                $('#is-searchForm-sidebar').on('submit', function(event){
+                    event.preventDefault();
+                    displaySearchResults($("#is-searchForm-sidebar .search-input").val());
+                });
+                
+                $(window).scroll(function() {
+                    if(currentTM===null) {
+                        if($(window).scrollTop()<300) {
+                            $("#is-tm-scrolltop-btn").fadeOut();
+                        }
+                        else {
+                            $("#is-tm-scrolltop-btn").fadeIn();
+                        }
+                    }
+                });
+            });
+            
+            function displaySearchResults(query) {
+                if(currentTM===null || currentTM!=="search") {
+                    openTM('search');
+                    $("#is-searchForm-main .search-input").val(query);
+                }
+                
+                $.get("/search?s="+query, function(data) {
+                    $("#searchresultswrapper").html("");
+                    $("#searchresultscounter").html(data.results.length);
+                    if(data.results.length!=0) {
+                        for(result in data.results) {
+                            $("#searchresultswrapper").append(
+                                    "<div onclick=\"location.href='"+data.results[result].link+"'\" class='card-article-link px-2' style='cursor:pointer'>"+
+                                        "<h6>"+data.results[result].title+"</h6>"+
+                                        "<p>"+data.results[result].description+"</p>"+
+                                    "</div>");
+                        }
+                    }
+                    else {
+                        $("#searchresultswrapper").html("<small class='text-center d-block'><i>No results found for \""+query+"\"</i></small>");
+                        $("#searchresultscounter").html("0");
+                    }
+                },"json")
+                .fail(function(data) {
+                    console.log(data.responseText);
+                    $("#searchresultswrapper").html("<small class='text-center d-block'><i>Unable to fetch results</i></small>");
+                    $("#searchresultscounter").html("0");
+                });
+            }
+            
             function openTM(modalName) {
-                if($("#is-tm-"+modalName+"-btn").hasClass("btn-info")) {
+                if(currentTM === modalName) {
                     closeTM();
                 }
                 else if(currentTM !== null) {
-                    $("#is-tm-content-"+currentTM).slideUp(function() {
-                        $("#is-tm-content-"+modalName).slideDown(); 
-                    });
-                    $("#is-tm-"+currentTM+"-btn").removeClass("btn-info").addClass("btn-outline-secondary");
-                    $("#is-tm-"+modalName+"-btn").removeClass("btn-outline-secondary").addClass("btn-info");
-                    $("#is-tm-close-btn").fadeIn();
+                    $("#is-tm-content-"+currentTM).fadeOut("fast");
+                    $("#is-tm-"+currentTM+"-btn").removeClass("active");
+                    $("#is-tm-content-"+modalName).fadeIn("slow");
+                    $("#is-tm-"+modalName+"-btn").addClass("active");
                     currentTM = modalName;
                 }
                 else {
+                    $("#is-tm-scrolltop-btn").hide();
                     $("#is-tm-wrapper").show();
-                    $("#is-tm-content-"+modalName).slideDown();
-                    $("#is-tm-"+modalName+"-btn").removeClass("btn-outline-secondary").addClass("btn-info");
-                    $("#is-tm-close-btn").fadeIn();
+                    $("#is-tm-search-btn").fadeIn();
+                    $("#is-tm-content-"+modalName).fadeIn();
+                    $("#is-tm-"+modalName+"-btn").addClass("active");
+                    $("#is-tm-close-btn").show();
                     currentTM = modalName;
                 }
             }
             
             function closeTM() {
-                $("#is-float-bottom > a").removeClass("btn-info").addClass("btn-outline-secondary");
-                $(".is-tm-content").slideUp(function() {
-                    $("#is-tm-wrapper").hide();
-                });
-                $("#is-tm-close-btn").fadeOut();
+                $("#is-tm-"+currentTM+"-btn").removeClass("active");
+                $(".is-tm-content").fadeOut("fast");
+                $("#is-tm-wrapper").fadeOut("slow");
+                $("#is-tm-search-btn").hide();
+                $("#is-tm-close-btn").hide();
+                if($(window).scrollTop()>300) {
+                    $("#is-tm-scrolltop-btn").fadeIn();
+                }
                 currentTM = null;
             }
-           
             
-            function toggleReadMode() {
-                console.log($("#is-tm-readmode-btn").attr("is-readmode"));
-                closeTM();
-                if($("#is-tm-readmode-btn").attr("is-readmode")==="false") {
-                    $('#is-tm-readmode-btn').removeClass("btn-outline-secondary").addClass("btn-info");
-                    $('#is-tm-quicklinks-btn').fadeOut();
-                    $('#is-tm-topics-btn').fadeOut();
-                    $('#is-tm-search-btn').fadeOut();
-                    $("#is-tm-readmode-btn").attr("is-readmode","true");
+            articleUpVote = <%=isVotedUp%>;
+            articleDownVote = <%=isVotedDown%>;
+            
+            function triggerUpVote() {
+                if(!articleUpVote) {
+                    $.ajax({
+                        url: '/newvote?articleId=<%=currentArticle.getId()%>&type=up',
+                        type: 'GET',
+                        datatype:"JSON",
+                        contentType: "application/json;charset=utf-8",
+                        error: function(data) {
+                        },
+                        success: function(data) {
+                        }
+                    });
+                    
+                    count = parseInt($(".is-upvote-count").html());
+                    $(".is-upvote-count").html(count+1);
+                    
+                    articleUpVote = true;
                 }
-                else {
-                    $('#is-tm-readmode-btn').removeClass("btn-info").addClass("btn-outline-secondary");
-                    $('#is-tm-quicklinks-btn').fadeIn();
-                    $('#is-tm-topics-btn').fadeIn();
-                    $('#is-tm-search-btn').fadeIn();
-                    $("#is-tm-readmode-btn").attr("is-readmode","false");
+                $("#upvoteModal").modal('show');
+            }
+            
+            function triggerDownVote() {
+                if(!articleDownVote) {
+                    $.ajax({
+                        url: '/newvote?articleId=<%=currentArticle.getId()%>&type=down',
+                        type: 'GET',
+                        datatype:"JSON",
+                        contentType: "application/json;charset=utf-8",
+                        error: function(data) {
+                        },
+                        success: function(data) {
+                        }
+                    });
+                    
+                    count = parseInt($(".is-downvote-count").html());
+                    $(".is-downvote-count").html(count+1);
+                    
+                    
+                    articleDownVote = true;
                 }
-            };
+                $("#downvoteModal").modal('show');
+            }
+            
+            function sendFeedback() {
+                ownerKey = $("#is-feedback-ownerkey").val();
+                data = $("#is-feedback-data").val();
+                $.post('/newfeedback', { ownerKey: ownerKey, data : data},function(returnedData){});
+                $("#feedbackModal").modal("hide");
+                $("#postFeedbackModal").modal("show");
+            }
+            
+            function scrollToTop() {
+		$('html, body').animate({scrollTop:'0px'});
+            }
             
         </script>
     </body>

@@ -1,8 +1,6 @@
 package controller.recommendation;
 
-import controller.link.*;
-import dao.ArticleDAO;
-import dao.RecommendationsDAO;
+import dao.RecommendationDAO;
 import dao.UserDAO;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -10,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/newrecommendation")
 public class NewRecommendation extends HttpServlet {
 
     @Override
@@ -20,7 +20,7 @@ public class NewRecommendation extends HttpServlet {
         Object userId = session.getAttribute("userId");
         UserDAO userdao = new UserDAO();
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
         
@@ -29,7 +29,7 @@ public class NewRecommendation extends HttpServlet {
         String type = request.getParameter("type");
         String link = request.getParameter("link");
         
-        RecommendationsDAO recommendationdao = new RecommendationsDAO();
+        RecommendationDAO recommendationdao = new RecommendationDAO();
         recommendationdao.newRecommendation(articleId, title, link, type);
         session.setAttribute("message","Recommendation created!");
         response.sendRedirect(request.getParameter("redirectURL"));

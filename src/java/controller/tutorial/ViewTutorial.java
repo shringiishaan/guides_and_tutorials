@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import model.Article;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/viewtutorial/*")
 public class ViewTutorial extends HttpServlet {
 
     @Override
@@ -19,7 +21,7 @@ public class ViewTutorial extends HttpServlet {
         String[] parts = requestedPath.split("/");
 
         if(parts.length!=3 || !parts[0].isEmpty() || !parts[1].equals("tutorial")) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
 

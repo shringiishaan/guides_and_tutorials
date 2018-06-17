@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
 
+
+@WebServlet("/deletearticle")
 public class DeleteArticle extends HttpServlet {
 
     @Override
@@ -18,19 +21,17 @@ public class DeleteArticle extends HttpServlet {
         UserDAO userdao = new UserDAO();
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
 
-        Integer articleId = Integer.parseInt(request.getParameter("articleId"));
-        
+        Integer articleId = Integer.parseInt(request.getParameter("articleId"));        
         ArticleDAO articledao = new ArticleDAO();
-        
-        articledao.removeAllLinksByArticleId(articleId);
+        articledao.removeTutorialArticleLinksByArticleId(articleId);
         articledao.deleteByArticleId(articleId);
         
         session.setAttribute("message", "Article Deleted!");
-        response.sendRedirect(request.getParameter("redirectURL"));
+        response.sendRedirect("/managearticle");
     }
 
     @Override

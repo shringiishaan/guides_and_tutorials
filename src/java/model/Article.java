@@ -9,9 +9,8 @@ public class Article {
     private String title;
     private Integer owner_id;
     private String status;
-    private String scope;
     private String data;
-    private String shortDescription;
+    private String description;
     private Timestamp createTime;
     private Timestamp modifiedTime;
     
@@ -55,14 +54,6 @@ public class Article {
         return this.status;
     }
     
-    public void setScope(String scope) {
-        this.scope = scope;
-    }
-    
-    public String getScope () {
-        return this.scope;
-    }
-    
     public void setData(String data) {
         this.data = data;
     }
@@ -71,12 +62,12 @@ public class Article {
         return this.data;
     }
     
-    public void setShortDescription(String desc) {
-        this.shortDescription = desc;
+    public void setDescription(String desc) {
+        this.description = desc;
     }
     
-    public String getShortDescription() {
-        return this.shortDescription;
+    public String getDescription() {
+        return this.description;
     }
     
     public void setCreateTime(Timestamp time) {

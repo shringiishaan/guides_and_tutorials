@@ -72,7 +72,7 @@ public class TopicDAO {
         Topic topic = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM topics where key=?");
+            statement = connection.prepareStatement("SELECT * FROM `topics` where `key`=?");
             statement.setString(1, key);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
@@ -164,35 +164,6 @@ public class TopicDAO {
         return null;
     }
     
-    public Integer getTopicIdByArticleId(Integer articleId) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT topic_id FROM topic_article_map where article_id=?");
-            statement.setInt(1, articleId);
-            resultSet = statement.executeQuery();
-            if(resultSet.first()) {
-                return resultSet.getInt("topic_id");
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if(connection!=null) 
-                    connection.close();
-                if(statement!=null) 
-                    statement.close();
-                if(resultSet!=null) 
-                    resultSet.close();
-            } catch (SQLException e) {
-            }
-        }
-        return null;
-    }
-    
     public List<Topic> getAllTopics() {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -235,7 +206,7 @@ public class TopicDAO {
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO topics (key,title,status,priority) VALUES (?,?,'new',10)");
+            statement = connection.prepareStatement("INSERT INTO `topics` (`key`,`title`,`status`,`priority`) VALUES (?,?,'new',10)");
             statement.setString(1, key);
             statement.setString(2, title);
             statement.executeUpdate();
@@ -334,9 +305,98 @@ public class TopicDAO {
             statement = connection.prepareStatement("DELETE FROM topic_tutorial_map WHERE topic_id=?");
             statement.setInt(1, topicId);
             statement.executeUpdate();
-            statement = connection.prepareStatement("DELETE FROM topic_article_map WHERE topic_id=?");
-            statement.setInt(1, topicId);
+        } catch (SQLException ex) {
+            Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void updateTitleByTopicId(Integer topicId, String title) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE topics SET title=? WHERE id=?");
+            statement.setString(1, title);
+            statement.setInt(2, topicId);
             statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void updateKeyByTopicId(Integer topicId, String key) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE `topics` SET `key`=? WHERE `id`=?");
+            statement.setString(1, key);
+            statement.setInt(2, topicId);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void updatePriorityByTopicId(Integer topicId, Integer priority) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE topics SET priority=? WHERE id=?");
+            statement.setInt(1, priority);
+            statement.setInt(2, topicId);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void updateStatusByTopicId(Integer topicId, String status) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE topics SET status=? WHERE id=?");
+            statement.setString(1, status);
+            statement.setInt(2, topicId);
+            statement.executeUpdate();
+            
         } catch (SQLException ex) {
             Logger.getLogger(TopicDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

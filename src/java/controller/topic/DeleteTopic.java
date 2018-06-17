@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
+
+@WebServlet("/deletetopic")
 public class DeleteTopic extends HttpServlet {
 
     @Override
@@ -17,7 +20,7 @@ public class DeleteTopic extends HttpServlet {
         UserDAO userdao = new UserDAO();
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
 
@@ -27,7 +30,7 @@ public class DeleteTopic extends HttpServlet {
         topicdao.removeAllLinksByTopicId(topicId);
         topicdao.deleteByTopicId(topicId);
         session.setAttribute("message", "Topic deleted!");
-        response.sendRedirect(request.getParameter("redirectURL"));
+        response.sendRedirect("/managetopic");
     }
 
     @Override

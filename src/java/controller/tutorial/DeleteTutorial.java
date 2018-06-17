@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/deletetutorial")
 public class DeleteTutorial extends HttpServlet {
 
     @Override
@@ -19,7 +21,7 @@ public class DeleteTutorial extends HttpServlet {
         UserDAO userdao = new UserDAO();
         Object userId = session.getAttribute("userId");
         if(userId==null || !userdao.validateAdminByUserId((Integer)userId)) {
-            request.getRequestDispatcher("/Error").forward(request, response);
+            request.getRequestDispatcher("/error").forward(request, response);
             return;
         }
 
@@ -30,7 +32,7 @@ public class DeleteTutorial extends HttpServlet {
         tutorialdao.deleteByTutorialId(tutorialId);
         
         session.setAttribute("message", "Tutorial deleted!");
-        response.sendRedirect(request.getParameter("redirectURL"));
+        response.sendRedirect("/managetutorial");
     }
 
     @Override

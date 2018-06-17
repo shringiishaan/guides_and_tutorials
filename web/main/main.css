@@ -37,19 +37,19 @@ a:hover {
 }
 
 .is-navbar {
-    background-color: #fff;
-    color:#557A95;
+    background-color: #3aafa9;
+    color:#fff;
     border-bottom: 1px solid #ddd;
     box-shadow: 0 3px 2px -2px rgba(200,200,200,0.2);
 }
 
-.is-navbar .navbar-nav a {
-    opacity:0.7;
+.is-navbar .nav-link {
+    color:#fff;
 }
 
 .is-navbar .active > a {
-    color:teal;
     opacity:0.8;
+    color:#fff;
 }
 
 .is-sidebar .is-tutorial-card {
@@ -91,29 +91,55 @@ a:hover {
     display:block;
 }
 
-#navigationModal .is-active {
-    font-weight: 600;
-    color: rgba(0,0,0,.85) !important;
+
+.is-article-data p, .is-article-data ul {
+    font-size:15px;
 }
 
-#navigationModal .is-title {
-    font-size:16px;
-    padding-bottom:10px;
-    padding-top:10px;
-    color: rgba(0,0,0,0.85);
+.is-article-data h5 {
+    padding-top:18px;
 }
 
-#navigationModal .is-label {
-    cursor:pointer;
-    font-size:14px;
+
+.is-sidebar {
+    background: #f3f3f3;
+}
+
+.is-nav-list a {
+    padding-left:10px;
+    padding-right:10px;
+    cursor: pointer;
+    display:block;
+}
+
+.is-nav-list .is-active {
+    background-color:#ddd;
+}
+
+.is-nav-list .is-title {
+    font-size:15px;
+    color: #333;
+    
     padding-bottom:8px;
-    color: rgba(109,121,147,0.65);
+    padding-top:14px;
 }
 
-#navigationModal .is-label:hover {
-    color: teal;
+.is-nav-list .is-label {
+    cursor:pointer;
+    
+    color: #555555;
+    font-size:14px;
+    font-weight:300;
+    
+    padding-top:5px;
+    padding-bottom:5px;
 }
 
+.is-nav-list .is-label:hover {
+    background-color:#ddd;
+}
+
+    
 #is-tm-wrapper {
     height:100%;
     width:100%;
@@ -124,8 +150,7 @@ a:hover {
     box-sizing: border-box;
     z-index:1000;
     
-    background-color:#fff;
-    opacity:0.9;
+    background-color:#f4f4f4;
     
     overflow-x: hidden;
     overflow-y: auto;
@@ -134,7 +159,6 @@ a:hover {
 .is-tm-content {
     height:100%;
     width:100%;
-    max-height:80vh;
     left: 0;
     top: 0;
     position:fixed;
@@ -143,21 +167,16 @@ a:hover {
     z-index:1005;
     opacity:1;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
 .is-tm-content .is-tutorial-card {
     z-index: 1005;
     border-radius: 4px;
-    box-shadow: 0 24px 33px -20px #333 !important;
     border:none;
-    border-radius: 2px;
-    box-shadow: 0 24px 33px -20px #bbb;
     background: #f3f3f3;
     border:none;
-    margin-bottom:25px;
     padding:0;
-    padding-bottom:10px;
 }
 
 .is-tm-content .is-tutorial-card .is-active {
@@ -169,7 +188,7 @@ a:hover {
     font-size:14px;
     color: #333;
     padding-top:15px;
-    padding-bottom:5px;
+    padding-bottom:10px;
     padding-left:15px;
     padding-right:15px;
     margin:0;
@@ -197,19 +216,31 @@ a:hover {
     left:10px;
     position:fixed;
     z-index: 1010;
-    background-color: #fff;
 }
 
-#is-float-bottom a {
+#is-float-bottom .btn {
     cursor:pointer;
+    background-color: #3aafa9;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26), 0 2px 10px 0 rgba(0, 0, 0, 0.22);
+    margin-right:5px;
+    color:white;
+}
+
+#is-float-bottom .btn:hover {
+    background-color: teal;
+}
+
+#is-float-bottom .active {
+    background-color: teal;
 }
 
 .home-page-container .is-tutorial-card {
     border-radius: 4px;
     box-shadow: 0 24px 33px -20px #bbb;
-    background: #f3f3f3;
+    background: #f4f4f4;
     border:none;
     margin-bottom:25px;
+    padding:0px;
     padding-bottom:20px;
 }
 
@@ -220,11 +251,7 @@ a:hover {
     display:block;
 }
 
-.home-page-container .is-nav-list .is-active {
-    background-color:#ddd;
-}
-
-.home-page-container .is-nav-list .is-title {
+.home-page-container .is-nav-list .card-title {
     font-size:15px;
     color: #333;
     
@@ -249,4 +276,47 @@ a:hover {
 
 .home-page-container .is-nav-list .card-article-link:hover {
     background-color:#ddd;
+}
+
+.is-article-util-panel .element {
+    display:inline-block;
+}
+
+.is-article-util-panel .is-pointer {
+    cursor:pointer;
+}
+
+.is-footer {
+    background-color:#3aafa9;
+    color:#fff;
+    height:20vh;
+    max-height:170px;
+}
+
+.is-btn-primary {
+    background-color:#3aafa9 !important;
+    border:none;
+    color:#fff !important;
+}
+
+.is-btn-primary:hover {
+    color:#fff;
+    background-color: teal !important;
+}
+
+.is-btn-primary-outline {
+    background-color: #fff;
+    border-color: #3aafa9;
+    color:#3aafa9;
+}
+
+.is-btn-primary-outline:hover {
+    background-color: #3aafa9;
+    color:#fff;
+}
+
+.is-comment {
+    border:none;
+    background-color: #f6f6f6;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0, 0, 0, 0.2);
 }

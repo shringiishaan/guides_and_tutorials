@@ -15,7 +15,9 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/uploadimage")
 public class UploadImage extends HttpServlet {
 
     private static final long serialVersionUID = -337920480578240289L;

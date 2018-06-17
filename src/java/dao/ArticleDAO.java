@@ -38,9 +38,9 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,scope"
-                    + (includeData?",data":"")
-                    + ",short_description,create_time,modified_time FROM articles where id=?;");
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`"
+                    + (includeData?",`data`":"")
+                    + ",`description`,`create_time`,`modified_time` FROM `articles` where `id`=?;");
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
@@ -50,8 +50,7 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
                 article.setData(includeData?resultSet.getString("data"):null);
@@ -81,9 +80,9 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`"
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`"
                     + (includeData?",`data`":"")
-                    + ",`short_description`,`create_time`,`modified_time` FROM `articles` WHERE `key`=?;");
+                    + ",`description`,`create_time`,`modified_time` FROM `articles` WHERE `key`=?;");
             
             statement.setString(1, key);
             resultSet = statement.executeQuery();
@@ -94,9 +93,8 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
                 article.setData(includeData?resultSet.getString("data"):null);
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
             }
@@ -124,9 +122,9 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,scope"
-                    + (includeData?",data":"")
-                    + ",create_time,modified_time FROM articles where title=?;");
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`"
+                    + (includeData?",`data`":"")
+                    + ",`create_time`,`modified_time` FROM `articles` where `title`=?;");
             
             statement.setString(1, title);
             resultSet = statement.executeQuery();
@@ -137,9 +135,8 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
                 article.setData(includeData?resultSet.getString("data"):null);
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
             }
@@ -168,9 +165,9 @@ public class ArticleDAO {
         Article article;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`"
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`"
                     + (includeData?",`data`":"")
-                    + ",`short_description`,`create_time`,`modified_time` FROM `articles`;");
+                    + ",`description`,`create_time`,`modified_time` FROM `articles`;");
             resultSet = statement.executeQuery();
             articles = new ArrayList<>();
             while(resultSet.next()) {
@@ -180,8 +177,7 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
                 article.setData(includeData?resultSet.getString("data"):null);
@@ -212,9 +208,9 @@ public class ArticleDAO {
         Article article;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT a.`id`,a.`key`,a.`title`,a.`owner_id`,a.`status`,a.`scope`"
+            statement = connection.prepareStatement("SELECT a.`id`,a.`key`,a.`title`,a.`owner_id`,a.`status`"
                 + (includeData?",a.`data`":"")
-                + ",a.`short_description`,a.`create_time`,a.`modified_time` "
+                + ",a.`description`,a.`create_time`,a.`modified_time` "
                     + "FROM `tutorial_article_map` m JOIN `articles` a "
                     + "ON m.`article_id` = a.`id` "
                     + "WHERE `tutorial_id`=? "
@@ -232,11 +228,10 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
                 article.setData(includeData?resultSet.getString("data"):null);
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 articles.add(article);
             }
         } catch (SQLException ex) {
@@ -263,9 +258,9 @@ public class ArticleDAO {
         Article article;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`,`short_description`,`create_time`,`modified_time` "
+            statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`description`,`create_time`,`modified_time` "
                     + "FROM `articles` "
-                    + "WHERE `id` NOT IN (SELECT DISTINCT `article_id` FROM `tutorial_article_map` UNION SELECT DISTINCT `article_id` FROM `topic_article_map`)");
+                    + "WHERE `id` NOT IN (SELECT DISTINCT `article_id` FROM `tutorial_article_map`)");
             resultSet = statement.executeQuery();
             articles = new ArrayList<>();
             while(resultSet.next()) {
@@ -275,74 +270,10 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setData(null);
-                articles.add(article);
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if(connection!=null) 
-                    connection.close();
-                if(statement!=null) 
-                    statement.close();
-                if(resultSet!=null) 
-                    resultSet.close();
-            } catch (SQLException e) {
-            }
-        }
-        return articles;
-    }
-    
-    public List<Article> getArticlesByTopicIdAndStatus(Integer topicId, String status, boolean includeData) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        List<Article> articles = null;
-        Article article;
-        try {
-            connection = dataSource.getConnection();
-            // all topics
-            if(topicId==null) {
-                statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`"
-                    + (includeData?",`data`":"")
-                    + ",`short_description`,`create_time`,`modified_time` "
-                        + "FROM `articles` "
-                        + "WHERE `id` NOT IN (SELECT `article_id` FROM `topic_article_map`)"
-                    + (status==null?"":" AND `status`=?;"));
-                if(status!=null)
-                    statement.setString(1,status);
-            }
-            else {
-                statement = connection.prepareStatement("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`"
-                    + (includeData?",`data`":"")
-                    + ",`short_description`,`create_time`,`modified_time` "
-                        + "FROM `articles` "
-                        + "WHERE `id` IN (SELECT `article_id` FROM `topic_article_map` WHERE `topic_id`=?)"
-                    + (status==null?"":" AND `status`=?;"));
-                statement.setInt(1, topicId);
-                if(status!=null)
-                    statement.setString(2,status);
-            }
-            resultSet = statement.executeQuery();
-            articles = new ArrayList<>();
-            while(resultSet.next()) {
-                article = new Article();
-                article.setId(resultSet.getInt("id"));
-                article.setKey(resultSet.getString("key"));
-                article.setTitle(resultSet.getString("title"));
-                article.setOwnerId(resultSet.getInt("owner_id"));
-                article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
-                article.setShortDescription(resultSet.getString("short_description"));
-                article.setCreateTime(resultSet.getTimestamp("create_time"));
-                article.setModifiedTime(resultSet.getTimestamp("modified_time"));
-                article.setData(includeData?resultSet.getString("data"):null);
                 articles.add(article);
             }
             
@@ -371,9 +302,9 @@ public class ArticleDAO {
         try {
             connection = dataSource.getConnection();
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT `id`,`key`,`title`,`owner_id`,`status`,`scope`,`short_description`,`create_time`,`modified_time` "
+            resultSet = statement.executeQuery("SELECT `id`,`key`,`title`,`owner_id`,`status`,`description`,`create_time`,`modified_time` "
                     + "FROM `articles` "
-                    + "WHERE title LIKE '%"+query+"%' or short_description LIKE '%"+query+"%';");
+                    + "WHERE title LIKE '%"+query+"%' or description LIKE '%"+query+"%';");
             articles = new ArrayList<>();
             while(resultSet.next()) {
                 article = new Article();
@@ -382,8 +313,51 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
+                article.setCreateTime(resultSet.getTimestamp("create_time"));
+                article.setModifiedTime(resultSet.getTimestamp("modified_time"));
+                article.setData(null);
+                articles.add(article);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+                if(resultSet!=null) 
+                    resultSet.close();
+            } catch (SQLException e) {
+            }
+        }
+        return articles;
+    }
+    
+    public List<Article> getTopArticles(Integer limit) {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List<Article> articles = null;
+        Article article;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT a.`id`,a.`key`,a.`title`,a.`owner_id`,a.`status`,a.`description`,"
+                    + "a.`create_time`,a.`modified_time` "
+                    + "FROM `articles` AS a JOIN `votes` AS v ON a.`id` = v.`article_id` WHERE v.`type`='up'"
+                    + " ORDER BY v.`count` DESC LIMIT "+limit+";");
+            articles = new ArrayList<>();
+            while(resultSet.next()) {
+                article = new Article();
+                article.setId(resultSet.getInt("id"));
+                article.setKey(resultSet.getString("key"));
+                article.setTitle(resultSet.getString("title"));
+                article.setOwnerId(resultSet.getInt("owner_id"));
+                article.setStatus(resultSet.getString("status"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
                 article.setData(null);
@@ -555,7 +529,7 @@ public class ArticleDAO {
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id FROM articles where key=?");
+            statement = connection.prepareStatement("SELECT `id` FROM `articles` where `key`=?");
             statement.setString(1, articleKey);
             resultSet = statement.executeQuery();
             if(resultSet.first()) {
@@ -614,9 +588,9 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT a.id,a.key,a.title,a.owner_id,a.status,a.scope"
+            statement = connection.prepareStatement("SELECT a.id,a.key,a.title,a.owner_id,a.status"
                 + (includeData?",a.data":"")
-                + ",a.short_description,a.create_time,a.modified_time "
+                + ",a.description,a.create_time,a.modified_time "
                 + "FROM tutorial_article_map m JOIN articles a "
                 + "ON m.article_id = a.id "
                 + "WHERE m.tutorial_id=? AND m.priority=(SELECT max(priority) FROM tutorial_article_map WHERE tutorial_id=?) "
@@ -634,9 +608,8 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("a.title"));
                 article.setOwnerId(resultSet.getInt("a.owner_id"));
                 article.setStatus(resultSet.getString("a.status"));
-                article.setScope(resultSet.getString("a.scope"));
                 article.setData(includeData?resultSet.getString("a.data"):null);
-                article.setShortDescription(resultSet.getString("a.short_description"));
+                article.setDescription(resultSet.getString("a.description"));
                 article.setCreateTime(resultSet.getTimestamp("a.create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("a.modified_time"));
             }
@@ -663,9 +636,9 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT a.id,a.key,a.title,a.owner_id,a.status,a.scope"
+            statement = connection.prepareStatement("SELECT a.id,a.key,a.title,a.owner_id,a.status"
                 + (includeData?",a.data":"")
-                + ",a.short_description,a.create_time,a.modified_time "
+                + ",a.description,a.create_time,a.modified_time "
                 + "FROM tutorial_article_map m JOIN articles a "
                 + "ON m.article_id = a.id "
                 + "WHERE m.tutorial_id=? AND m.priority=(SELECT min(priority) FROM tutorial_article_map WHERE tutorial_id=?) "
@@ -682,9 +655,8 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("a.title"));
                 article.setOwnerId(resultSet.getInt("a.owner_id"));
                 article.setStatus(resultSet.getString("a.status"));
-                article.setScope(resultSet.getString("a.scope"));
                 article.setData(includeData?resultSet.getString("a.data"):null);
-                article.setShortDescription(resultSet.getString("a.short_description"));
+                article.setDescription(resultSet.getString("a.description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
             }
@@ -711,7 +683,7 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,scope,short_descripion,create_time,modified_time "
+            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,description,create_time,modified_time "
                     + "FROM articles WHERE id in "
                         + "(SELECT article_id from tutorial_article_map "
                         + "WHERE tutorial_id=? and priority>=? ORDER BY priority ASC LIMIT 1);");
@@ -725,9 +697,8 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
                 article.setData(null);
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
             }
@@ -754,7 +725,7 @@ public class ArticleDAO {
         Article article = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,scope,short_description,create_time,modified_time "
+            statement = connection.prepareStatement("SELECT id,key,title,owner_id,status,description,create_time,modified_time "
                     + "from articles where id in "
                         + "(SELECT article_id from tutorial_article_map "
                         + "WHERE tutorial_id=? and priority<=? ORDER BY priority DESC LIMIT 1);");
@@ -768,9 +739,8 @@ public class ArticleDAO {
                 article.setTitle(resultSet.getString("title"));
                 article.setOwnerId(resultSet.getInt("owner_id"));
                 article.setStatus(resultSet.getString("status"));
-                article.setScope(resultSet.getString("scope"));
                 article.setData(null);
-                article.setShortDescription(resultSet.getString("short_description"));
+                article.setDescription(resultSet.getString("description"));
                 article.setCreateTime(resultSet.getTimestamp("create_time"));
                 article.setModifiedTime(resultSet.getTimestamp("modified_time"));
             }
@@ -790,26 +760,15 @@ public class ArticleDAO {
         return article;
     }
     
-    public void createNewArticle(String key, String title, Integer ownerId, String scope, String data) {
+    public void createNewArticle(String key, String title, Integer ownerId) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            if(data==null) {
-                statement = connection.prepareStatement("INSERT INTO articles (key,title,owner_id,data,scope,status,short_description) VALUES (?,?,?,?,?,'new','meta desc');");
-                statement.setString(1, key);
-                statement.setString(2, title);
-                statement.setInt(3, ownerId);
-                statement.setString(4,data);
-                statement.setString(5,scope);
-            }
-            else {
-                statement = connection.prepareStatement("INSERT INTO articles (key,title,owner_id,scope,status,short_description) VALUES (?,?,?,?,'new','meta desc');");
-                statement.setString(1, key);
-                statement.setString(2, title);
-                statement.setInt(3, ownerId);
-                statement.setString(4,scope);
-            }
+            statement = connection.prepareStatement("INSERT INTO `articles` (`key`,`title`,`owner_id`,`data`,`status`,`description`) VALUES (?,?,?,'new data','new','new desc');");
+            statement.setString(1, key);
+            statement.setString(2, title);
+            statement.setInt(3, ownerId);
             statement.executeUpdate();
             
         } catch (SQLException ex) {
@@ -836,28 +795,6 @@ public class ArticleDAO {
             statement.setInt(3, priority);
             statement.executeUpdate();
             
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if(connection!=null) 
-                    connection.close();
-                if(statement!=null) 
-                    statement.close();
-            } catch (SQLException e) {
-            }
-        }
-    }
-    
-    public void createTopicArticleLink(Integer topicId, Integer articleId) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("INSERT INTO topic_article_map (topic_id,article_id) VALUES (?,?)");
-            statement.setInt(1,topicId);
-            statement.setInt(2,articleId);
-            statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -983,13 +920,13 @@ public class ArticleDAO {
         }
     }
     
-    public void updateScopeByArticleId(Integer articleId, String scope) {
+    public void updateDescriptionByArticleId(Integer articleId, String description) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("UPDATE articles SET scope=? WHERE id=?");
-            statement.setString(1, scope);
+            statement = connection.prepareStatement("UPDATE articles SET description=? WHERE id=?");
+            statement.setString(1, description);
             statement.setInt(2, articleId);
             statement.executeUpdate();
             
@@ -1006,13 +943,36 @@ public class ArticleDAO {
         }
     }
     
-    public void updateShortDescriptionByArticleId(Integer articleId, String shortDescription) {
+    public void updateTitleByArticleId(Integer articleId, String title) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("UPDATE articles SET short_description=? WHERE id=?");
-            statement.setString(1, shortDescription);
+            statement = connection.prepareStatement("UPDATE articles SET title=? WHERE id=?");
+            statement.setString(1, title);
+            statement.setInt(2, articleId);
+            statement.executeUpdate();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if(connection!=null) 
+                    connection.close();
+                if(statement!=null) 
+                    statement.close();
+            } catch (SQLException e) {
+            }
+        }
+    }
+    
+    public void updateKeyByArticleId(Integer articleId, String key) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("UPDATE `articles` SET `key`=? WHERE `id`=?");
+            statement.setString(1, key);
             statement.setInt(2, articleId);
             statement.executeUpdate();
             
@@ -1127,38 +1087,13 @@ public class ArticleDAO {
         }
     }
     
-    public void removeAllLinksByArticleId(Integer articleId) {
+    public void removeTutorialArticleLinksByArticleId(Integer articleId) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("DELETE FROM tutorial_article_map WHERE article_id=?;");
             statement.setInt(1,articleId);
-            statement.executeUpdate();
-            statement = connection.prepareStatement("DELETE FROM topic_article_map WHERE article_id=?;");
-            statement.setInt(1,articleId);
-            statement.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            try {
-                if(connection!=null) 
-                    connection.close();
-                if(statement!=null) 
-                    statement.close();
-            } catch (SQLException e) {
-            }
-        }
-    }
-    
-    public void removeTopicArticleLink(Integer topicId, Integer articleId) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("DELETE FROM topic_article_map WHERE topic_id=? AND article_id=?;");
-            statement.setInt(1,topicId);
-            statement.setInt(2,articleId);
             statement.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ArticleDAO.class.getName()).log(Level.SEVERE, null, ex);

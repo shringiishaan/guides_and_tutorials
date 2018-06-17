@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.annotation.WebServlet;
 
+@WebServlet("/logout")
 public class Logout extends HttpServlet {
 
     @Override
@@ -14,6 +16,7 @@ public class Logout extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(true);
         session.removeAttribute("userId");
+        session.invalidate();
         if(request.getParameter("redirectURL")!=null) {
             response.sendRedirect(request.getParameter("redirectURL"));
         }
