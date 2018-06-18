@@ -371,7 +371,7 @@
                             </div>
                             <%
                                 if(recommendations_internal!=null && recommendations_internal.size()>0) {
-                                    %><a class="is-title">Related Links</a><%
+                                    %><a class="is-title">Recommended Links</a><%
                                     for(int j=0; j<recommendations_internal.size(); j++) { 
                                         %><a class='is-label' href='<%=recommendations_internal.get(j).get("link")%>'><%=recommendations_internal.get(j).get("title")%></a><%
                                     }
@@ -638,7 +638,7 @@
                         if(recommendations_internal!=null && recommendations_internal.size()>0) {
                             %><div class="col-sm-6 col-md-4">
                                 <div class="card card-body is-tutorial-card">
-                                    <h6 class="card-title">Related Links</h6><%
+                                    <h6 class="card-title">Recommended Links</h6><%
                                     for(int j=0; j<recommendations_internal.size(); j++) { 
                                         %><a class='card-article-link' href='<%=recommendations_internal.get(j).get("link")%>'><%=recommendations_internal.get(j).get("title")%></a><%
                                     }
