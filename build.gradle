@@ -26,12 +26,6 @@ cargo {
     deployable {
         context = '/'
     }
-
-    remote {
-        hostname = 'cstutorials.tech'
-        username = 'tomcatmanager'
-        password = 'tomcatmanager'
-    }
 	
     local {
         homeDir = file('C:/Users/Ishaan/applications/Apache Tomcat 8.0.27')
