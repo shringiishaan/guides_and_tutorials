@@ -1,5 +1,7 @@
+
 plugins {
     id 'war'  
+	id "com.bmuschko.cargo" version "2.3"
 }
 
 repositories {
@@ -7,7 +9,37 @@ repositories {
 }
 
 dependencies {
-    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.46'
 	compile group: 'org.apache.tomcat', name: 'tomcat-coyote', version: '9.0.8'
+	
+    cargo 'org.codehaus.cargo:cargo-core-uberjar:1.4.5',
+            'org.codehaus.cargo:cargo-ant:1.4.5'
+}
+
+apply plugin: 'com.bmuschko.cargo'
+
+cargo {
+    containerId = 'tomcat8x'
+    port = 8080
+
+    deployable {
+        context = '/'
+    }
+
+    remote {
+        hostname = 'cstutorials.tech'
+        username = 'tomcatmanager'
+        password = 'tomcatmanager'
+    }
+	
+    local {
+        homeDir = file('C:/Users/Ishaan/applications/Apache Tomcat 8.0.27')
+        outputFile = file('build/cargo-deploy-output.log')
+        
+		containerProperties {
+            property 'cargo.rmi.port', 9090
+            property 'cargo.tomcat.ajp.port', 9091
+        }
+	}
 }

@@ -383,14 +383,6 @@
                                         %><a class='is-label' target="_blank" href='<%=recommendations_external.get(j).get("link")%>'><%=recommendations_external.get(j).get("title")%></a><%
                                     }
                                 }
-
-                                tempArticles = articledao.getTopArticles(5);
-                                if(tempArticles!=null && tempArticles.size()>0) {
-                                    %><a class="is-title">Top Articles</a><%
-                                    for(int j=0; j<tempArticles.size(); j++) { 
-                                        %><a class='is-label' href='/article/<%=tempArticles.get(j).getKey()%>'><%=tempArticles.get(j).getTitle()%></a><%
-                                    }
-                                }
                             %>
                         </div>
                     </div>
@@ -636,7 +628,7 @@
                     <div class="row">
                     <%
                         if(recommendations_internal!=null && recommendations_internal.size()>0) {
-                            %><div class="col-sm-6 col-md-4">
+                            %><div class="col-sm-10 offset-sm-1 col-md-4 offset-md-2">
                                 <div class="card card-body is-tutorial-card">
                                     <h6 class="card-title">Recommended Links</h6><%
                                     for(int j=0; j<recommendations_internal.size(); j++) { 
@@ -647,23 +639,11 @@
                         }
 
                         if(recommendations_external!=null && recommendations_external.size()>0) {
-                            %><div class="col-sm-6 col-md-4">
+                            %><div class="col-sm-10 offset-sm-1 col-md-4">
                                 <div class="card card-body is-tutorial-card">
                                     <h6 class="card-title">Recommended External Links</h6><%
                                     for(int j=0; j<recommendations_external.size(); j++) { 
                                         %><a class='card-article-link' target="_blank" href='<%=recommendations_external.get(j).get("link")%>'><%=recommendations_external.get(j).get("title")%></a><%
-                                    }
-                                %></div>
-                            </div><%
-                        }
-
-                        tempArticles = articledao.getTopArticles(5);
-                        if(tempArticles!=null && tempArticles.size()>0) {
-                            %><div class="col-sm-6 col-md-4">
-                                <div class="card card-body is-tutorial-card">
-                                    <h6 class="card-title">Top Articles</h6><%
-                                    for(int j=0; j<tempArticles.size(); j++) { 
-                                        %><a class='card-article-link' href='/article/<%=tempArticles.get(j).getKey()%>'><%=tempArticles.get(j).getTitle()%></a><%
                                     }
                                 %></div>
                             </div><%
