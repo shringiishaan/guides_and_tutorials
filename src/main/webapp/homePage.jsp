@@ -40,7 +40,7 @@
                 test your fundamental understanding of the subject." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
-        <meta name="google-site-verification" content="q94Vj4nrbIhqG6KIgr4iAWZmLVQa3Pm5UV2gGWSAwHE" />
+		<meta name="google-site-verification" content="q94Vj4nrbIhqG6KIgr4iAWZmLVQa3Pm5UV2gGWSAwHE" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" crossorigin="anonymous" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
@@ -56,12 +56,23 @@
                 <ul class="navbar-nav ml-auto">
                     <%
                         if(isAdmin) {
-                            %><li class="nav-item">
-                                <a class="nav-link" href="/admindashboard">Admin</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/logout">Logout</a>
-                            </li><%
+                            %><li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+								   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								   Admin
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="/admindashboard">Dashboard</a>
+									<a class="dropdown-item" href="/managetopic">Topics</a>
+									<a class="dropdown-item" href="/managetutorial">Tutorials</a>
+									<a class="dropdown-item" href="/managearticle">Articles</a>
+									<a class="dropdown-item" href="/managecomments">Comments</a>
+									<a class="dropdown-item" href="/managefeedbacks">Feedbacks</a>
+									<a class="dropdown-item" href="/manageimages">Images</a>
+									<hr class="mb-0 mt-2" />
+									<a class="dropdown-item" href="/logout">Logout</a>
+								</div>
+							</li><%
                         }
                     %>
                     <li class="nav-item dropdown">

@@ -147,7 +147,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%=currentArticle.getTitle()%> | currentTutorial.getTitle()%></title>
+        <title><%=currentArticle.getTitle()%> | <%=currentTutorial.getTitle()%> | CS Turorials</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charset="UTF-8" />
         <meta name="description" content="<%=currentArticle.getDescription()%>" />
@@ -168,12 +168,23 @@
                 <ul class="navbar-nav ml-auto">
                     <%
                         if(isAdmin) {
-                            %><li class="nav-item">
-                                <a class="nav-link" href="/admindashboard">Admin</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/logout">Logout</a>
-                            </li><%
+                            %><li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" 
+								   role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								   Admin
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="/admindashboard">Dashboard</a>
+									<a class="dropdown-item" href="/managetopic">Topics</a>
+									<a class="dropdown-item" href="/managetutorial">Tutorials</a>
+									<a class="dropdown-item" href="/managearticle">Articles</a>
+									<a class="dropdown-item" href="/managecomments">Comments</a>
+									<a class="dropdown-item" href="/managefeedbacks">Feedbacks</a>
+									<a class="dropdown-item" href="/manageimages">Images</a>
+									<hr class="mb-0 mt-2" />
+									<a class="dropdown-item" href="/logout">Logout</a>
+								</div>
+							</li><%
                         }
                     %>
                     <li class="nav-item dropdown">
@@ -197,7 +208,7 @@
             <div class="row">
                 
                 <!-- side bar -->
-                <div class="col-md-3 col-lg-2 is-sidebar is-nav-list d-none d-md-inline-block p-0 pt-1">
+                <div class="col-md-3 col-lg-2 is-sidebar is-nav-list d-none d-md-inline-block p-0 pt-1 pb-3">
                     <%
                         for (int i = 0; i < relatedTutorials.size(); i++) {
                             if(!(relatedTutorials.get(i)).getStatus().equals("final") && !isAdmin) {
@@ -312,7 +323,7 @@
                                     </form>
                                     <form method="POST" action="/updatearticledescription" class="mt-3">
                                         <div class="input-group">
-                                            <textarea name="description" rows="4" maxlength="250" class="form-control"><%=currentArticle.getDescription()%></textarea>
+                                            <textarea name="description" rows="4" maxlength="500" class="form-control"><%=currentArticle.getDescription()%></textarea>
                                             <input type="text" name="articleId" hidden="true" value="<%=currentArticle.getId()%>" />
                                             <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
                                             <div class="input-group-append">
@@ -322,7 +333,7 @@
                                     </form>
                                     <form method="POST" action="/updatearticledata" class="mt-3">
                                         <div class="input-group">
-                                            <textarea name="data" class="form-control"><%=currentArticle.getData()%></textarea>
+                                            <textarea name="data" rows="4" class="form-control"><%=currentArticle.getData()%></textarea>
                                             <input type="text" name="articleId" hidden="true" value="<%=currentArticle.getId()%>" />
                                             <input type="text" name="redirectURL" hidden="true" value="/article/<%=currentArticle.getKey()%>" />
                                             <div class="input-group-append">

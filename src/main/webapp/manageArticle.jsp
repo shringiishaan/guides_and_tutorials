@@ -204,7 +204,7 @@
                                         <div class="input-group">
                                             <input name="articleId" value="<%=currentArticle.getId()%>" hidden="true" />
                                             <input name="redirectURL" value="/managearticle?aid=<%=currentArticle.getId()%>" hidden="true" />
-                                            <textarea type="text" name="description" class="form-control" ><%=currentArticle.getDescription()%></textarea>
+                                            <textarea type="text" name="description" maxlength="500" class="form-control" ><%=currentArticle.getDescription()%></textarea>
                                             <button class="btn default is-btn-primary" type="submit">Update Description</button>
                                         </div>
                                     </form>
